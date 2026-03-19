@@ -1,0 +1,105 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|c:\\users\\acer\\desktop\\fp uoc\\semestre 1 2026\\.net\\producto 2\\hotelsol\\models\\persona.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|solutionrelative:models\\persona.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|c:\\users\\acer\\desktop\\fp uoc\\semestre 1 2026\\.net\\producto 2\\hotelsol\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|solutionrelative:controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|c:\\users\\acer\\desktop\\fp uoc\\semestre 1 2026\\.net\\producto 2\\hotelsol\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|c:\\users\\acer\\desktop\\fp uoc\\semestre 1 2026\\.net\\producto 2\\hotelsol\\models\\detalleventum.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|solutionrelative:models\\detalleventum.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|c:\\users\\acer\\desktop\\fp uoc\\semestre 1 2026\\.net\\producto 2\\hotelsol\\models\\habitacion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|solutionrelative:models\\habitacion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Persona.cs",
+              "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\Models\\Persona.cs",
+              "RelativeDocumentMoniker": "Models\\Persona.cs",
+              "ToolTip": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\Models\\Persona.cs",
+              "RelativeToolTip": "Models\\Persona.cs",
+              "ViewState": "AgIAACYAAAAAAAAAAAAuwDQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-19T10:39:16.618Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "Controllers\\HomeController.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-19T10:34:45.385Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "DetalleVentum.cs",
+              "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\Models\\DetalleVentum.cs",
+              "RelativeDocumentMoniker": "Models\\DetalleVentum.cs",
+              "ToolTip": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\Models\\DetalleVentum.cs",
+              "RelativeToolTip": "Models\\DetalleVentum.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-19T10:33:02.315Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Habitacion.cs",
+              "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\Models\\Habitacion.cs",
+              "RelativeDocumentMoniker": "Models\\Habitacion.cs",
+              "ToolTip": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\Models\\Habitacion.cs",
+              "RelativeToolTip": "Models\\Habitacion.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAA4wCQAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-19T10:23:40.875Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-19T08:55:03.135Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
