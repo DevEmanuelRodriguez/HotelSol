@@ -1,6 +1,25 @@
-﻿
-@{
+﻿<h1>Exportar XML</h1>
+
+<form asp-action="ExportarTabla" method="post">
+
+    <select name="tabla">
+        <option value="Categoria">Categoría</option>
+        <option value="Piso">Piso</option>
+        <option value="EstadoHabitacion">Estado Habitación</option>
+        <option value="TipoPersona">Tipo Persona</option>
+        <option value="Producto">Producto</option>
+        <option value="Persona">Persona</option>
+        <option value="Habitacion">Habitación</option>
+        <option value="Recepcion">Recepción</option>
+        <option value="Venta">Venta</option>
+        <option value="DetalleVenta">Detalle Venta</option>
+    </select>
+
+    <button type="submit">Exportar</button>
+
+</form>
+
+@if (ViewBag.Mensaje != null)
+{
+    <p>@ViewBag.Mensaje</p>
 }
-<h1>Exportar XML</h1>
-<p>@ViewBag.Mensaje</p>
-<a asp-action="Leer">Ver XML</a>

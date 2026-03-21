@@ -1,78 +1,97 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Habitaciones>
   <Habitacion>
+    <Id>1</Id>
     <Numero>001</Numero>
     <Precio>70.00</Precio>
   </Habitacion>
   <Habitacion>
+    <Id>2</Id>
     <Numero>002</Numero>
     <Precio>80.00</Precio>
   </Habitacion>
   <Habitacion>
+    <Id>3</Id>
     <Numero>003</Numero>
     <Precio>60.00</Precio>
   </Habitacion>
   <Habitacion>
+    <Id>4</Id>
     <Numero>004</Numero>
     <Precio>80.00</Precio>
   </Habitacion>
   <Habitacion>
+    <Id>5</Id>
     <Numero>005</Numero>
     <Precio>50.00</Precio>
   </Habitacion>
   <Habitacion>
+    <Id>6</Id>
     <Numero>006</Numero>
     <Precio>80.00</Precio>
   </Habitacion>
   <Habitacion>
+    <Id>7</Id>
     <Numero>007</Numero>
     <Precio>90.00</Precio>
   </Habitacion>
   <Habitacion>
+    <Id>8</Id>
     <Numero>008</Numero>
     <Precio>70.00</Precio>
   </Habitacion>
   <Habitacion>
+    <Id>9</Id>
     <Numero>009</Numero>
     <Precio>80.00</Precio>
   </Habitacion>
   <Habitacion>
+    <Id>10</Id>
     <Numero>010</Numero>
     <Precio>70.00</Precio>
   </Habitacion>
   <Habitacion>
+    <Id>11</Id>
     <Numero>011</Numero>
     <Precio>120.00</Precio>
   </Habitacion>
   <Habitacion>
+    <Id>12</Id>
     <Numero>012</Numero>
     <Precio>120.00</Precio>
   </Habitacion>
   <Habitacion>
+    <Id>13</Id>
     <Numero>013</Numero>
     <Precio>120.00</Precio>
   </Habitacion>
   <Habitacion>
+    <Id>14</Id>
     <Numero>014</Numero>
     <Precio>85.00</Precio>
   </Habitacion>
   <Habitacion>
+    <Id>15</Id>
     <Numero>015</Numero>
     <Precio>75.00</Precio>
   </Habitacion>
   <Habitacion>
+    <Id>16</Id>
     <Numero>101</Numero>
     <Precio>1200.50</Precio>
   </Habitacion>
   <Habitacion>
+    <Id>17</Id>
     <Numero>101</Numero>
     <Precio>1200.50</Precio>
   </Habitacion>
   <Habitacion>
+    <Id>18</Id>
     <Numero>102</Numero>
     <Precio>1200.50</Precio>
   </Habitacion>
   <Habitacion>
+    <Id>19</Id>
     <Numero>105</Numero>
     <Precio>150.00</Precio>
   </Habitacion>
