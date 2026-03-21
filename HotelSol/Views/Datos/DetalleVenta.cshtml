@@ -1,0 +1,20 @@
+﻿@model IEnumerable<HotelSol.Models.DetalleVentum>
+
+<h1>Detalle de Ventas</h1>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Cantidad</th>
+        <th>SubTotal</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.IdDetalleVenta</td>
+            <td>@item.Cantidad</td>
+            <td>@item.SubTotal</td>
+        </tr>
+    }
+</table>

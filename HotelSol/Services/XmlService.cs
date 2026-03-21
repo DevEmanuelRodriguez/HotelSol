@@ -44,8 +44,9 @@ public class XmlService
 
         var xml = XDocument.Load(ruta);
 
+        //si es null, pone vacío ""
         return xml.Descendants("Habitacion")
-                  .Select(x => (string)x.Element("Numero"))
-                  .ToList();
+          .Select(x => (string?)x.Element("Numero") ?? "")
+          .ToList();
     }
 }

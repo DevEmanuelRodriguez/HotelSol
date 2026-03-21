@@ -1,0 +1,18 @@
+﻿@model IEnumerable<HotelSol.Models.TipoPersona>
+
+<h1>Tipos de Persona</h1>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Descripcion</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.IdTipoPersona</td>
+            <td>@item.Descripcion</td>
+        </tr>
+    }
+</table>

@@ -1,0 +1,21 @@
+﻿
+@{
+}
+@model IEnumerable<HotelSol.Models.Categorium>
+
+<h1>Categorías</h1>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Descripcion</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.IdCategoria</td>
+            <td>@item.Descripcion</td>
+        </tr>
+    }
+</table>

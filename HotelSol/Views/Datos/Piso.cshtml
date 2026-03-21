@@ -1,0 +1,23 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model IEnumerable<HotelSol.Models.Piso>
+
+<h1>Pisos</h1>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Descripcion</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.IdPiso</td>
+            <td>@item.Descripcion</td>
+        </tr>
+    }
+</table>

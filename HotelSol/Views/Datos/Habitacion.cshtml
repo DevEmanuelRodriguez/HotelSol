@@ -1,0 +1,20 @@
+﻿@model IEnumerable<HotelSol.Models.Habitacion>
+
+<h1>Habitaciones</h1>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Número</th>
+        <th>Precio</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.IdHabitacion</td>
+            <td>@item.Numero</td>
+            <td>@item.Precio</td>
+        </tr>
+    }
+</table>
