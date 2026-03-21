@@ -1,0 +1,14 @@
+﻿<h1>Importar XML</h1>
+
+<form asp-action="ImportarArchivo" method="post" enctype="multipart/form-data">
+
+    <input type="file" name="archivo" />
+
+    <button type="submit">Importar</button>
+
+</form>
+
+@if (ViewBag.Mensaje != null)
+{
+    <p>@ViewBag.Mensaje</p>
+}

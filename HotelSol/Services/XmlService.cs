@@ -109,6 +109,7 @@ public class XmlService
                             new XElement("Producto",
                                 new XElement("Id", p.IdProducto),
                                 new XElement("Nombre", p.Nombre ?? ""),
+                                new XElement("Detalle", p.Detalle ?? ""),
                                 new XElement("Precio", p.Precio ?? 0)
                             )
                         )
@@ -123,7 +124,8 @@ public class XmlService
                         personas.Select(p =>
                             new XElement("Persona",
                                 new XElement("Id", p.IdPersona),
-                                new XElement("Nombre", p.Nombre ?? "")
+                                new XElement("Nombre", p.Nombre ?? ""),
+                                new XElement("Documento", p.Documento ?? "")
                             )
                         )
                     )
@@ -197,7 +199,204 @@ public class XmlService
         xml.Save(ruta);
     }
 
-    // leer XML 
+    //Para importar XML con nuevo registro a DB
+    public async Task ImportarDesdeArchivoAsync(IFormFile archivo)
+    {
+        // Validación 
+        if (archivo == null || archivo.Length == 0)
+            return;
+
+        using var stream = archivo.OpenReadStream();
+
+        var xml = XDocument.Load(stream);
+
+        // Detectamos el tipo por nodo raiz del XML
+        var root = xml.Root?.Name.LocalName;
+
+        switch (root)
+        {
+            case "Categorias":
+                foreach (var nodo in xml.Descendants("Categoria"))
+                {
+                    var descripcion = (string?)nodo.Element("Descripcion") ?? "";
+
+                    // comprobar si ya existe
+                    bool existe = await _context.Categoria
+                        .AnyAsync(c => c.Descripcion == descripcion);
+
+                    if (!existe)
+                    {
+                        _context.Categoria.Add(new Models.Categorium
+                        {
+                            Descripcion = descripcion
+                        });
+                    }
+                }
+                break;
+
+            case "Pisos":
+                foreach (var nodo in xml.Descendants("Piso"))
+                {
+                    var descripcion = (string?)nodo.Element("Descripcion") ?? "";
+
+                    bool existe = await _context.Pisos
+                        .AnyAsync(p => p.Descripcion == descripcion);
+
+                    if (!existe)
+                    {
+                        _context.Pisos.Add(new Models.Piso
+                        {
+                            Descripcion = descripcion
+                        });
+                    }
+                }
+                break;
+
+            case "EstadosHabitacion":
+                foreach (var nodo in xml.Descendants("EstadoHabitacion"))
+                {
+                    var descripcion = (string?)nodo.Element("Descripcion") ?? "";
+
+                    bool existe = await _context.EstadoHabitacions
+                        .AnyAsync(e => e.Descripcion == descripcion);
+
+                    if (!existe)
+                    {
+                        _context.EstadoHabitacions.Add(new Models.EstadoHabitacion
+                        {
+                            Descripcion = descripcion
+                        });
+                    }
+                }
+                break;
+
+            case "TiposPersona":
+                foreach (var nodo in xml.Descendants("TipoPersona"))
+                {
+                    var descripcion = (string?)nodo.Element("Descripcion") ?? "";
+
+                    bool existe = await _context.TipoPersonas
+                        .AnyAsync(t => t.Descripcion == descripcion);
+
+                    if (!existe)
+                    {
+                        _context.TipoPersonas.Add(new Models.TipoPersona
+                        {
+                            Descripcion = descripcion
+                        });
+                    }
+                }
+                break;
+
+            case "Productos":
+                foreach (var nodo in xml.Descendants("Producto"))
+                {
+                    // leer datos del XML
+                    var nombre = (string?)nodo.Element("Nombre") ?? "";
+                    var detalle = (string?)nodo.Element("Detalle") ?? "";
+                    var precio = (decimal?)nodo.Element("Precio") ?? 0;
+
+                    // comprobar duplicado por combinación
+                    bool existe = await _context.Productos
+                        .AnyAsync(p => p.Nombre == nombre && p.Detalle == detalle);
+
+                    // insertar solo si no existe producto con nombre y detalle iguales
+                    if (!existe)
+                    {
+                        _context.Productos.Add(new Models.Producto
+                        {
+                            Nombre = nombre,
+                            Detalle = detalle,
+                            Precio = precio
+                        });
+                    }
+                }
+                break;
+
+            case "Personas":
+                foreach (var nodo in xml.Descendants("Persona"))
+                {
+                    var documento = (string?)nodo.Element("Documento") ?? "";
+
+                    bool existe = await _context.Personas
+                        .AnyAsync(p => p.Documento == documento);
+
+                    if (!existe)
+                    {
+                        _context.Personas.Add(new Models.Persona
+                        {
+                            Nombre = (string?)nodo.Element("Nombre") ?? "",
+                            Documento = documento
+                        });
+                    }
+                }
+                break;
+
+            case "Habitaciones":
+                foreach (var nodo in xml.Descendants("Habitacion"))
+                {
+                    var numero = (string?)nodo.Element("Numero") ?? "";
+
+                    // evitamos duplicados
+                    bool existe = await _context.Habitacions
+                        .AnyAsync(h => h.Numero == numero);
+
+                    //si no existe agragmos
+                    if (!existe)
+                    {
+                        _context.Habitacions.Add(new Models.Habitacion
+                        {
+                            Numero = numero,
+                            Precio = (decimal?)nodo.Element("Precio") ?? 0
+                        });
+                    }
+                }
+                break;
+
+            case "Recepciones":
+                foreach (var nodo in xml.Descendants("Recepcion"))
+                {
+                    _context.Recepcions.Add(new Models.Recepcion
+                    {
+                        FechaEntrada = (DateTime?)nodo.Element("FechaEntrada"),
+                        FechaSalida = (DateTime?)nodo.Element("FechaSalida")
+                    });
+                }
+                break;
+
+            case "Ventas":
+                foreach (var nodo in xml.Descendants("Venta"))
+                {
+                    _context.Venta.Add(new Models.Ventum
+                    {
+                        Total = (decimal?)nodo.Element("Total") ?? 0
+                    });
+                }
+                break;
+
+            case "DetallesVenta":
+                foreach (var nodo in xml.Descendants("DetalleVenta"))
+                {
+                    _context.DetalleVenta.Add(new Models.DetalleVentum
+                    {
+                        IdProducto = (int?)nodo.Element("Producto"),
+                        Cantidad = (int?)nodo.Element("Cantidad") ?? 0,
+                        SubTotal = (decimal?)nodo.Element("SubTotal") ?? 0
+                    });
+                }
+                break;
+
+            default:
+                throw new Exception("XML no reconocido");
+        }
+
+        // guardamos todo
+        await _context.SaveChangesAsync();
+    }
+
+
+
+    // leer XML EN DESARROLLO >>>>NO FUNCIONA<<<<< 
     public List<string> Leer()
     {
         var ruta = Path.Combine(_env.WebRootPath, "habitaciones.xml");

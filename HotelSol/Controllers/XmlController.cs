@@ -17,9 +17,9 @@ public class XmlController : Controller
         await _xml.ExportarAsync();
         ViewBag.Mensaje = "XML generado correctamente";
         return View();
-    }*/
-
-    // pantalla inicial
+    }
+    */
+    // pantalla inicial exportar
     public IActionResult Exportar()
     {
         return View();
@@ -34,7 +34,29 @@ public class XmlController : Controller
         return View("Exportar");
     }
 
-    // leer XML (el simple)
+    //pantalla inicial importar
+    public IActionResult Importar()
+    {
+        return View(); 
+    }
+    //import XML
+    [HttpPost]
+    public async Task<IActionResult> ImportarArchivo(IFormFile archivo)
+    {
+        try
+        {
+            await _xml.ImportarDesdeArchivoAsync(archivo);
+            ViewBag.Mensaje = "Archivo importado correctamente";
+        }
+        catch
+        {
+            ViewBag.Mensaje = "Error al importar XML";
+        }
+
+        return View("Importar");
+    }
+
+    // leer XML (NO FUNCIONA ETADO: EN DESARROLLO)
     public IActionResult Leer()
     {
         var datos = _xml.Leer();

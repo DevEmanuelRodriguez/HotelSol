@@ -3,16 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|c:\\users\\acer\\desktop\\fp uoc\\semestre 1 2026\\.net\\producto 2\\hotelsol\\hotelsol\\views\\xml\\exportar.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|solutionrelative:views\\xml\\exportar.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|c:\\users\\acer\\desktop\\fp uoc\\semestre 1 2026\\.net\\producto 2\\hotelsol\\hotelsol\\services\\xmlservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|solutionrelative:services\\xmlservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|c:\\users\\acer\\desktop\\fp uoc\\semestre 1 2026\\.net\\producto 2\\hotelsol\\hotelsol\\controllers\\xmlcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|solutionrelative:controllers\\xmlcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|c:\\users\\acer\\desktop\\fp uoc\\semestre 1 2026\\.net\\producto 2\\hotelsol\\hotelsol\\services\\xmlservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|solutionrelative:services\\xmlservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|c:\\users\\acer\\desktop\\fp uoc\\semestre 1 2026\\.net\\producto 2\\hotelsol\\hotelsol\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|solutionrelative:views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|c:\\users\\acer\\desktop\\fp uoc\\semestre 1 2026\\.net\\producto 2\\hotelsol\\hotelsol\\views\\xml\\importar.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|solutionrelative:views\\xml\\importar.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|c:\\users\\acer\\desktop\\fp uoc\\semestre 1 2026\\.net\\producto 2\\hotelsol\\hotelsol\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -98,24 +102,50 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAACgAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-03-21T10:25:05.733Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Importar.cshtml",
+              "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\Views\\Xml\\Importar.cshtml",
+              "RelativeDocumentMoniker": "Views\\Xml\\Importar.cshtml",
+              "ToolTip": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\Views\\Xml\\Importar.cshtml",
+              "RelativeToolTip": "Views\\Xml\\Importar.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-03-21T10:23:24.812Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
               "Title": "XmlService.cs",
               "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\Services\\XmlService.cs",
               "RelativeDocumentMoniker": "Services\\XmlService.cs",
               "ToolTip": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\Services\\XmlService.cs",
               "RelativeToolTip": "Services\\XmlService.cs",
-              "ViewState": "AgIAACIAAAAAAAAAAAAswCQAAAAHAAAAAAAAAA==",
+              "ViewState": "AgIAAE8BAAAAAAAAAAAQwC4BAABXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-20T23:24:01.616Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "DetalleVenta.cshtml",
               "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\Views\\Datos\\DetalleVenta.cshtml",
               "RelativeDocumentMoniker": "Views\\Datos\\DetalleVenta.cshtml",
@@ -134,14 +164,14 @@
               "RelativeDocumentMoniker": "Controllers\\XmlController.cs",
               "ToolTip": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\Controllers\\XmlController.cs",
               "RelativeToolTip": "Controllers\\XmlController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACQAAAAbAAAAAAAAAA==",
+              "ViewState": "AgIAACYAAAAAAAAAAAAIwCQAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-20T23:26:43.229Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "Recepcion.cshtml",
               "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\Views\\Datos\\Recepcion.cshtml",
               "RelativeDocumentMoniker": "Views\\Datos\\Recepcion.cshtml",
@@ -154,7 +184,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
@@ -167,7 +197,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "TipoPersona.cshtml",
               "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\Views\\Datos\\TipoPersona.cshtml",
               "RelativeDocumentMoniker": "Views\\Datos\\TipoPersona.cshtml",
@@ -180,20 +210,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Exportar.cshtml",
-              "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\Views\\Xml\\Exportar.cshtml",
-              "RelativeDocumentMoniker": "Views\\Xml\\Exportar.cshtml",
-              "ToolTip": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\Views\\Xml\\Exportar.cshtml",
-              "RelativeToolTip": "Views\\Xml\\Exportar.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAUAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-20T23:29:08.288Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "Producto.cshtml",
               "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\Views\\Datos\\Producto.cshtml",
               "RelativeDocumentMoniker": "Views\\Datos\\Producto.cshtml",
@@ -206,7 +223,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "Persona.cshtml",
               "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\Views\\Datos\\Persona.cshtml",
               "RelativeDocumentMoniker": "Views\\Datos\\Persona.cshtml",
@@ -219,7 +236,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "Habitacion.cshtml",
               "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\Views\\Datos\\Habitacion.cshtml",
               "RelativeDocumentMoniker": "Views\\Datos\\Habitacion.cshtml",
@@ -232,7 +249,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "Venta.cshtml",
               "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\Views\\Datos\\Venta.cshtml",
               "RelativeDocumentMoniker": "Views\\Datos\\Venta.cshtml",
@@ -245,7 +262,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 14,
               "Title": "EstadoHabitacion.cshtml",
               "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\Views\\Datos\\EstadoHabitacion.cshtml",
               "RelativeDocumentMoniker": "Views\\Datos\\EstadoHabitacion.cshtml",
@@ -258,7 +275,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "Piso.cshtml",
               "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\Views\\Datos\\Piso.cshtml",
               "RelativeDocumentMoniker": "Views\\Datos\\Piso.cshtml",
@@ -271,7 +288,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "Categoria.cshtml",
               "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\Views\\Datos\\Categoria.cshtml",
               "RelativeDocumentMoniker": "Views\\Datos\\Categoria.cshtml",
@@ -284,7 +301,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 15,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\Views\\Datos\\Index.cshtml",
               "RelativeDocumentMoniker": "Views\\Datos\\Index.cshtml",
@@ -297,7 +314,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 16,
               "Title": "DatosController.cs",
               "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\Controllers\\DatosController.cs",
               "RelativeDocumentMoniker": "Controllers\\DatosController.cs",
@@ -310,7 +327,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 21,
               "Title": "DbHotelContext.cs",
               "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\Data\\DbHotelContext.cs",
               "RelativeDocumentMoniker": "Data\\DbHotelContext.cs",
@@ -322,7 +339,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 17,
               "Title": "Create.cshtml",
               "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\Views\\Habitaciones\\Create.cshtml",
               "RelativeDocumentMoniker": "Views\\Habitaciones\\Create.cshtml",
@@ -334,7 +351,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 22,
               "Title": "launchSettings.json",
               "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\Properties\\launchSettings.json",
               "RelativeDocumentMoniker": "Properties\\launchSettings.json",
@@ -346,7 +363,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 20,
               "Title": "HabitacionesController.cs",
               "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\Controllers\\HabitacionesController.cs",
               "RelativeDocumentMoniker": "Controllers\\HabitacionesController.cs",
@@ -358,7 +375,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 18,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\Views\\Habitaciones\\Index.cshtml",
               "RelativeDocumentMoniker": "Views\\Habitaciones\\Index.cshtml",
@@ -370,7 +387,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 19,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\appsettings.json",
               "RelativeDocumentMoniker": "appsettings.json",
