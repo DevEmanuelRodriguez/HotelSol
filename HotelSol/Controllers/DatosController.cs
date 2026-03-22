@@ -1,4 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/*
+ Este controller permite al usuario seleccionar una tabla de la base de datos
+ y visualizar su contenido.
+ Utiliza Entity Framework para obtener los datos desde SQL Server.
+*/
+
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HotelSol.Data;
 
@@ -6,23 +12,26 @@ namespace HotelSol.Controllers;
 
 public class DatosController : Controller
 {
+    // DbContext: permite acceder a la base de datos
     private readonly DbHotelContext _context;
 
+    // Inyección de dependencias del DbContext
     public DatosController(DbHotelContext context)
     {
         _context = context;
     }
 
-    // 👉 Vista inicial (selector)
+    // Vista inicial donde se muestra el selector de tablas
     public IActionResult Index()
     {
         return View();
     }
 
-    // 👉 Procesar selección
+    // Método que recibe la tabla seleccionada por el usuario
     [HttpPost]
     public async Task<IActionResult> VerTabla(string tabla)
     {
+        // Según la tabla elegida, se consulta la BD
         switch (tabla)
         {
             case "Categoria":
@@ -66,6 +75,7 @@ public class DatosController : Controller
                 return View("DetalleVenta", detalles);
 
             default:
+                // Si no coincide, vuelve al selector
                 return RedirectToAction("Index");
         }
     }

@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Habitaciones>
+  <Habitacion>
+    <Id>1</Id>
+    <Numero>001</Numero>
+    <Detalle>WIFI + BAÑO + TV + CABLE</Detalle>
+    <Precio>70.00</Precio>
+  </Habitacion>
+  <Habitacion>
+    <Id>2</Id>
+    <Numero>002</Numero>
+    <Detalle>WIFI + BAÑO + TV + CABLE</Detalle>
+    <Precio>80.00</Precio>
+  </Habitacion>
+  <Habitacion>
+    <Id>3</Id>
+    <Numero>003</Numero>
+    <Detalle>BAÑO + TV + CABLE</Detalle>
+    <Precio>60.00</Precio>
+  </Habitacion>
+  <Habitacion>
+    <Id>4</Id>
+    <Numero>004</Numero>
+    <Detalle>WIFI + BAÑO + TV + CABLE</Detalle>
+    <Precio>80.00</Precio>
+  </Habitacion>
+  <Habitacion>
+    <Id>5</Id>
+    <Numero>005</Numero>
+    <Detalle>WIFI + BAÑO</Detalle>
+    <Precio>50.00</Precio>
+  </Habitacion>
+  <Habitacion>
+    <Id>6</Id>
+    <Numero>006</Numero>
+    <Detalle>WIFI + BAÑO + TV 4K + CABLE</Detalle>
+    <Precio>80.00</Precio>
+  </Habitacion>
+  <Habitacion>
+    <Id>7</Id>
+    <Numero>007</Numero>
+    <Detalle>WIFI + BAÑO + TV 4K + CABLE</Detalle>
+    <Precio>90.00</Precio>
+  </Habitacion>
+  <Habitacion>
+    <Id>8</Id>
+    <Numero>008</Numero>
+    <Detalle>WIFI + BAÑO + TV + CABLE</Detalle>
+    <Precio>70.00</Precio>
+  </Habitacion>
+  <Habitacion>
+    <Id>9</Id>
+    <Numero>009</Numero>
+    <Detalle>WIFI + BAÑO + TV + CABLE</Detalle>
+    <Precio>80.00</Precio>
+  </Habitacion>
+  <Habitacion>
+    <Id>10</Id>
+    <Numero>010</Numero>
+    <Detalle>WIFI + BAÑO + TV + CABLE</Detalle>
+    <Precio>70.00</Precio>
+  </Habitacion>
+  <Habitacion>
+    <Id>11</Id>
+    <Numero>011</Numero>
+    <Detalle>WIFI + BAÑO + TV 4K + CABLE</Detalle>
+    <Precio>120.00</Precio>
+  </Habitacion>
+  <Habitacion>
+    <Id>12</Id>
+    <Numero>012</Numero>
+    <Detalle>WIFI + BAÑO + TV 4K + CABLE</Detalle>
+    <Precio>120.00</Precio>
+  </Habitacion>
+  <Habitacion>
+    <Id>13</Id>
+    <Numero>013</Numero>
+    <Detalle>WIFI + BAÑO + TV 4K + CABLE</Detalle>
+    <Precio>120.00</Precio>
+  </Habitacion>
+  <Habitacion>
+    <Id>14</Id>
+    <Numero>014</Numero>
+    <Detalle>WIFI + BAÑO + TV + CABLE</Detalle>
+    <Precio>85.00</Precio>
+  </Habitacion>
+  <Habitacion>
+    <Id>15</Id>
+    <Numero>015</Numero>
+    <Detalle>WIFI + BAÑO + TV + CABLE</Detalle>
+    <Precio>75.00</Precio>
+  </Habitacion>
+  <Habitacion>
+    <Id>16</Id>
+    <Numero>016</Numero>
+    <Detalle>WIFI + BAÑO</Detalle>
+    <Precio>65.00</Precio>
+  </Habitacion>
+  <Habitacion>
+    <Id>17</Id>
+    <Numero>017</Numero>
+    <Detalle>BAÑO</Detalle>
+    <Precio>35.00</Precio>
+  </Habitacion>
+</Habitaciones>

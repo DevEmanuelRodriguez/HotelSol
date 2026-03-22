@@ -442,3 +442,4 @@ C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\Producto 2\HotelSol\HotelSol\o
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\Producto 2\HotelSol\HotelSol\obj\Debug\net9.0\HotelSol.pdb
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\Producto 2\HotelSol\HotelSol\obj\Debug\net9.0\HotelSol.genruntimeconfig.cache
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\Producto 2\HotelSol\HotelSol\obj\Debug\net9.0\ref\HotelSol.dll
+C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\Producto 2\HotelSol\HotelSol\obj\Debug\net9.0\compressed\os4lv9agv8-{0}-g1ih01cjqc-g1ih01cjqc.gz

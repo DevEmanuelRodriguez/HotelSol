@@ -7,6 +7,7 @@ namespace HotelSol.Data;
 
 public partial class DbHotelContext : DbContext
 {
+    //Constructores
     public DbHotelContext()
     {
     }
@@ -16,6 +17,7 @@ public partial class DbHotelContext : DbContext
     {
     }
 
+    //Cada DbSet es una tabla en la DB
     public virtual DbSet<Categorium> Categoria { get; set; }
 
     public virtual DbSet<DetalleVentum> DetalleVenta { get; set; }
@@ -35,17 +37,15 @@ public partial class DbHotelContext : DbContext
     public virtual DbSet<TipoPersona> TipoPersonas { get; set; }
 
     public virtual DbSet<Ventum> Venta { get; set; }
-    /*
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=DB_HOTEL;Integrated Security=True;Trust Server Certificate=True");
-    */
+    
+    //Para configurar tablas
     protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
+    {   //tabla categoria
         modelBuilder.Entity<Categorium>(entity =>
         {
             entity.HasKey(e => e.IdCategoria).HasName("PK__CATEGORI__A3C02A10A721BE6A");
 
+            //atributos con valores por defecto
             entity.Property(e => e.Estado).HasDefaultValue(true);
             entity.Property(e => e.FechaCreacion).HasDefaultValueSql("(getdate())");
         });

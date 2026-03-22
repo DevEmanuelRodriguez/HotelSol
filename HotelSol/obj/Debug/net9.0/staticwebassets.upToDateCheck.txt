@@ -61,6 +61,7 @@ wwwroot\lib\jquery\dist\jquery.slim.js
 wwwroot\lib\jquery\dist\jquery.slim.min.js
 wwwroot\lib\jquery\dist\jquery.slim.min.map
 wwwroot\lib\jquery\LICENSE.txt
+wwwroot\Habitacion.xml
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\Producto 2\HotelSol\HotelSol\wwwroot\css\site.css
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\Producto 2\HotelSol\HotelSol\wwwroot\favicon.ico
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\Producto 2\HotelSol\HotelSol\wwwroot\js\site.js
@@ -123,3 +124,4 @@ C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\Producto 2\HotelSol\HotelSol\w
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\Producto 2\HotelSol\HotelSol\wwwroot\lib\jquery\dist\jquery.slim.min.js
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\Producto 2\HotelSol\HotelSol\wwwroot\lib\jquery\dist\jquery.slim.min.map
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\Producto 2\HotelSol\HotelSol\wwwroot\lib\jquery\LICENSE.txt
+C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\Producto 2\HotelSol\HotelSol\wwwroot\Habitacion.xml

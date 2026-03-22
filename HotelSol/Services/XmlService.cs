@@ -1,12 +1,16 @@
-﻿using System.Xml.Linq;
+﻿/*
+ XmlService contiene toda la lógica relacionada con XML para exportar e importar datos, se procesa XML usando LINQ to XML
+*/
+using System.Xml.Linq;
 using HotelSol.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelSol.Services;
 
 public class XmlService
-{
+{   // Acceso a la base de datos
     private readonly DbHotelContext _context;
+    //Permite acceder a wwwroot para guardar los XML exportados
     private readonly IWebHostEnvironment _env;
 
     public XmlService(DbHotelContext context, IWebHostEnvironment env)
@@ -36,15 +40,18 @@ public class XmlService
         xml.Save(ruta);
     }*/
 
-    // exportar cualquier tabla
-    public async Task ExportarTablaAsync(string tabla)
+    // Para exportar cualquier tabla
+    public async Task ExportarTabla(string tabla)
     {
+        //ruta donde se guardará el XML
         var ruta = Path.Combine(_env.WebRootPath, $"{tabla}.xml");
 
         XDocument xml;
 
+        //switch para gestionar la tabla seleccionada
         switch (tabla)
         {
+            //de cada clase podemos selccionar aquellos atributos que nos interesen 
             case "Categoria":
                 var categorias = await _context.Categoria.ToListAsync();
                 xml = new XDocument(
@@ -140,7 +147,9 @@ public class XmlService
                             new XElement("Habitacion",
                                 new XElement("Id", h.IdHabitacion),
                                 new XElement("Numero", h.Numero ?? ""),
+                                new XElement("Detalle", h.Detalle ?? ""),
                                 new XElement("Precio", h.Precio ?? 0)
+
                             )
                         )
                     )
@@ -200,7 +209,7 @@ public class XmlService
     }
 
     //Para importar XML con nuevo registro a DB
-    public async Task ImportarDesdeArchivoAsync(IFormFile archivo)
+    public async Task ImportarDesdeArchivo(IFormFile archivo)
     {
         // Validación 
         if (archivo == null || archivo.Length == 0)
@@ -336,6 +345,7 @@ public class XmlService
                 foreach (var nodo in xml.Descendants("Habitacion"))
                 {
                     var numero = (string?)nodo.Element("Numero") ?? "";
+                    
 
                     // evitamos duplicados
                     bool existe = await _context.Habitacions
@@ -347,6 +357,7 @@ public class XmlService
                         _context.Habitacions.Add(new Models.Habitacion
                         {
                             Numero = numero,
+                            Detalle = (string?)nodo.Element("Detalle") ?? "",
                             Precio = (decimal?)nodo.Element("Precio") ?? 0
                         });
                     }
@@ -390,24 +401,11 @@ public class XmlService
                 throw new Exception("XML no reconocido");
         }
 
-        // guardamos todo
+        // guardamos cambios en la DB
         await _context.SaveChangesAsync();
     }
 
 
 
-    // leer XML EN DESARROLLO >>>>NO FUNCIONA<<<<< 
-    public List<string> Leer()
-    {
-        var ruta = Path.Combine(_env.WebRootPath, "habitaciones.xml");
-
-        if (!File.Exists(ruta))
-            return new List<string>();
-
-        var xml = XDocument.Load(ruta);
-
-        return xml.Descendants("Habitacion")
-                  .Select(x => (string?)x.Element("Numero") ?? "")
-                  .ToList();
-    }
+    
 }
