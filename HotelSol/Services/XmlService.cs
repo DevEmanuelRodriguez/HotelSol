@@ -53,11 +53,12 @@ public class XmlService
         {
             //de cada clase podemos selccionar aquellos atributos que nos interesen 
             case "Categoria":
+                //await para esperar a que termine la operacion sin bloquear la aplicación
                 var categorias = await _context.Categoria.ToListAsync();
                 xml = new XDocument(
-                    new XElement("Categorias",
+                    new XElement("Categorias",//nodo raiz 
                         categorias.Select(c =>
-                            new XElement("Categoria",
+                            new XElement("Categoria",//nodo interno
                                 new XElement("Id", c.IdCategoria),
                                 new XElement("Descripcion", c.Descripcion ?? "")
                             )

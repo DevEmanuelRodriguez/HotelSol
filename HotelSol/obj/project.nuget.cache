@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "2WuFUUd6rRE=",
+  "dgSpecHash": "B14W4g7q9Gc=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\Producto 2\\HotelSol\\HotelSol\\HotelSol.csproj",
+  "projectFilePath": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\P2\\Producto 2\\HotelSol\\HotelSol\\HotelSol.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Acer\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Acer\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
