@@ -34,12 +34,13 @@ namespace HotelSol.Controllers
                 .Distinct()
                 .Count();
 
-            // DISPONIBLES
-            var disponibles = total - ocupadas;
-
             // EN LIMPIEZA (según estado)
             var limpieza = _context.Habitacions
                 .Count(h => h.IdEstadoHabitacion == 3); //  ajusta si cambia en tu BD
+
+            // DISPONIBLES
+            var disponibles = total - ocupadas - limpieza;
+            
 
             //  Enviamos datos a la vista
             ViewBag.TotalHabitaciones = total;

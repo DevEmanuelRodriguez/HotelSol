@@ -1,74 +1,113 @@
 ﻿<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-    <!-- Marca -->
+    <!-- Logo / Marca -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-controller="Home" asp-action="Index">
-        <div class="sidebar-brand-icon rotate-n-15">
+        <div class="sidebar-brand-icon">
             <i class="fas fa-hotel"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">HotelSol</div>
+        <div class="sidebar-brand-text mx-2">MI HOTEL</div>
     </a>
 
     <hr class="sidebar-divider my-0">
 
     <!-- Dashboard -->
-    <li class="nav-item active">
+    <li class="nav-item">
         <a class="nav-link" asp-controller="Home" asp-action="Index">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <i class="fas fa-tachometer-alt"></i>
             <span>Dashboard</span>
         </a>
     </li>
 
     <hr class="sidebar-divider">
 
-    <!-- Gestión -->
-    <div class="sidebar-heading">
-        Gestión
-    </div>
-
-    <!-- Habitaciones -->
+    <!-- Gestion -->
     <li class="nav-item">
-        <a class="nav-link" asp-controller="Habitaciones" asp-action="Index">
-            <i class="fas fa-bed"></i>
-            <span>Habitaciones</span>
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseGestion"
+           aria-expanded="false" aria-controls="collapseGestion">
+            <i class="fas fa-caret-up"></i>
+            <span>Gestion</span>
+        </a>
+        <div id="collapseGestion" class="collapse" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item" asp-controller="Recepcion" asp-action="Index">Recepción</a>
+                <a class="collapse-item" href="#">Salidas</a>
+                <a class="collapse-item" asp-controller="Habitaciones" asp-action="Index">Habitaciones</a>
+                
+                
+            </div>
+        </div>
+    </li>
+
+    <!-- Tienda -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTienda"
+           aria-expanded="false" aria-controls="collapseTienda">
+            <i class="fas fa-shopping-bag"></i>
+            <span>Tienda</span>
+        </a>
+        <div id="collapseTienda" class="collapse" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item" href="#">Productos</a>
+                <a class="collapse-item" href="#">Ventas</a>
+                <a class="collapse-item" href="#">Detalle venta</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Mantenimiento -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento"
+           aria-expanded="false" aria-controls="collapseMantenimiento">
+            <i class="fas fa-wrench"></i>
+            <span>Mantenimiento</span>
+        </a>
+        <div id="collapseMantenimiento" class="collapse" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item" href="#">Estado Habitación</a>
+                <a class="collapse-item" href="#">Tipo Persona</a>
+                <a class="collapse-item" href="#">XML Exportar</a>
+                <a class="collapse-item" href="#">XML Importar</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Reportes -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReportes"
+           aria-expanded="false" aria-controls="collapseReportes">
+            <i class="fas fa-chart-line"></i>
+            <span>Reportes</span>
+        </a>
+        <div id="collapseReportes" class="collapse" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item" href="#">Reporte de habitaciones</a>
+                <a class="collapse-item" href="#">Reporte de clientes</a>
+                <a class="collapse-item" href="#">Reporte de ventas</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Usuarios -->
+    <li class="nav-item">
+        <a class="nav-link" href="#">
+            <i class="fas fa-user-cog"></i>
+            <span>Usuarios</span>
         </a>
     </li>
 
     <!-- Clientes -->
     <li class="nav-item">
-        <a class="nav-link" asp-controller="Clientes" asp-action="Index">
+        <a class="nav-link" href="#">
             <i class="fas fa-users"></i>
             <span>Clientes</span>
         </a>
     </li>
 
-    <!-- Reservas -->
-    <li class="nav-item">
-        <a class="nav-link" asp-controller="Reservas" asp-action="Index">
-            <i class="fas fa-calendar-check"></i>
-            <span>Reservas</span>
-        </a>
-    </li>
-
-    <hr class="sidebar-divider">
-
-    <!-- Extras -->
-    <div class="sidebar-heading">
-        Extras
-    </div>
-
-    <!-- Reportes -->
+    <!-- Ver Premium -->
     <li class="nav-item">
         <a class="nav-link" href="#">
-            <i class="fas fa-chart-area"></i>
-            <span>Reportes</span>
-        </a>
-    </li>
-
-    <!-- Configuración -->
-    <li class="nav-item">
-        <a class="nav-link" href="#">
-            <i class="fas fa-cog"></i>
-            <span>Configuración</span>
+            <i class="fas fa-gem"></i>
+            <span>Ver Premium =)</span>
         </a>
     </li>
 

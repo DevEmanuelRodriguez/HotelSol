@@ -1,0 +1,133 @@
+﻿@model HotelSol.Models.ViewModels.RecepcionCreateVM
+
+@{
+    ViewData["Title"] = "Nueva Recepción";
+}
+
+<div class="card shadow mb-3">
+    <div class="card-body">
+        <h5 class="text-primary font-weight-bold mb-3">Detalles de la Habitación</h5>
+
+        <div class="row">
+            <div class="col-md-3">
+                <strong>Número:</strong>
+                <div>@Model.NumeroHabitacion</div>
+            </div>
+            <div class="col-md-3">
+                <strong>Categoría:</strong>
+                <div>@Model.Categoria</div>
+            </div>
+            <div class="col-md-3">
+                <strong>Piso:</strong>
+                <div>@Model.Piso</div>
+            </div>
+            <div class="col-md-3">
+                <strong>Detalles:</strong>
+                <div>@Model.DetalleHabitacion</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form asp-action="Create" method="post">
+    <input asp-for="IdHabitacion" type="hidden" />
+    <input asp-for="IdClienteExistente" type="hidden" id="IdClienteExistente" />
+
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="row">
+                <!-- Cliente -->
+                <div class="col-md-6">
+                    <h5 class="text-primary font-weight-bold mb-3">Detalle Cliente</h5>
+
+                    <label>Nro Documento:</label>
+                    <div class="input-group mb-3">
+                        <input asp-for="DocumentoBusqueda" class="form-control" id="DocumentoBusqueda" />
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-success" id="btnBuscarCliente">Buscar</button>
+                        </div>
+                    </div>
+
+                    <label>Tipo Documento:</label>
+                    <select asp-for="TipoDocumento" class="form-control mb-3">
+                        <option value="DNI" selected>DNI</option>
+                        <option value="PASAPORTE">Pasaporte</option>
+                        <option value="NIE">NIE</option>
+                    </select>
+
+                    <label>Nombres:</label>
+                    <input asp-for="Nombre" class="form-control mb-3" id="Nombre" />
+
+                    <label>Apellidos:</label>
+                    <input asp-for="Apellido" class="form-control mb-3" id="Apellido" />
+
+                    <label>Correo:</label>
+                    <input asp-for="Correo" class="form-control mb-3" id="Correo" />
+                </div>
+
+                <!-- Reserva -->
+                <div class="col-md-6">
+                    <h5 class="text-primary font-weight-bold mb-3">Detalle Reservación</h5>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Fecha Entrada:</label>
+                            <input asp-for="FechaEntrada" class="form-control mb-3" type="date" />
+                        </div>
+                        <div class="col-md-6">
+                            <label>Fecha Salida:</label>
+                            <input asp-for="FechaSalida" class="form-control mb-3" type="date" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Precio:</label>
+                            <input asp-for="PrecioInicial" class="form-control mb-3" />
+                        </div>
+                        <div class="col-md-6">
+                            <label>Adelanto:</label>
+                            <input asp-for="Adelanto" class="form-control mb-3" />
+                        </div>
+                    </div>
+
+                    <label>Observación:</label>
+                    <textarea asp-for="Observacion" class="form-control mb-3" rows="5"></textarea>
+
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary px-4">Registrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.getElementById("btnBuscarCliente").addEventListener("click", async function () {
+            const documento = document.getElementById("DocumentoBusqueda").value;
+
+            if (!documento) return;
+
+            const response = await fetch(`/Recepcion/BuscarCliente?documento=${encodeURIComponent(documento)}`);
+            const data = await response.json();
+
+            if (data) {
+                document.getElementById("IdClienteExistente").value = data.idPersona;
+                document.getElementById("TipoDocumento").value = data.tipoDocumento ?? "";
+                document.getElementById("Nombre").value = data.nombre ?? "";
+                document.getElementById("Apellido").value = data.apellido ?? "";
+                document.getElementById("Correo").value = data.correo ?? "";
+                document.getElementById("Documento").value = data.documento ?? documento;
+            } else {
+                document.getElementById("IdClienteExistente").value = "";
+                alert("Cliente no encontrado. Puedes registrarlo manualmente.");
+            }
+        });
+    </script>
+}
