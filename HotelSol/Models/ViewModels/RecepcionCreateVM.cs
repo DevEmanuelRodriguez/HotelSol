@@ -12,6 +12,7 @@ namespace HotelSol.Models.ViewModels
         public string Piso { get; set; } = "";
         public string DetalleHabitacion { get; set; } = "";
         public decimal PrecioHabitacion { get; set; }
+        public List<Persona> Clientes { get; set; } = new();
 
         [Display(Name = "Nro Documento")]
         public string? DocumentoBusqueda { get; set; }
@@ -49,6 +50,6 @@ namespace HotelSol.Models.ViewModels
 
         public string? Observacion { get; set; }
 
-        public List<TipoPersona> TiposPersona { get; set; } = new();
+        //public List<TipoPersona> TiposPersona { get; set; } = new();
     }
 }

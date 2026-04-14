@@ -30,29 +30,41 @@
 </div>
 
 <form asp-action="Create" method="post">
+
     <input asp-for="IdHabitacion" type="hidden" />
     <input asp-for="IdClienteExistente" type="hidden" id="IdClienteExistente" />
+
+    <!-- Precio por noche oculto -->
+    <input type="hidden" id="PrecioNoche" value="@Model.PrecioHabitacion" />
 
     <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
     <div class="card shadow">
         <div class="card-body">
             <div class="row">
-                <!-- Cliente -->
+
+                <!-- CLIENTE -->
                 <div class="col-md-6">
                     <h5 class="text-primary font-weight-bold mb-3">Detalle Cliente</h5>
 
-                    <label>Nro Documento:</label>
+                    <label>Nro Documento para buscar:</label>
                     <div class="input-group mb-3">
                         <input asp-for="DocumentoBusqueda" class="form-control" id="DocumentoBusqueda" />
                         <div class="input-group-append">
-                            <button type="button" class="btn btn-success" id="btnBuscarCliente">Buscar</button>
+                            <!-- SOLO abre modal -->
+                            <button type="button" class="btn btn-success"
+                                    onclick="$('#modalClientes').modal('show')">
+                                Buscar
+                            </button>
                         </div>
                     </div>
 
+                    <label>Documento:</label>
+                    <input asp-for="Documento" class="form-control mb-3" id="Documento" />
+
                     <label>Tipo Documento:</label>
-                    <select asp-for="TipoDocumento" class="form-control mb-3">
-                        <option value="DNI" selected>DNI</option>
+                    <select asp-for="TipoDocumento" class="form-control mb-3" id="TipoDocumento">
+                        <option value="DNI">DNI</option>
                         <option value="PASAPORTE">Pasaporte</option>
                         <option value="NIE">NIE</option>
                     </select>
@@ -67,25 +79,37 @@
                     <input asp-for="Correo" class="form-control mb-3" id="Correo" />
                 </div>
 
-                <!-- Reserva -->
+                <!-- RESERVA -->
                 <div class="col-md-6">
                     <h5 class="text-primary font-weight-bold mb-3">Detalle Reservación</h5>
 
                     <div class="row">
                         <div class="col-md-6">
                             <label>Fecha Entrada:</label>
-                            <input asp-for="FechaEntrada" class="form-control mb-3" type="date" />
+                            <input asp-for="FechaEntrada" id="FechaEntrada" class="form-control mb-3" type="date" />
                         </div>
                         <div class="col-md-6">
                             <label>Fecha Salida:</label>
-                            <input asp-for="FechaSalida" class="form-control mb-3" type="date" />
+                            <input asp-for="FechaSalida" id="FechaSalida" class="form-control mb-3" type="date" />
+                        </div>
+                    </div>
+
+                    <!-- 🔥 CAMBIO: NUEVOS CAMPOS -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Noches:</label>
+                            <input type="text" id="Noches" class="form-control mb-3" readonly />
+                        </div>
+                        <div class="col-md-6">
+                            <label>Temporada:</label>
+                            <input type="text" id="Temporada" class="form-control mb-3" readonly />
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6">
-                            <label>Precio:</label>
-                            <input asp-for="PrecioInicial" class="form-control mb-3" />
+                            <label>Precio Total:</label>
+                            <input asp-for="PrecioInicial" id="PrecioInicial" class="form-control mb-3" readonly />
                         </div>
                         <div class="col-md-6">
                             <label>Adelanto:</label>
@@ -100,34 +124,152 @@
                         <button type="submit" class="btn btn-primary px-4">Registrar</button>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
 </form>
 
+<!-- MODAL CLIENTES -->
+<div class="modal fade" id="modalClientes" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5>Lista de Clientes</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                @if (Model.Clientes != null && Model.Clientes.Any())
+                {
+                    <table class="table table-bordered" id="tablaClientes">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Documento</th>
+                                <th>Nombre</th>
+                                <th>Apellido</th>
+                                <th>Correo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var c in Model.Clientes)
+                            {
+                                <tr>
+                                    <td>
+                                        <button type="button" class="btn btn-primary btn-sm"
+                                                onclick="seleccionarCliente(@c.IdPersona, '@c.Documento', '@c.Nombre', '@c.Apellido', '@c.Correo', '@c.TipoDocumento')">
+                                            ✔
+                                        </button>
+                                    </td>
+                                    <td>@c.Documento</td>
+                                    <td>@c.Nombre</td>
+                                    <td>@c.Apellido</td>
+                                    <td>@c.Correo</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="alert alert-info">No hay clientes</div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
+
 @section Scripts {
+
     <partial name="_ValidationScriptsPartial" />
 
+    <!-- SELECCIONAR CLIENTE -->
     <script>
-        document.getElementById("btnBuscarCliente").addEventListener("click", async function () {
-            const documento = document.getElementById("DocumentoBusqueda").value;
+        function seleccionarCliente(id, documento, nombre, apellido, correo, tipoDocumento) {
 
-            if (!documento) return;
+            document.getElementById("IdClienteExistente").value = id;
+            document.getElementById("DocumentoBusqueda").value = documento;
+            document.getElementById("Documento").value = documento;
+            document.getElementById("Nombre").value = nombre;
+            document.getElementById("Apellido").value = apellido;
+            document.getElementById("Correo").value = correo;
+            document.getElementById("TipoDocumento").value = tipoDocumento || "DNI";
 
-            const response = await fetch(`/Recepcion/BuscarCliente?documento=${encodeURIComponent(documento)}`);
-            const data = await response.json();
+            $('#modalClientes').modal('hide');
+        }
+    </script>
 
-            if (data) {
-                document.getElementById("IdClienteExistente").value = data.idPersona;
-                document.getElementById("TipoDocumento").value = data.tipoDocumento ?? "";
-                document.getElementById("Nombre").value = data.nombre ?? "";
-                document.getElementById("Apellido").value = data.apellido ?? "";
-                document.getElementById("Correo").value = data.correo ?? "";
-                document.getElementById("Documento").value = data.documento ?? documento;
-            } else {
-                document.getElementById("IdClienteExistente").value = "";
-                alert("Cliente no encontrado. Puedes registrarlo manualmente.");
-            }
+    <!-- FILTRO CLIENTES -->
+    <script>
+        document.getElementById("DocumentoBusqueda").addEventListener("keyup", function () {
+
+            let filtro = this.value.toLowerCase();
+            let filas = document.querySelectorAll("#tablaClientes tbody tr");
+
+            filas.forEach(fila => {
+                let texto = fila.innerText.toLowerCase();
+                fila.style.display = texto.includes(filtro) ? "" : "none";
+            });
         });
+    </script>
+
+    <!-- CAMBIO: PRECIO + TEMPORADA -->
+    <script>
+        function obtenerMultiplicador(fecha) {
+
+            let mes = fecha.getMonth() + 1;
+
+            if (mes >= 6 && mes <= 8)
+                return { mult: 1.5, nombre: "ALTA 🔴" };
+
+            if (mes == 1 || mes == 2)
+                return { mult: 0.8, nombre: "BAJA 🟢" };
+
+            return { mult: 1, nombre: "MEDIA 🟡" };
+        }
+
+        function calcularTotal() {
+
+            let entrada = document.getElementById("FechaEntrada").value;
+            let salida = document.getElementById("FechaSalida").value;
+            let precio = parseFloat(document.getElementById("PrecioNoche").value);
+
+            if (!entrada || !salida) return;
+
+            let f1 = new Date(entrada);
+            let f2 = new Date(salida);
+
+            let dias = (f2 - f1) / (1000 * 60 * 60 * 24);
+
+            if (dias <= 0) {
+                document.getElementById("PrecioInicial").value = "";
+                document.getElementById("Noches").value = "";
+                document.getElementById("Temporada").value = "";
+                return;
+            }
+
+            let total = 0;
+            let temporada = "";
+
+            for (let i = 0; i < dias; i++) {
+                let fecha = new Date(f1);
+                fecha.setDate(f1.getDate() + i);
+
+                let temp = obtenerMultiplicador(fecha);
+                total += precio * temp.mult;
+
+                if (i === 0) temporada = temp.nombre;
+            }
+
+            document.getElementById("PrecioInicial").value = total.toFixed(2);
+            document.getElementById("Noches").value = dias;
+            document.getElementById("Temporada").value = temporada;
+        }
+
+        document.getElementById("FechaEntrada").addEventListener("change", calcularTotal);
+        document.getElementById("FechaSalida").addEventListener("change", calcularTotal);
     </script>
 }
