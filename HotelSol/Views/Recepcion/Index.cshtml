@@ -2,6 +2,10 @@
 
 @{
     ViewData["Title"] = "Recepción";
+
+    // 🔥 USAR EL MODELO (NO Query directamente)
+    var fechaEntrada = Model.FechaEntrada?.ToString("yyyy-MM-dd");
+    var fechaSalida = Model.FechaSalida?.ToString("yyyy-MM-dd");
 }
 
 <style>
@@ -13,24 +17,14 @@
         transition: 0.2s;
     }
 
-    .habitacion-card:hover {
-        box-shadow: 0 4px 14px rgba(0,0,0,.08);
-        transform: translateY(-2px);
-    }
+        .habitacion-card:hover {
+            box-shadow: 0 4px 14px rgba(0,0,0,.08);
+            transform: translateY(-2px);
+        }
 
     .habitacion-top {
         padding: 18px;
         min-height: 110px;
-    }
-
-    .habitacion-top h5 {
-        font-weight: 700;
-        margin-bottom: 4px;
-    }
-
-    .habitacion-top small {
-        text-transform: uppercase;
-        font-weight: 600;
     }
 
     .habitacion-bottom {
@@ -42,9 +36,17 @@
         align-items: center;
     }
 
-    .disponible { background: #1cc88a; }
-    .ocupado { background: #e74a3b; }
-    .limpieza { background: #36b9cc; }
+    .disponible {
+        background: #1cc88a;
+    }
+
+    .ocupado {
+        background: #e74a3b;
+    }
+
+    .limpieza {
+        background: #36b9cc;
+    }
 
     .link-card {
         text-decoration: none;
@@ -52,80 +54,100 @@
     }
 </style>
 
+<!-- 🔥 FILTRO COMPLETO -->
 <div class="card shadow mb-4">
     <div class="card-body">
+
         <form method="get" asp-action="Index" class="form-inline">
-            <label class="mr-3 font-weight-bold">Seleccionar Piso</label>
-            <select name="pisoId" class="form-control mr-2" style="min-width: 300px;" onchange="this.form.submit()">
+
+            <!-- PISO -->
+            <label class="mr-2 font-weight-bold">Piso</label>
+            <select name="pisoId" class="form-control mr-3">
                 <option value="">Todos</option>
+
                 @foreach (var piso in Model.Pisos)
                 {
-                    if (Model.PisoSeleccionado == piso.IdPiso)
-                    {
-                        <option value="@piso.IdPiso" selected>@piso.Descripcion</option>
-                    }
-                    else
-                    {
-                        <option value="@piso.IdPiso">@piso.Descripcion</option>
-                    }
+                    <option value="@piso.IdPiso"
+                            selected="@(Model.PisoSeleccionado == piso.IdPiso)">
+                        @piso.Descripcion
+                    </option>
                 }
             </select>
+
+            <!-- 🔥 FECHAS -->
+            <label class="mr-2 font-weight-bold">Entrada</label>
+            <input type="date" name="fechaEntrada"
+                   value="@fechaEntrada"
+                   class="form-control mr-3" />
+
+            <label class="mr-2 font-weight-bold">Salida</label>
+            <input type="date" name="fechaSalida"
+                   value="@fechaSalida"
+                   class="form-control mr-3" />
+
+            <button type="submit" class="btn btn-primary">
+                Buscar disponibilidad
+            </button>
+
         </form>
     </div>
 </div>
 
+<!-- 🔥 TARJETAS -->
 <div class="row">
     @foreach (var item in Model.Habitaciones)
     {
         <div class="col-xl-3 col-md-6 mb-4">
-            @if (item.PuedeReservar)
+
+            <!-- 🔥 USAMOS DIRECTO item.OcupadaEnFechas -->
+            @if (item.PuedeReservar && !item.OcupadaEnFechas)
             {
-                <a asp-action="Create" asp-route-id="@item.IdHabitacion" class="link-card">
+                <!-- DISPONIBLE -->
+                <a asp-action="Create"
+                   asp-route-id="@item.IdHabitacion"
+                   asp-route-fechaEntrada="@(Model.FechaEntrada?.ToString("yyyy-MM-dd"))"
+                   asp-route-fechaSalida="@(Model.FechaSalida?.ToString("yyyy-MM-dd"))"
+                   class="link-card">
+
                     <div class="habitacion-card">
+
                         <div class="habitacion-top">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <h5>NRO: @item.Numero</h5>
-                                    <small class="text-success">CATEGORIA: @item.Categoria</small>
-                                </div>
-                                <i class="fas fa-shopping-bag fa-2x text-success"></i>
-                            </div>
+                            <h5>NRO: @item.Numero</h5>
+                            <small class="text-success">
+                                CATEGORIA: @item.Categoria
+                            </small>
                         </div>
-                        <div class="habitacion-bottom @item.EstadoCss">
-                            <span>@item.EstadoTexto</span>
+
+                        <div class="habitacion-bottom disponible">
+                            <span>DISPONIBLE</span>
                             <span><i class="fas fa-angle-right"></i></span>
                         </div>
+
                     </div>
                 </a>
             }
             else
             {
+                <!-- 🔴 OCUPADO POR FECHAS -->
                 <div class="habitacion-card">
-                    <div class="habitacion-top">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div>
-                                <h5>NRO: @item.Numero</h5>
-                                <small class="@(item.EstadoCss == "ocupado" ? "text-danger" : "text-info")">
-                                    CATEGORIA: @item.Categoria
-                                </small>
-                            </div>
 
-                            @if (item.EstadoCss == "ocupado")
-                            {
-                                <i class="fas fa-bed fa-2x text-danger"></i>
-                            }
-                            else
-                            {
-                                <i class="fas fa-pump-soap fa-2x text-info"></i>
-                            }
-                        </div>
+                    <div class="habitacion-top">
+                        <h5>NRO: @item.Numero</h5>
+
+                        <small class="text-danger">
+                            CATEGORIA: @item.Categoria
+                        </small>
                     </div>
-                    <div class="habitacion-bottom @item.EstadoCss">
-                        <span>@item.EstadoTexto</span>
-                        <span><i class="fas fa-angle-right"></i></span>
+
+                    <div class="habitacion-bottom ocupado">
+                        <span>
+                            @(item.OcupadaEnFechas ? "RESERVADA EN FECHAS" : item.EstadoTexto)
+                        </span>
                     </div>
+
                 </div>
             }
+
         </div>
     }
 </div>

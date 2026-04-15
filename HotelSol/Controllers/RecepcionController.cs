@@ -15,25 +15,24 @@ namespace HotelSol.Controllers
             _context = context;
         }
 
-        // CAMBIO: función para calcular multiplicador de temporada
+        // ================================
+        // FUNCIÓN TEMPORADAS
+        // ================================
         private decimal ObtenerMultiplicador(DateTime fecha)
         {
-            // TEMPORADA ALTA (junio-agosto)
             if (fecha.Month >= 6 && fecha.Month <= 8)
-                return 1.5m;
+                return 1.5m; // 🔴 ALTA
 
-            // TEMPORADA BAJA (enero-febrero)
             if (fecha.Month == 1 || fecha.Month == 2)
-                return 0.8m;
+                return 0.8m; // 🟢 BAJA
 
-            // TEMPORADA MEDIA
-            return 1m;
+            return 1m; // 🟡 MEDIA
         }
 
-
-        // LISTA DE HABITACIONES
-
-        public async Task<IActionResult> Index(int? pisoId)
+        // ================================
+        // INDEX (DISPONIBILIDAD REAL)
+        // ================================
+        public async Task<IActionResult> Index(int? pisoId, DateTime? fechaEntrada, DateTime? fechaSalida)
         {
             var habitacionesQuery = _context.Habitacions
                 .Include(h => h.IdCategoriaNavigation)
@@ -41,7 +40,6 @@ namespace HotelSol.Controllers
                 .Include(h => h.IdEstadoHabitacionNavigation)
                 .AsQueryable();
 
-            // FILTRO CORREGIDO
             if (pisoId.HasValue && pisoId.Value > 0)
             {
                 habitacionesQuery = habitacionesQuery
@@ -50,16 +48,29 @@ namespace HotelSol.Controllers
 
             var habitaciones = await habitacionesQuery.ToListAsync();
 
-            // HABITACIONES OCUPADAS
-            var habitacionesActivas = await _context.Recepcions
-                .Where(r => r.FechaSalida == null)
-                .Select(r => r.IdHabitacion)
-                .Distinct()
-                .ToListAsync();
+            // 🔥 HABITACIONES OCUPADAS EN RANGO
+            List<int?> habitacionesOcupadas = new();
+
+            if (fechaEntrada.HasValue && fechaSalida.HasValue)
+            {
+                habitacionesOcupadas = await _context.Recepcions
+                    .Where(r =>
+                        r.IdHabitacion != null &&
+                        r.FechaEntrada != null &&
+                        r.FechaSalida != null &&
+                        fechaEntrada.Value < r.FechaSalida.Value &&
+                        fechaSalida.Value > r.FechaEntrada.Value
+                    )
+                    .Select(r => r.IdHabitacion)
+                    .Distinct()
+                    .ToListAsync();
+            }
 
             var vm = new RecepcionIndexVM
             {
                 PisoSeleccionado = pisoId,
+                FechaEntrada = fechaEntrada,
+                FechaSalida = fechaSalida,
 
                 Pisos = await _context.Pisos
                     .Where(p => p.Estado == true)
@@ -68,7 +79,7 @@ namespace HotelSol.Controllers
 
                 Habitaciones = habitaciones.Select(h =>
                 {
-                    var ocupada = habitacionesActivas.Contains(h.IdHabitacion);
+                    var ocupada = habitacionesOcupadas.Contains(h.IdHabitacion);
                     var limpieza = h.IdEstadoHabitacion == 3;
 
                     string estadoTexto;
@@ -102,7 +113,10 @@ namespace HotelSol.Controllers
                         Piso = h.IdPisoNavigation?.Descripcion ?? "",
                         EstadoTexto = estadoTexto,
                         EstadoCss = estadoCss,
-                        PuedeReservar = puedeReservar
+                        PuedeReservar = puedeReservar,
+
+                        // 🔥 IMPORTANTE PARA LA VISTA
+                        OcupadaEnFechas = ocupada
                     };
                 }).ToList()
             };
@@ -110,10 +124,10 @@ namespace HotelSol.Controllers
             return View(vm);
         }
 
-
-        // FORMULARIO DE RESERVA
-
-        public async Task<IActionResult> Create(int id)
+        // ================================
+        // FORMULARIO CREATE
+        // ================================
+        public async Task<IActionResult> Create(int id, DateTime? fechaEntrada, DateTime? fechaSalida)
         {
             var habitacion = await _context.Habitacions
                 .Include(h => h.IdCategoriaNavigation)
@@ -123,16 +137,6 @@ namespace HotelSol.Controllers
             if (habitacion == null)
                 return NotFound();
 
-            // VALIDAR DISPONIBILIDAD
-            var ocupada = await _context.Recepcions
-                .AnyAsync(r => r.IdHabitacion == id && r.FechaSalida == null);
-
-            if (ocupada || habitacion.IdEstadoHabitacion == 3)
-            {
-                TempData["Error"] = "La habitación no está disponible.";
-                return RedirectToAction(nameof(Index));
-            }
-
             var vm = new RecepcionCreateVM
             {
                 IdHabitacion = habitacion.IdHabitacion,
@@ -141,10 +145,15 @@ namespace HotelSol.Controllers
                 Piso = habitacion.IdPisoNavigation?.Descripcion ?? "",
                 DetalleHabitacion = habitacion.Detalle ?? "",
                 PrecioHabitacion = habitacion.Precio ?? 0,
-                FechaEntrada = DateTime.Today,
-                FechaSalida = DateTime.Today,
+
+                // 🔥 FIX FECHAS (SIN HORA)
+                FechaEntrada = fechaEntrada?.Date ?? DateTime.Today,
+                FechaSalida = fechaSalida?.Date ?? DateTime.Today,
+
                 PrecioInicial = habitacion.Precio ?? 0,
-                Adelanto = 0,
+
+                // 🔥 FIX ADELANTO
+                Adelanto = 0.00m,
 
                 Clientes = await _context.Personas
                     .Where(p => p.IdTipoPersona == 3)
@@ -154,34 +163,9 @@ namespace HotelSol.Controllers
             return View(vm);
         }
 
-
-        // BUSCAR CLIENTE
-
-        [HttpGet]
-        public async Task<IActionResult> BuscarCliente(string documento)
-        {
-            if (string.IsNullOrWhiteSpace(documento))
-                return Json(null);
-
-            var cliente = await _context.Personas
-                .Where(p => p.IdTipoPersona == 3 && p.Documento == documento)
-                .Select(p => new
-                {
-                    idPersona = p.IdPersona,
-                    tipoDocumento = p.TipoDocumento,
-                    documento = p.Documento,
-                    nombre = p.Nombre,
-                    apellido = p.Apellido,
-                    correo = p.Correo
-                })
-                .FirstOrDefaultAsync();
-
-            return Json(cliente);
-        }
-
-
+        // ================================
         // GUARDAR RESERVA
-
+        // ================================
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(RecepcionCreateVM vm)
@@ -192,46 +176,41 @@ namespace HotelSol.Controllers
             if (habitacion == null)
                 return NotFound();
 
-            // VALIDAR SI YA ESTÁ OCUPADA
-            var ocupada = await _context.Recepcions
-                .AnyAsync(r => r.IdHabitacion == vm.IdHabitacion && r.FechaSalida == null);
-
-            if (ocupada || habitacion.IdEstadoHabitacion == 3)
+            // VALIDAR FECHAS
+            if (!vm.FechaEntrada.HasValue || !vm.FechaSalida.HasValue)
             {
-                ModelState.AddModelError("", "La habitación ya no está disponible.");
+                ModelState.AddModelError("", "Debe ingresar fechas.");
             }
 
-            // VALIDAR FECHAS
+            // 🔥 VALIDACIÓN SOLAPAMIENTO
+            var conflicto = await _context.Recepcions
+                .AnyAsync(r =>
+                    r.IdHabitacion == vm.IdHabitacion &&
+                    r.FechaEntrada != null &&
+                    r.FechaSalida != null &&
+                    vm.FechaEntrada.Value < r.FechaSalida.Value &&
+                    vm.FechaSalida.Value > r.FechaEntrada.Value
+                );
+
+            if (conflicto)
+            {
+                ModelState.AddModelError("", "La habitación ya está reservada en esas fechas.");
+            }
+
             if (vm.FechaEntrada > vm.FechaSalida)
             {
-                ModelState.AddModelError("", "La fecha de salida no puede ser menor que la de entrada.");
+                ModelState.AddModelError("", "La fecha de salida no puede ser menor.");
             }
 
-            // CAMBIO: calcular número de noches
             var dias = (vm.FechaSalida.Value - vm.FechaEntrada.Value).Days;
 
-            // CAMBIO: validar mínimo 1 noche
             if (dias <= 0)
             {
                 ModelState.AddModelError("", "Debe reservar al menos 1 noche.");
             }
 
-            // SI HAY ERRORES
             if (!ModelState.IsValid)
             {
-                vm.NumeroHabitacion = habitacion.Numero ?? "";
-                vm.DetalleHabitacion = habitacion.Detalle ?? "";
-                vm.PrecioHabitacion = habitacion.Precio ?? 0;
-
-                var categoria = await _context.Categoria
-                    .FirstOrDefaultAsync(c => c.IdCategoria == habitacion.IdCategoria);
-
-                var piso = await _context.Pisos
-                    .FirstOrDefaultAsync(p => p.IdPiso == habitacion.IdPiso);
-
-                vm.Categoria = categoria?.Descripcion ?? "";
-                vm.Piso = piso?.Descripcion ?? "";
-
                 vm.Clientes = await _context.Personas
                     .Where(p => p.IdTipoPersona == 3)
                     .ToListAsync();
@@ -239,6 +218,7 @@ namespace HotelSol.Controllers
                 return View(vm);
             }
 
+            // ================= CLIENTE =================
             int idCliente;
 
             if (vm.IdClienteExistente.HasValue)
@@ -247,16 +227,16 @@ namespace HotelSol.Controllers
             }
             else
             {
-                var clienteExistente = await _context.Personas
-                    .FirstOrDefaultAsync(p => p.Documento == vm.Documento && p.IdTipoPersona == 3);
+                var cliente = await _context.Personas
+                    .FirstOrDefaultAsync(p => p.Documento == vm.Documento);
 
-                if (clienteExistente != null)
+                if (cliente != null)
                 {
-                    idCliente = clienteExistente.IdPersona;
+                    idCliente = cliente.IdPersona;
                 }
                 else
                 {
-                    var nuevoCliente = new Persona
+                    var nuevo = new Persona
                     {
                         TipoDocumento = vm.TipoDocumento,
                         Documento = vm.Documento,
@@ -268,30 +248,28 @@ namespace HotelSol.Controllers
                         FechaCreacion = DateTime.Now
                     };
 
-                    _context.Personas.Add(nuevoCliente);
+                    _context.Personas.Add(nuevo);
                     await _context.SaveChangesAsync();
 
-                    idCliente = nuevoCliente.IdPersona;
+                    idCliente = nuevo.IdPersona;
                 }
             }
 
-            // CAMBIO: calcular precio por día con temporada
+            // ================= PRECIO =================
             decimal precioTotal = 0;
 
             for (var fecha = vm.FechaEntrada.Value; fecha < vm.FechaSalida.Value; fecha = fecha.AddDays(1))
             {
-                var multiplicador = ObtenerMultiplicador(fecha);
-                precioTotal += (habitacion.Precio ?? 0) * multiplicador;
+                var mult = ObtenerMultiplicador(fecha);
+                precioTotal += (habitacion.Precio ?? 0) * mult;
             }
 
-            // CREAR RECEPCIÓN
             var recepcion = new Recepcion
             {
                 IdCliente = idCliente,
                 IdHabitacion = vm.IdHabitacion,
                 FechaEntrada = vm.FechaEntrada,
-                FechaSalida = null,
-
+                FechaSalida = vm.FechaSalida,
                 PrecioInicial = precioTotal,
                 Adelanto = vm.Adelanto ?? 0,
                 PrecioRestante = precioTotal - (vm.Adelanto ?? 0),
@@ -302,13 +280,18 @@ namespace HotelSol.Controllers
 
             _context.Recepcions.Add(recepcion);
 
-            // ACTUALIZAR ESTADO A OCUPADO
             habitacion.IdEstadoHabitacion = 2;
 
             await _context.SaveChangesAsync();
 
             TempData["Ok"] = "Reserva registrada correctamente.";
-            return RedirectToAction(nameof(Index));
+
+            // 🔥 FIX FORMATO FECHAS EN REDIRECT
+            return RedirectToAction(nameof(Index), new
+            {
+                fechaEntrada = vm.FechaEntrada.Value.ToString("yyyy-MM-dd"),
+                fechaSalida = vm.FechaSalida.Value.ToString("yyyy-MM-dd")
+            });
         }
     }
 }

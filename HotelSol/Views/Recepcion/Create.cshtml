@@ -34,16 +34,17 @@
     <input asp-for="IdHabitacion" type="hidden" />
     <input asp-for="IdClienteExistente" type="hidden" id="IdClienteExistente" />
 
-    <!-- Precio por noche oculto -->
+    <!-- PRECIO BASE -->
     <input type="hidden" id="PrecioNoche" value="@Model.PrecioHabitacion" />
 
-    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    <!-- ERRORES -->
+    <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
     <div class="card shadow">
         <div class="card-body">
             <div class="row">
 
-                <!-- CLIENTE -->
+                <!-- ================= CLIENTE ================= -->
                 <div class="col-md-6">
                     <h5 class="text-primary font-weight-bold mb-3">Detalle Cliente</h5>
 
@@ -51,9 +52,10 @@
                     <div class="input-group mb-3">
                         <input asp-for="DocumentoBusqueda" class="form-control" id="DocumentoBusqueda" />
                         <div class="input-group-append">
-                            <!-- SOLO abre modal -->
+                            <!-- 🔥 FIX: botón correcto -->
                             <button type="button" class="btn btn-success"
-                                    onclick="$('#modalClientes').modal('show')">
+                                    data-toggle="modal"
+                                    data-target="#modalClientes">
                                 Buscar
                             </button>
                         </div>
@@ -79,27 +81,39 @@
                     <input asp-for="Correo" class="form-control mb-3" id="Correo" />
                 </div>
 
-                <!-- RESERVA -->
+                <!-- ================= RESERVA ================= -->
                 <div class="col-md-6">
                     <h5 class="text-primary font-weight-bold mb-3">Detalle Reservación</h5>
 
                     <div class="row">
                         <div class="col-md-6">
                             <label>Fecha Entrada:</label>
-                            <input asp-for="FechaEntrada" id="FechaEntrada" class="form-control mb-3" type="date" />
+                            <input asp-for="FechaEntrada"
+                                   asp-format="{0:yyyy-MM-dd}"
+                                   id="FechaEntrada"
+                                   type="date"
+                                   min="@DateTime.Today.ToString("yyyy-MM-dd")"
+                                   class="form-control mb-3" />
                         </div>
+
                         <div class="col-md-6">
                             <label>Fecha Salida:</label>
-                            <input asp-for="FechaSalida" id="FechaSalida" class="form-control mb-3" type="date" />
+                            <input asp-for="FechaSalida"
+                                   asp-format="{0:yyyy-MM-dd}"
+                                   id="FechaSalida"
+                                   type="date"
+                                   min="@DateTime.Today.ToString("yyyy-MM-dd")"
+                                   class="form-control mb-3" />
                         </div>
                     </div>
 
-                    <!-- 🔥 CAMBIO: NUEVOS CAMPOS -->
+                    <!-- 🔥 NOCHES + TEMPORADA -->
                     <div class="row">
                         <div class="col-md-6">
                             <label>Noches:</label>
                             <input type="text" id="Noches" class="form-control mb-3" readonly />
                         </div>
+
                         <div class="col-md-6">
                             <label>Temporada:</label>
                             <input type="text" id="Temporada" class="form-control mb-3" readonly />
@@ -109,11 +123,17 @@
                     <div class="row">
                         <div class="col-md-6">
                             <label>Precio Total:</label>
-                            <input asp-for="PrecioInicial" id="PrecioInicial" class="form-control mb-3" readonly />
+                            <input asp-for="PrecioInicial" id="PrecioInicial"
+                                   class="form-control mb-3" readonly />
                         </div>
+
                         <div class="col-md-6">
                             <label>Adelanto:</label>
-                            <input asp-for="Adelanto" class="form-control mb-3" />
+                            <!-- 🔥 FIX decimal -->
+                            <input asp-for="Adelanto"
+                                   class="form-control mb-3"
+                                   step="0.01"
+                                   value="0.00" />
                         </div>
                     </div>
 
@@ -130,7 +150,7 @@
     </div>
 </form>
 
-<!-- MODAL CLIENTES -->
+<!-- ================= MODAL CLIENTES ================= -->
 <div class="modal fade" id="modalClientes" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -172,10 +192,6 @@
                         </tbody>
                     </table>
                 }
-                else
-                {
-                    <div class="alert alert-info">No hay clientes</div>
-                }
             </div>
 
         </div>
@@ -186,90 +202,78 @@
 
     <partial name="_ValidationScriptsPartial" />
 
-    <!-- SELECCIONAR CLIENTE -->
     <script>
-        function seleccionarCliente(id, documento, nombre, apellido, correo, tipoDocumento) {
+        document.addEventListener("DOMContentLoaded", function () {
 
-            document.getElementById("IdClienteExistente").value = id;
-            document.getElementById("DocumentoBusqueda").value = documento;
-            document.getElementById("Documento").value = documento;
-            document.getElementById("Nombre").value = nombre;
-            document.getElementById("Apellido").value = apellido;
-            document.getElementById("Correo").value = correo;
-            document.getElementById("TipoDocumento").value = tipoDocumento || "DNI";
+            // ================= CLIENTE =================
+            window.seleccionarCliente = function (id, documento, nombre, apellido, correo, tipoDocumento) {
 
-            $('#modalClientes').modal('hide');
-        }
-    </script>
+                document.getElementById("IdClienteExistente").value = id;
+                document.getElementById("DocumentoBusqueda").value = documento;
+                document.getElementById("Documento").value = documento;
+                document.getElementById("Nombre").value = nombre;
+                document.getElementById("Apellido").value = apellido;
+                document.getElementById("Correo").value = correo;
+                document.getElementById("TipoDocumento").value = tipoDocumento || "DNI";
 
-    <!-- FILTRO CLIENTES -->
-    <script>
-        document.getElementById("DocumentoBusqueda").addEventListener("keyup", function () {
+                $('#modalClientes').modal('hide');
+            };
 
-            let filtro = this.value.toLowerCase();
-            let filas = document.querySelectorAll("#tablaClientes tbody tr");
+            // ================= PRECIO + TEMPORADA =================
+            function obtenerMultiplicador(fecha) {
+                let mes = fecha.getMonth() + 1;
 
-            filas.forEach(fila => {
-                let texto = fila.innerText.toLowerCase();
-                fila.style.display = texto.includes(filtro) ? "" : "none";
-            });
+                if (mes >= 6 && mes <= 8)
+                    return { mult: 1.5, nombre: "ALTA 🔴" };
+
+                if (mes == 1 || mes == 2)
+                    return { mult: 0.8, nombre: "BAJA 🟢" };
+
+                return { mult: 1, nombre: "MEDIA 🟡" };
+            }
+
+            function calcularTotal() {
+
+                let entrada = document.getElementById("FechaEntrada").value;
+                let salida = document.getElementById("FechaSalida").value;
+                let precio = parseFloat(document.getElementById("PrecioNoche").value);
+
+                if (!entrada || !salida) return;
+
+                let f1 = new Date(entrada);
+                let f2 = new Date(salida);
+
+                if (f2 <= f1) {
+                    document.getElementById("PrecioInicial").value = "";
+                    document.getElementById("Noches").value = "";
+                    document.getElementById("Temporada").value = "";
+                    return;
+                }
+
+                let dias = (f2 - f1) / (1000 * 60 * 60 * 24);
+
+                let total = 0;
+                let temporada = "";
+
+                for (let i = 0; i < dias; i++) {
+                    let fecha = new Date(f1);
+                    fecha.setDate(f1.getDate() + i);
+
+                    let temp = obtenerMultiplicador(fecha);
+                    total += precio * temp.mult;
+
+                    if (i === 0) temporada = temp.nombre;
+                }
+
+                document.getElementById("PrecioInicial").value = total.toFixed(2);
+                document.getElementById("Noches").value = dias;
+                document.getElementById("Temporada").value = temporada;
+            }
+
+            document.getElementById("FechaEntrada").addEventListener("change", calcularTotal);
+            document.getElementById("FechaSalida").addEventListener("change", calcularTotal);
+            //  SOLUCIÓN CLAVE
+            calcularTotal();
         });
-    </script>
-
-    <!-- CAMBIO: PRECIO + TEMPORADA -->
-    <script>
-        function obtenerMultiplicador(fecha) {
-
-            let mes = fecha.getMonth() + 1;
-
-            if (mes >= 6 && mes <= 8)
-                return { mult: 1.5, nombre: "ALTA 🔴" };
-
-            if (mes == 1 || mes == 2)
-                return { mult: 0.8, nombre: "BAJA 🟢" };
-
-            return { mult: 1, nombre: "MEDIA 🟡" };
-        }
-
-        function calcularTotal() {
-
-            let entrada = document.getElementById("FechaEntrada").value;
-            let salida = document.getElementById("FechaSalida").value;
-            let precio = parseFloat(document.getElementById("PrecioNoche").value);
-
-            if (!entrada || !salida) return;
-
-            let f1 = new Date(entrada);
-            let f2 = new Date(salida);
-
-            let dias = (f2 - f1) / (1000 * 60 * 60 * 24);
-
-            if (dias <= 0) {
-                document.getElementById("PrecioInicial").value = "";
-                document.getElementById("Noches").value = "";
-                document.getElementById("Temporada").value = "";
-                return;
-            }
-
-            let total = 0;
-            let temporada = "";
-
-            for (let i = 0; i < dias; i++) {
-                let fecha = new Date(f1);
-                fecha.setDate(f1.getDate() + i);
-
-                let temp = obtenerMultiplicador(fecha);
-                total += precio * temp.mult;
-
-                if (i === 0) temporada = temp.nombre;
-            }
-
-            document.getElementById("PrecioInicial").value = total.toFixed(2);
-            document.getElementById("Noches").value = dias;
-            document.getElementById("Temporada").value = temporada;
-        }
-
-        document.getElementById("FechaEntrada").addEventListener("change", calcularTotal);
-        document.getElementById("FechaSalida").addEventListener("change", calcularTotal);
     </script>
 }
