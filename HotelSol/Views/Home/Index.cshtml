@@ -26,7 +26,7 @@
         <div class="card border-left-primary shadow h-100 py-2">
             <div class="card-body">
                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                    Disponibles
+                    Disponibles Hoy
                 </div>
                 <div class="h5 mb-0 font-weight-bold text-gray-800">
                     @ViewBag.Disponibles
@@ -35,21 +35,21 @@
         </div>
     </div>
 
-    <!-- OCUPADAS -->
+    <!-- 🔴 OCUPADAS HOY (CAMBIO) -->
     <div class="col-xl-3 col-md-6 mb-4">
         <div class="card border-left-danger shadow h-100 py-2">
             <div class="card-body">
                 <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                    Ocupadas
+                    Ocupadas Hoy
                 </div>
                 <div class="h5 mb-0 font-weight-bold text-gray-800">
-                    @ViewBag.Ocupadas
+                    @ViewBag.OcupadasHoy
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- LIMPIEZA -->
+    <!-- 🔵 LIMPIEZA -->
     <div class="col-xl-3 col-md-6 mb-4">
         <div class="card border-left-info shadow h-100 py-2">
             <div class="card-body">
@@ -58,6 +58,34 @@
                 </div>
                 <div class="h5 mb-0 font-weight-bold text-gray-800">
                     @ViewBag.Limpieza
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🟡 RESERVAS FUTURAS (NUEVO) -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                    Reservas Futuras
+                </div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                    @ViewBag.ReservasFuturas
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📊 % OCUPACIÓN (NUEVO) -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                    % Ocupación Hoy
+                </div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                    @ViewBag.PorcentajeOcupacion %
                 </div>
             </div>
         </div>

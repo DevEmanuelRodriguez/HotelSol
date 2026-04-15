@@ -1,10 +1,6 @@
-﻿/*
- Controller generado por ASP.NET. para gestionar la pagina de inicio >Home<
-*/
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using HotelSol.Models;
-using HotelSol.Data;//acceder a la DB
+using HotelSol.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelSol.Controllers
@@ -20,44 +16,58 @@ namespace HotelSol.Controllers
             _context = context;
         }
 
-        // Dashboard principal
+        // ================================
+        // DASHBOARD 
+        // ================================
         public IActionResult Index()
         {
             var hoy = DateTime.Today;
-            var mañana = hoy.AddDays(1);
 
             // TOTAL habitaciones
             var total = _context.Habitacions.Count();
 
-            // 🔥 OCUPADAS HOY (SOLAPAMIENTO REAL)
-            var habitacionesOcupadas = _context.Recepcions
+            // 🔴 OCUPADAS HOY (VALIDACIÓN SEGURA)
+            var ocupadasHoy = _context.Recepcions
                 .Where(r =>
                     r.IdHabitacion != null &&
                     r.FechaEntrada != null &&
                     r.FechaSalida != null &&
-
-                    // 🔥 CLAVE
-                    hoy < r.FechaSalida &&
-                    mañana > r.FechaEntrada
+                    r.FechaEntrada.Value.Date <= hoy &&
+                    r.FechaSalida.Value.Date >= hoy
                 )
                 .Select(r => r.IdHabitacion)
                 .Distinct()
-                .ToList();
+                .Count();
 
-            var ocupadas = habitacionesOcupadas.Count;
+            // 🟡 RESERVAS FUTURAS
+            var futuras = _context.Recepcions
+                .Where(r =>
+                    r.FechaEntrada != null &&
+                    r.FechaEntrada.Value.Date > hoy
+                )
+                .Count();
 
-            // LIMPIEZA
+            // 🔵 LIMPIEZA
             var limpieza = _context.Habitacions
                 .Count(h => h.IdEstadoHabitacion == 3);
 
-            // DISPONIBLES
-            var disponibles = total - ocupadas - limpieza;
+            // 🟢 DISPONIBLES HOY
+            var disponibles = total - ocupadasHoy - limpieza;
 
+            // 📊 PORCENTAJE OCUPACIÓN
+            var porcentaje = total > 0
+                ? (ocupadasHoy * 100.0) / total
+                : 0;
+
+            // ================================
             // VIEWBAG
+            // ================================
             ViewBag.TotalHabitaciones = total;
-            ViewBag.Ocupadas = ocupadas;
+            ViewBag.OcupadasHoy = ocupadasHoy;
+            ViewBag.ReservasFuturas = futuras;
             ViewBag.Disponibles = disponibles;
             ViewBag.Limpieza = limpieza;
+            ViewBag.PorcentajeOcupacion = porcentaje.ToString("0.00");
 
             return View();
         }
