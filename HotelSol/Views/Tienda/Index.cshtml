@@ -1,0 +1,112 @@
+﻿@model List<HotelSol.Models.Habitacion>
+
+@{
+    ViewData["Title"] = "Ventas";
+}
+
+<h1 class="h4 mb-4 text-gray-800">Ventas</h1>
+
+<style>
+    .card-hab {
+        border: 1px solid #f6c23e;
+        border-radius: 6px;
+        overflow: hidden;
+        transition: 0.2s;
+    }
+
+        .card-hab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,.1);
+        }
+
+    .card-top {
+        padding: 15px;
+        background: #fff;
+    }
+
+    .card-bottom {
+        background: #f6c23e;
+        color: #fff;
+        padding: 10px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .link-card {
+        text-decoration: none;
+        color: inherit;
+    }
+</style>
+
+<!-- 🔽 FILTRO PISO -->
+<div class="card shadow mb-4">
+    <div class="card-body">
+
+        <form method="get" class="form-inline">
+
+            <label class="mr-2 font-weight-bold">Seleccionar Piso</label>
+
+            <select name="pisoId" class="form-control mr-3">
+                <option value="">Todos</option>
+
+                @foreach (var piso in ViewBag.Pisos)
+                {
+                    <option value="@piso.IdPiso">
+                        @piso.Descripcion
+                    </option>
+                }
+            </select>
+
+            <button class="btn btn-primary">Filtrar</button>
+
+        </form>
+
+    </div>
+</div>
+
+<!-- 🔥 TARJETAS -->
+<div class="row">
+
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 mb-4">
+
+            <a asp-controller="Tienda"
+               asp-action="Venta"
+               asp-route-idHabitacion="@item.IdHabitacion"
+               class="link-card">
+
+                <div class="card-hab">
+
+                    <div class="card-top d-flex justify-content-between">
+
+                        <div>
+                            <h5>NRO: @item.Numero</h5>
+                            <small class="text-warning">
+                                CATEGORIA: @item.IdCategoriaNavigation?.Descripcion
+                            </small>
+                        </div>
+
+                        <i class="fas fa-bed fa-2x text-warning"></i>
+
+                    </div>
+
+                    <div class="card-bottom">
+                        INICIAR VENTA →
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+    }
+
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        No hay habitaciones ocupadas.
+    </div>
+}

@@ -1,36 +1,150 @@
-﻿@{
-    var recepcion = ViewBag.Recepcion as HotelSol.Models.Recepcion;
-    var productos = ViewBag.Productos as List<HotelSol.Models.Producto>;
+﻿@model HotelSol.Models.ViewModels.TiendaVentaVM
+
+@{
+    ViewData["Title"] = "Venta";
 }
 
-<h3>Venta a Habitación</h3>
+<h4 class="mb-3">Detalle Venta</h4>
 
-<div class="card mb-3 p-3">
-    <strong>Habitación:</strong> @recepcion?.IdHabitacionNavigation?.Numero <br />
-    <strong>Cliente:</strong> @recepcion?.IdClienteNavigation?.Nombre
+<!-- 🔷 RESUMEN -->
+<div class="card mb-3">
+    <div class="card-body">
+
+        <div class="row">
+            <div class="col-md-3">
+                <strong>Número:</strong>
+                <div>@Model.NumeroHabitacion</div>
+            </div>
+
+            <div class="col-md-3">
+                <strong>Cliente:</strong>
+                <div>@Model.Cliente</div>
+            </div>
+
+            <div class="col-md-3">
+                <strong>Documento:</strong>
+                <div>@Model.Documento</div>
+            </div>
+
+            <div class="col-md-3">
+                <strong>Fecha Entrada:</strong>
+                <div>@Model.FechaEntrada?.ToString("dd/MM/yyyy")</div>
+            </div>
+        </div>
+
+    </div>
 </div>
 
-<form method="post">
-    <input type="hidden" name="idRecepcion" value="@recepcion?.IdRecepcion" />
+<!-- 🔷 FORMULARIO -->
+<div class="card">
+    <div class="card-body">
 
-    <div class="form-group">
-        <label>Producto</label>
-        <select name="idProducto" class="form-control">
-            @foreach (var p in productos)
-            {
-                <option value="@p.IdProducto">
-                    @p.Nombre - @p.Precio €
-                </option>
+        <div class="row mb-3">
+
+            <div class="col-md-4">
+                <label>Producto</label>
+                <select id="producto" class="form-control">
+                    @foreach (var p in Model.Productos)
+                    {
+                        <option value="@p.IdProducto" data-precio="@p.Precio">
+                            @p.Nombre
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label>Precio</label>
+                <input type="text" id="precio" class="form-control" readonly />
+            </div>
+
+            <div class="col-md-2">
+                <label>Cantidad</label>
+                <input type="number" id="cantidad" value="1" class="form-control" />
+            </div>
+
+            <div class="col-md-3 d-flex align-items-end">
+                <button type="button" class="btn btn-success w-100" onclick="agregar()">
+                    Agregar
+                </button>
+            </div>
+
+        </div>
+
+        <!-- TABLA -->
+        <table class="table table-bordered" id="tabla">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>SubTotal</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <!-- TOTAL -->
+        <div class="text-right">
+            <h5>Total: <span id="total">0.00</span></h5>
+        </div>
+
+        <div class="text-right mt-3">
+            <button class="btn btn-primary">
+                Finalizar Venta
+            </button>
+        </div>
+
+    </div>
+</div>
+@section Scripts {
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        let total = 0;
+
+        const producto = document.getElementById("producto");
+        const precioInput = document.getElementById("precio");
+
+        producto.addEventListener("change", function () {
+            let precio = this.selectedOptions[0].dataset.precio;
+            precioInput.value = parseFloat(precio).toFixed(2);
+        });
+
+        // cargar precio inicial
+        producto.dispatchEvent(new Event("change"));
+
+        window.agregar = function () {
+
+            let select = document.getElementById("producto");
+            let nombre = select.options[select.selectedIndex].text;
+            let precio = parseFloat(select.selectedOptions[0].dataset.precio);
+            let cantidad = parseInt(document.getElementById("cantidad").value);
+
+            if (!cantidad || cantidad <= 0) {
+                alert("Cantidad inválida");
+                return;
             }
-        </select>
-    </div>
 
-    <div class="form-group">
-        <label>Cantidad</label>
-        <input type="number" name="cantidad" value="1" class="form-control" />
-    </div>
+            let subtotal = precio * cantidad;
 
-    <button type="submit" class="btn btn-primary mt-2">
-        Agregar
-    </button>
-</form>
+            let fila = `
+                <tr>
+                    <td>${nombre}</td>
+                    <td>${cantidad}</td>
+                    <td>${precio.toFixed(2)}</td>
+                    <td>${subtotal.toFixed(2)}</td>
+                </tr>
+            `;
+
+            document.querySelector("#tabla tbody").innerHTML += fila;
+
+            total += subtotal;
+            document.getElementById("total").innerText = total.toFixed(2);
+        };
+
+    });
+</script>
+
+}

@@ -47,9 +47,19 @@
         </a>
         <div id="collapseTienda" class="collapse" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="#">Productos</a>
-                <a class="collapse-item" href="#">Ventas</a>
-                <a class="collapse-item" href="#">Detalle venta</a>
+
+                <a class="collapse-item" asp-controller="Producto" asp-action="Create">
+                    Productos
+                </a>
+
+                <a class="collapse-item" asp-controller="Tienda" asp-action="Index">
+                    Ventas
+                </a>
+
+                <a class="collapse-item" href="#">
+                    Detalle venta
+                </a>
+
             </div>
         </div>
     </li>

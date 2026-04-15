@@ -1,5 +1,6 @@
 ﻿using HotelSol.Data;
 using HotelSol.Models;
+using HotelSol.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,85 +16,90 @@ namespace HotelSol.Controllers
         }
 
         // ============================
-        // VENTA
+        // INDEX (HABITACIONES OCUPADAS)
         // ============================
-        public async Task<IActionResult> Venta(int idRecepcion)
+        public async Task<IActionResult> Index(int? pisoId)
         {
-            var recepcion = await _context.Recepcions
-                .Include(r => r.IdHabitacionNavigation)
-                .Include(r => r.IdClienteNavigation)
-                .FirstOrDefaultAsync(r => r.IdRecepcion == idRecepcion);
+            var hoy = DateTime.Today;
 
-            var productos = await _context.Productos
+            var habitaciones = await _context.Habitacions
+                .Include(h => h.IdCategoriaNavigation)
+                .Include(h => h.IdPisoNavigation)
+                .Where(h =>
+                    h.IdEstadoHabitacion == 2 // 🔴 OCUPADO
+                )
+                .ToListAsync();
+
+            // 🔥 SOLO HABITACIONES CON RECEPCIÓN ACTIVA
+            var habitacionesOcupadas = new List<Habitacion>();
+
+            foreach (var h in habitaciones)
+            {
+                var tieneRecepcion = await _context.Recepcions.AnyAsync(r =>
+                    r.IdHabitacion == h.IdHabitacion &&
+                    r.FechaEntrada <= hoy &&
+                    r.FechaSalida > hoy
+                );
+
+                if (tieneRecepcion)
+                    habitacionesOcupadas.Add(h);
+            }
+
+            ViewBag.PisoSeleccionado = pisoId;
+
+            ViewBag.Pisos = await _context.Pisos
                 .Where(p => p.Estado == true)
                 .ToListAsync();
 
-            ViewBag.Recepcion = recepcion;
-            ViewBag.Productos = productos;
-
-            return View();
+            return View(habitacionesOcupadas);
         }
-
-        // ============================
-        // GUARDAR VENTA
-        // ============================
-        [HttpPost]
-        public async Task<IActionResult> Venta(int idRecepcion, int idProducto, int cantidad)
+        public async Task<IActionResult> Venta(int idHabitacion)
         {
-            var producto = await _context.Productos.FindAsync(idProducto);
+            var hoy = DateTime.Today;
 
-            if (producto == null) return RedirectToAction("Venta", new { idRecepcion });
+            var habitacion = await _context.Habitacions
+                .Include(h => h.IdCategoriaNavigation)
+                .Include(h => h.IdPisoNavigation)
+                .FirstOrDefaultAsync(h => h.IdHabitacion == idHabitacion);
 
-            var subtotal = (producto.Precio ?? 0) * cantidad;
+            if (habitacion == null)
+                return NotFound();
 
-            // 🔥 CREAR VENTA
-            var venta = new Ventum
+            var recepcion = await _context.Recepcions
+                .FirstOrDefaultAsync(r =>
+                    r.IdHabitacion == idHabitacion &&
+                    r.FechaEntrada <= hoy &&
+                    r.FechaSalida > hoy);
+
+            if (recepcion == null)
             {
-                IdRecepcion = idRecepcion,
-                Total = subtotal,
-                Estado = "PENDIENTE"
+                TempData["Error"] = "No hay hospedaje activo.";
+                return RedirectToAction("Index");
+            }
+
+            var cliente = await _context.Personas
+                .FirstOrDefaultAsync(p => p.IdPersona == recepcion.IdCliente);
+
+            var vm = new TiendaVentaVM
+            {
+                IdHabitacion = habitacion.IdHabitacion,
+                IdRecepcion = recepcion.IdRecepcion,
+
+                NumeroHabitacion = habitacion.Numero ?? "",
+                Categoria = habitacion.IdCategoriaNavigation?.Descripcion ?? "",
+                Piso = habitacion.IdPisoNavigation?.Descripcion ?? "",
+
+                Cliente = cliente == null ? "" : $"{cliente.Nombre} {cliente.Apellido}",
+                Documento = cliente?.Documento ?? "",
+
+                FechaEntrada = recepcion.FechaEntrada,
+
+                Productos = await _context.Productos
+                    .Where(p => p.Estado == true)
+                    .ToListAsync()
             };
 
-            _context.Venta.Add(venta);
-            await _context.SaveChangesAsync();
-
-            // 🔥 DETALLE
-            var detalle = new DetalleVentum
-            {
-                IdVenta = venta.IdVenta,
-                IdProducto = idProducto,
-                Cantidad = cantidad,
-                SubTotal = subtotal
-            };
-
-            _context.DetalleVenta.Add(detalle);
-
-            // 🔥 RESTAR STOCK
-            producto.Cantidad -= cantidad;
-
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("Detalle", "Recepcion", new { idRecepcion });
-        }
-
-        // ============================
-        // CREAR PRODUCTO
-        // ============================
-        public IActionResult CrearProducto()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CrearProducto(Producto p)
-        {
-            p.Estado = true;
-            p.FechaCreacion = DateTime.Now;
-
-            _context.Productos.Add(p);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("CrearProducto");
+            return View(vm);
         }
     }
 }
