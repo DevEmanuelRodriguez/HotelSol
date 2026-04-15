@@ -299,5 +299,81 @@ namespace HotelSol.Controllers
                 fechaSalida = vm.FechaSalida.Value.ToString("yyyy-MM-dd")
             });
         }
+
+        //DETALLE DE RESERVA
+        public async Task<IActionResult> Detalle(int idHabitacion)
+        {
+            var habitacion = await _context.Habitacions
+                .Include(h => h.IdCategoriaNavigation)
+                .Include(h => h.IdPisoNavigation)
+                .FirstOrDefaultAsync(h => h.IdHabitacion == idHabitacion);
+
+            if (habitacion == null)
+                return NotFound();
+
+            // Recepción activa de esa habitación
+            var recepcion = await _context.Recepcions
+                .FirstOrDefaultAsync(r =>
+                    r.IdHabitacion == idHabitacion &&
+                    r.FechaEntrada != null &&
+                    r.FechaSalida != null &&
+                    DateTime.Today >= r.FechaEntrada.Value.Date &&
+                    DateTime.Today < r.FechaSalida.Value.Date);
+
+            if (recepcion == null)
+            {
+                TempData["Error"] = "La habitación no tiene una recepción activa.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var cliente = await _context.Personas
+                .FirstOrDefaultAsync(p => p.IdPersona == recepcion.IdCliente);
+
+            // PRODUCTOS COMPRADOS EN TIENDA
+            // Aquí supongo esta relación:
+            // VENTA -> DETALLEVENTA -> PRODUCTO
+            // y que Venta tiene relación con la recepción o con cliente/habitación.
+            // Si todavía no tienes esa relación hecha, de momento deja esta lista vacía.
+            //var productos = new List<RecepcionDetalleProductoVM>();
+            var productos = await _context.Venta
+            .Where(v => v.IdRecepcion == recepcion.IdRecepcion)
+            .Include(v => v.DetalleVenta)
+            .ThenInclude(d => d.IdProductoNavigation)
+            .SelectMany(v => v.DetalleVenta.Select(d => new RecepcionDetalleProductoVM
+    {
+        Producto = d.IdProductoNavigation!.Nombre!,
+        Cantidad = d.Cantidad ?? 0,
+        PrecioUnitario = d.IdProductoNavigation.Precio ?? 0,
+        EstadoVenta = v.Estado ?? "",
+        SubTotal = d.SubTotal ?? 0
+    }))
+    .ToListAsync();
+
+            var vm = new RecepcionDetalleVM
+            {
+                IdHabitacion = habitacion.IdHabitacion,
+                NumeroHabitacion = habitacion.Numero ?? "",
+                DetalleHabitacion = habitacion.Detalle ?? "",
+                Categoria = habitacion.IdCategoriaNavigation?.Descripcion ?? "",
+                Piso = habitacion.IdPisoNavigation?.Descripcion ?? "",
+
+                IdRecepcion = recepcion.IdRecepcion,
+                IdCliente = cliente?.IdPersona ?? 0,
+                Cliente = cliente == null ? "" : $"{cliente.Nombre} {cliente.Apellido}",
+                Documento = cliente?.Documento ?? "",
+                Correo = cliente?.Correo ?? "",
+
+                FechaEntrada = recepcion.FechaEntrada,
+                FechaSalida = recepcion.FechaSalida,
+                CostoHabitacion = recepcion.PrecioInicial ?? 0,
+                CantidadAdelantado = recepcion.Adelanto ?? 0,
+                CantidadRestante = recepcion.PrecioRestante ?? 0,
+
+                Productos = productos
+            };
+
+            return View(vm);
+        }
+
     }
 }

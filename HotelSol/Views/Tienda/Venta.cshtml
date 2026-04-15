@@ -1,0 +1,36 @@
+﻿@{
+    var recepcion = ViewBag.Recepcion as HotelSol.Models.Recepcion;
+    var productos = ViewBag.Productos as List<HotelSol.Models.Producto>;
+}
+
+<h3>Venta a Habitación</h3>
+
+<div class="card mb-3 p-3">
+    <strong>Habitación:</strong> @recepcion?.IdHabitacionNavigation?.Numero <br />
+    <strong>Cliente:</strong> @recepcion?.IdClienteNavigation?.Nombre
+</div>
+
+<form method="post">
+    <input type="hidden" name="idRecepcion" value="@recepcion?.IdRecepcion" />
+
+    <div class="form-group">
+        <label>Producto</label>
+        <select name="idProducto" class="form-control">
+            @foreach (var p in productos)
+            {
+                <option value="@p.IdProducto">
+                    @p.Nombre - @p.Precio €
+                </option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Cantidad</label>
+        <input type="number" name="cantidad" value="1" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-2">
+        Agregar
+    </button>
+</form>

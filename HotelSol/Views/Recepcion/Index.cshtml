@@ -117,7 +117,6 @@
 
                         <div class="habitacion-top">
                             <div class="d-flex justify-content-between">
-
                                 <div>
                                     <h5>NRO: @item.Numero</h5>
                                     <small class="text-success">
@@ -125,9 +124,7 @@
                                     </small>
                                 </div>
 
-                                <!-- ICONO DISPONIBLE -->
                                 <i class="fas fa-check-circle fa-2x text-success"></i>
-
                             </div>
                         </div>
 
@@ -138,9 +135,50 @@
                     </div>
                 </a>
             }
-            else
+            else if (bloqueada || item.EstadoCss == "ocupado")
             {
-                <!-- 🔴 BLOQUEADA -->
+                <!-- 🔴 OCUPADO / RESERVADO -->
+                <a asp-action="Detalle"
+                   asp-route-idHabitacion="@item.IdHabitacion"
+                   class="link-card">
+
+                    <div class="habitacion-card">
+
+                        <div class="habitacion-top">
+                            <div class="d-flex justify-content-between">
+
+                                <div>
+                                    <h5>NRO: @item.Numero</h5>
+
+                                    <small class="text-danger">
+                                        CATEGORIA: @item.Categoria
+                                    </small>
+                                </div>
+
+                                @if (bloqueada)
+                                {
+                                    <i class="fas fa-calendar-times fa-2x text-danger"></i>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-bed fa-2x text-danger"></i>
+                                }
+
+                            </div>
+                        </div>
+
+                        <div class="habitacion-bottom ocupado">
+                            <span>
+                                @(bloqueada ? "RESERVADA EN FECHAS" : "OCUPADO")
+                            </span>
+                        </div>
+
+                    </div>
+                </a>
+            }
+            else if (item.EstadoCss == "limpieza")
+            {
+                <!-- 🧼 LIMPIEZA -->
                 <div class="habitacion-card">
 
                     <div class="habitacion-top">
@@ -149,35 +187,18 @@
                             <div>
                                 <h5>NRO: @item.Numero</h5>
 
-                                <small class="@(bloqueada ? "text-danger" : "text-info")">
+                                <small class="text-info">
                                     CATEGORIA: @item.Categoria
                                 </small>
                             </div>
 
-                            <!-- ICONOS SEGÚN ESTADO -->
-                            @if (bloqueada)
-                            {
-                                <!-- 📅 RESERVADA EN FECHAS -->
-                                <i class="fas fa-calendar-times fa-2x text-danger"></i>
-                            }
-                            else if (item.EstadoCss == "ocupado")
-                            {
-                                <!-- 🛏️ OCUPADO -->
-                                <i class="fas fa-bed fa-2x text-danger"></i>
-                            }
-                            else
-                            {
-                                <!-- 🧼 LIMPIEZA -->
-                                <i class="fas fa-pump-soap fa-2x text-info"></i>
-                            }
+                            <i class="fas fa-pump-soap fa-2x text-info"></i>
 
                         </div>
                     </div>
 
-                    <div class="habitacion-bottom @item.EstadoCss">
-                        <span>
-                            @(bloqueada ? "RESERVADA EN FECHAS" : item.EstadoTexto)
-                        </span>
+                    <div class="habitacion-bottom limpieza">
+                        <span>LIMPIEZA</span>
                     </div>
 
                 </div>

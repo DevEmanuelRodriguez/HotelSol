@@ -1,0 +1,124 @@
+﻿@model HotelSol.Models.ViewModels.RecepcionDetalleVM
+
+@{
+    ViewData["Title"] = "Detalle de Hospedaje";
+}
+
+<div class="card shadow mb-3">
+    <div class="card-body">
+        <h5 class="text-primary font-weight-bold mb-3">Resumen de la Habitación</h5>
+
+        <div class="row">
+            <div class="col-md-3">
+                <strong>Número:</strong>
+                <div>@Model.NumeroHabitacion</div>
+            </div>
+            <div class="col-md-3">
+                <strong>Detalles:</strong>
+                <div>@Model.DetalleHabitacion</div>
+            </div>
+            <div class="col-md-3">
+                <strong>Categoría:</strong>
+                <div>@Model.Categoria</div>
+            </div>
+            <div class="col-md-3">
+                <strong>Piso:</strong>
+                <div>@Model.Piso</div>
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="row">
+            <div class="col-md-3">
+                <strong>Cliente:</strong>
+                <div>@Model.Cliente</div>
+            </div>
+            <div class="col-md-3">
+                <strong>Nro. Documento:</strong>
+                <div>@Model.Documento</div>
+            </div>
+            <div class="col-md-3">
+                <strong>Correo:</strong>
+                <div>@Model.Correo</div>
+            </div>
+            <div class="col-md-3">
+                <strong>Fecha Entrada:</strong>
+                <div>@Model.FechaEntrada?.ToString("dd/MM/yyyy")</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow mb-3">
+    <div class="card-body">
+        <h5 class="text-primary font-weight-bold mb-3">Detalle de Hospedaje</h5>
+
+        <div class="row">
+            <div class="col-md-3">
+                <strong>Costo Habitación:</strong>
+                <input class="form-control" value="@Model.CostoHabitacion.ToString("0.00")" readonly />
+            </div>
+            <div class="col-md-3">
+                <strong>Cantidad Adelantado:</strong>
+                <input class="form-control" value="@Model.CantidadAdelantado.ToString("0.00")" readonly />
+            </div>
+            <div class="col-md-3">
+                <strong>Cantidad Restante:</strong>
+                <input class="form-control" value="@Model.CantidadRestante.ToString("0.00")" readonly />
+            </div>
+            <div class="col-md-3">
+                <strong>Fecha Salida:</strong>
+                <input class="form-control" value="@Model.FechaSalida?.ToString("dd/MM/yyyy")" readonly />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow">
+    <div class="card-body">
+        <!-- 🔥 BOTÓN TIENDA -->
+        <a asp-controller="Tienda"
+           asp-action="Venta"
+           asp-route-idRecepcion="@Model.IdRecepcion"
+           class="btn btn-success mb-3">
+            🛒 Agregar consumo
+        </a>
+        <h5 class="text-primary font-weight-bold mb-3">Servicio a la Habitación</h5>
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Estado Venta</th>
+                        <th>Sub Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Productos.Any())
+                    {
+                        @foreach (var item in Model.Productos)
+                        {
+                            <tr>
+                                <td>@item.Producto</td>
+                                <td>@item.Cantidad</td>
+                                <td>@item.PrecioUnitario.ToString("0.00")</td>
+                                <td>@item.EstadoVenta</td>
+                                <td>@item.SubTotal.ToString("0.00")</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center">No hay productos registrados.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
