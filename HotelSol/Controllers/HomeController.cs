@@ -23,26 +23,37 @@ namespace HotelSol.Controllers
         // Dashboard principal
         public IActionResult Index()
         {
+            var hoy = DateTime.Today;
+            var mañana = hoy.AddDays(1);
+
             // TOTAL habitaciones
             var total = _context.Habitacions.Count();
 
-            // HABITACIONES OCUPADAS
-            // (tienen recepción sin fecha de salida)
-            var ocupadas = _context.Recepcions
-                .Where(r => r.FechaSalida == null)
+            // 🔥 OCUPADAS HOY (SOLAPAMIENTO REAL)
+            var habitacionesOcupadas = _context.Recepcions
+                .Where(r =>
+                    r.IdHabitacion != null &&
+                    r.FechaEntrada != null &&
+                    r.FechaSalida != null &&
+
+                    // 🔥 CLAVE
+                    hoy < r.FechaSalida &&
+                    mañana > r.FechaEntrada
+                )
                 .Select(r => r.IdHabitacion)
                 .Distinct()
-                .Count();
+                .ToList();
 
-            // EN LIMPIEZA (según estado)
+            var ocupadas = habitacionesOcupadas.Count;
+
+            // LIMPIEZA
             var limpieza = _context.Habitacions
-                .Count(h => h.IdEstadoHabitacion == 3); //  ajusta si cambia en tu BD
+                .Count(h => h.IdEstadoHabitacion == 3);
 
             // DISPONIBLES
             var disponibles = total - ocupadas - limpieza;
-            
 
-            //  Enviamos datos a la vista
+            // VIEWBAG
             ViewBag.TotalHabitaciones = total;
             ViewBag.Ocupadas = ocupadas;
             ViewBag.Disponibles = disponibles;

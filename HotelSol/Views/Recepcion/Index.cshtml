@@ -4,8 +4,9 @@
     ViewData["Title"] = "Recepción";
 
     // 🔥 USAR EL MODELO (NO Query directamente)
-    var fechaEntrada = Model.FechaEntrada?.ToString("yyyy-MM-dd");
-    var fechaSalida = Model.FechaSalida?.ToString("yyyy-MM-dd");
+    // 🔥 FIX: si no hay fechas → usar HOY automáticamente
+    var fechaEntrada = (Model.FechaEntrada ?? DateTime.Today).ToString("yyyy-MM-dd");
+    var fechaSalida = (Model.FechaSalida ?? DateTime.Today.AddDays(1)).ToString("yyyy-MM-dd");
 }
 
 <style>
@@ -99,28 +100,39 @@
     {
         <div class="col-xl-3 col-md-6 mb-4">
 
-            <!-- 🔥 USAMOS DIRECTO item.OcupadaEnFechas -->
-            @if (item.PuedeReservar && !item.OcupadaEnFechas)
+            @{
+                var bloqueada = item.OcupadaEnFechas;
+            }
+
+            @if (item.PuedeReservar && !bloqueada)
             {
-                <!-- DISPONIBLE -->
+                <!-- 🟢 DISPONIBLE -->
                 <a asp-action="Create"
                    asp-route-id="@item.IdHabitacion"
-                   asp-route-fechaEntrada="@(Model.FechaEntrada?.ToString("yyyy-MM-dd"))"
-                   asp-route-fechaSalida="@(Model.FechaSalida?.ToString("yyyy-MM-dd"))"
+                   asp-route-fechaEntrada="@Model.FechaEntrada"
+                   asp-route-fechaSalida="@Model.FechaSalida"
                    class="link-card">
 
                     <div class="habitacion-card">
 
                         <div class="habitacion-top">
-                            <h5>NRO: @item.Numero</h5>
-                            <small class="text-success">
-                                CATEGORIA: @item.Categoria
-                            </small>
+                            <div class="d-flex justify-content-between">
+
+                                <div>
+                                    <h5>NRO: @item.Numero</h5>
+                                    <small class="text-success">
+                                        CATEGORIA: @item.Categoria
+                                    </small>
+                                </div>
+
+                                <!-- ICONO DISPONIBLE -->
+                                <i class="fas fa-check-circle fa-2x text-success"></i>
+
+                            </div>
                         </div>
 
                         <div class="habitacion-bottom disponible">
                             <span>DISPONIBLE</span>
-                            <span><i class="fas fa-angle-right"></i></span>
                         </div>
 
                     </div>
@@ -128,20 +140,43 @@
             }
             else
             {
-                <!-- 🔴 OCUPADO POR FECHAS -->
+                <!-- 🔴 BLOQUEADA -->
                 <div class="habitacion-card">
 
                     <div class="habitacion-top">
-                        <h5>NRO: @item.Numero</h5>
+                        <div class="d-flex justify-content-between">
 
-                        <small class="text-danger">
-                            CATEGORIA: @item.Categoria
-                        </small>
+                            <div>
+                                <h5>NRO: @item.Numero</h5>
+
+                                <small class="@(bloqueada ? "text-danger" : "text-info")">
+                                    CATEGORIA: @item.Categoria
+                                </small>
+                            </div>
+
+                            <!-- ICONOS SEGÚN ESTADO -->
+                            @if (bloqueada)
+                            {
+                                <!-- 📅 RESERVADA EN FECHAS -->
+                                <i class="fas fa-calendar-times fa-2x text-danger"></i>
+                            }
+                            else if (item.EstadoCss == "ocupado")
+                            {
+                                <!-- 🛏️ OCUPADO -->
+                                <i class="fas fa-bed fa-2x text-danger"></i>
+                            }
+                            else
+                            {
+                                <!-- 🧼 LIMPIEZA -->
+                                <i class="fas fa-pump-soap fa-2x text-info"></i>
+                            }
+
+                        </div>
                     </div>
 
-                    <div class="habitacion-bottom ocupado">
+                    <div class="habitacion-bottom @item.EstadoCss">
                         <span>
-                            @(item.OcupadaEnFechas ? "RESERVADA EN FECHAS" : item.EstadoTexto)
+                            @(bloqueada ? "RESERVADA EN FECHAS" : item.EstadoTexto)
                         </span>
                     </div>
 

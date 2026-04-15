@@ -32,6 +32,9 @@ namespace HotelSol.Controllers
         // ================================
         // INDEX (DISPONIBILIDAD REAL)
         // ================================
+        // ================================
+        // INDEX (DISPONIBILIDAD REAL)
+        // ================================
         public async Task<IActionResult> Index(int? pisoId, DateTime? fechaEntrada, DateTime? fechaSalida)
         {
             var habitacionesQuery = _context.Habitacions
@@ -48,29 +51,32 @@ namespace HotelSol.Controllers
 
             var habitaciones = await habitacionesQuery.ToListAsync();
 
-            // 🔥 HABITACIONES OCUPADAS EN RANGO
-            List<int?> habitacionesOcupadas = new();
+            // 🔥 CLAVE: SI NO HAY FECHAS → USAR HOY
+            var fechaInicio = fechaEntrada ?? DateTime.Today;
+            var fechaFin = fechaSalida ?? DateTime.Today.AddDays(1);
 
-            if (fechaEntrada.HasValue && fechaSalida.HasValue)
-            {
-                habitacionesOcupadas = await _context.Recepcions
-                    .Where(r =>
-                        r.IdHabitacion != null &&
-                        r.FechaEntrada != null &&
-                        r.FechaSalida != null &&
-                        fechaEntrada.Value < r.FechaSalida.Value &&
-                        fechaSalida.Value > r.FechaEntrada.Value
-                    )
-                    .Select(r => r.IdHabitacion)
-                    .Distinct()
-                    .ToListAsync();
-            }
+            // 🔥 OCUPACIÓN REAL
+            var habitacionesOcupadas = await _context.Recepcions
+                .Where(r =>
+                    r.IdHabitacion != null &&
+                    r.FechaEntrada != null &&
+                    r.FechaSalida != null &&
+
+                    // 🔥 SOLAPAMIENTO REAL
+                    fechaInicio < r.FechaSalida.Value &&
+                    fechaFin > r.FechaEntrada.Value
+                )
+                .Select(r => r.IdHabitacion)
+                .Distinct()
+                .ToListAsync();
 
             var vm = new RecepcionIndexVM
             {
                 PisoSeleccionado = pisoId,
-                FechaEntrada = fechaEntrada,
-                FechaSalida = fechaSalida,
+
+                // 🔥 IMPORTANTE: enviar fechas a la vista
+                FechaEntrada = fechaInicio,
+                FechaSalida = fechaFin,
 
                 Pisos = await _context.Pisos
                     .Where(p => p.Estado == true)
@@ -115,7 +121,7 @@ namespace HotelSol.Controllers
                         EstadoCss = estadoCss,
                         PuedeReservar = puedeReservar,
 
-                        // 🔥 IMPORTANTE PARA LA VISTA
+                        // 🔥 PARA LA VISTA
                         OcupadaEnFechas = ocupada
                     };
                 }).ToList()
