@@ -48,21 +48,28 @@
 
             <div class="row mb-3">
 
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label>Producto</label>
                     <select id="producto" class="form-control">
                         @foreach (var p in Model.Productos)
                         {
-                            <option value="@p.IdProducto" data-precio="@p.Precio">
+                            <option value="@p.IdProducto"
+                                    data-precio="@((p.Precio ?? 0).ToString(System.Globalization.CultureInfo.InvariantCulture))"
+                                    data-stock="@(p.Cantidad ?? 0)">
                                 @p.Nombre
                             </option>
                         }
                     </select>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label>Precio</label>
                     <input type="text" id="precio" class="form-control" readonly />
+                </div>
+
+                <div class="col-md-2">
+                    <label>Stock disponible</label>
+                    <input type="text" id="stock" class="form-control" readonly />
                 </div>
 
                 <div class="col-md-2">
@@ -70,7 +77,7 @@
                     <input type="number" id="cantidad" value="1" class="form-control" />
                 </div>
 
-                <div class="col-md-3 d-flex align-items-end">
+                <div class="col-md-2 d-flex align-items-end">
                     <button type="button" class="btn btn-success w-100" onclick="agregar()">
                         Agregar
                     </button>
@@ -83,9 +90,10 @@
                 <thead>
                     <tr>
                         <th>Producto</th>
-                        <th>Cantidad</th>
+                        <th style="width: 140px;">Cantidad</th>
                         <th>Precio</th>
                         <th>SubTotal</th>
+                        <th style="width: 90px;">Acción</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -106,95 +114,183 @@
     </div>
 
 </form>
+@section Scripts {
+    <script>
 
-<script>
+        let detalles = [];
 
-    let detalles = []; // 🔥 GLOBAL
+        document.addEventListener("DOMContentLoaded", function () {
 
-    document.addEventListener("DOMContentLoaded", function () {
+            let total = 0;
 
-        console.log("🔥 SCRIPT CARGADO");
+            const producto = document.getElementById("producto");
+            const stockInput = document.getElementById("stock");
+            const precioInput = document.getElementById("precio");
+            const form = document.getElementById("formVenta");
 
-        let total = 0;
+            // 🔹 ACTUALIZAR PRECIO AL CAMBIAR PRODUCTO
+            producto.addEventListener("change", function () {
 
-        const producto = document.getElementById("producto");
-        const precioInput = document.getElementById("precio");
-        const form = document.getElementById("formVenta"); // 🔥 USAMOS ID
+                let precio = this.selectedOptions[0].dataset.precio;
+                let stock = this.selectedOptions[0].dataset.stock;
 
-        // 🔹 CAMBIO DE PRODUCTO → ACTUALIZA PRECIO
-        producto.addEventListener("change", function () {
-            let precio = this.selectedOptions[0].dataset.precio;
-            precioInput.value = parseFloat(precio).toFixed(2);
-        });
-
-        // 🔹 PRECIO INICIAL
-        producto.dispatchEvent(new Event("change"));
-
-        // 🔹 AGREGAR PRODUCTO
-        window.agregar = function () {
-
-            console.log("➕ AGREGAR CLICK");
-
-            let select = document.getElementById("producto");
-            let idProducto = parseInt(select.value);
-            let nombre = select.options[select.selectedIndex].text;
-            let precio = parseFloat(select.selectedOptions[0].dataset.precio);
-            let cantidad = parseInt(document.getElementById("cantidad").value);
-
-            if (!cantidad || cantidad <= 0) {
-                alert("Cantidad inválida");
-                return;
-            }
-
-            let subtotal = precio * cantidad;
-
-            // 🔥 GUARDAR EN ARRAY
-            detalles.push({
-                idProducto: idProducto,
-                cantidad: cantidad,
-                precio: precio,
-                subTotal: subtotal
+                precioInput.value = parseFloat(precio).toFixed(2);
+                stockInput.value = stock;
             });
 
-            // 🔹 AGREGAR FILA A TABLA
-            let fila = `
-                <tr>
-                    <td>${nombre}</td>
-                    <td>${cantidad}</td>
-                    <td>${precio.toFixed(2)}</td>
-                    <td>${subtotal.toFixed(2)}</td>
-                </tr>
-            `;
+            producto.dispatchEvent(new Event("change"));
 
-            document.querySelector("#tabla tbody").innerHTML += fila;
+            // =========================
+            // 🔥 AGREGAR PRODUCTO
+            // =========================
+            window.agregar = function () {
 
-            // 🔹 ACTUALIZAR TOTAL
-            total += subtotal;
-            document.getElementById("total").innerText = total.toFixed(2);
-        };
+                let select = document.getElementById("producto");
+                let idProducto = parseInt(select.value);
+                let nombre = select.options[select.selectedIndex].text;
+                let precio = parseFloat(select.selectedOptions[0].dataset.precio);
+                let cantidad = parseInt(document.getElementById("cantidad").value);
+                let stock = parseInt(select.selectedOptions[0].dataset.stock);
 
-        // 🔥 SUBMIT DEL FORM
-        if (form) {
-            form.onsubmit = function (e) {
-
-                console.log("🔥 CLICK FINALIZAR");
-
-                if (detalles.length === 0) {
-                    alert("Debes agregar al menos un producto");
-                    e.preventDefault();
-                    return false;
+                if (!cantidad || cantidad <= 0) {
+                    alert("Cantidad inválida");
+                    return;
                 }
 
-                // 🔥 ENVIAR JSON AL CONTROLLER
-                document.getElementById("detalleJson").value = JSON.stringify(detalles);
+                // 🔥 VALIDACIÓN STOCK
+                if (cantidad > stock) {
+                    alert("No hay suficiente stock disponible");
+                    return;
+                }
 
-                console.log("📦 ENVIANDO:", detalles);
+                let existente = detalles.find(x => x.idProducto === idProducto);
 
-                return true;
+                if (existente) {
+
+                    // 🔥 VALIDAR SUMA TOTAL
+                    if (existente.cantidad + cantidad > stock) {
+                        alert("Supera el stock disponible");
+                        return;
+                    }
+
+                    existente.cantidad += cantidad;
+                    existente.subTotal = existente.cantidad * existente.precio;
+
+                } else {
+
+                    detalles.push({
+                        idProducto: idProducto,
+                        nombre: nombre,
+                        cantidad: cantidad,
+                        precio: precio,
+                        subTotal: precio * cantidad
+                    });
+                }
+
+                renderTabla();
             };
-        }
 
-    });
+            // =========================
+            // 🔥 ELIMINAR PRODUCTO
+            // =========================
+            window.eliminar = function (idProducto) {
+                detalles = detalles.filter(x => x.idProducto !== idProducto);
+                renderTabla();
+            };
 
-</script>
+            // =========================
+            // 🔥 EDITAR CANTIDAD EN VIVO
+            // =========================
+            window.actualizarCantidad = function (idProducto, nuevaCantidad) {
 
+                nuevaCantidad = parseInt(nuevaCantidad);
+
+                let item = detalles.find(x => x.idProducto === idProducto);
+
+                let option = document.querySelector(`#producto option[value='${idProducto}']`);
+                let stock = parseInt(option.dataset.stock);
+
+                if (!nuevaCantidad || nuevaCantidad <= 0) {
+                    eliminar(idProducto);
+                    return;
+                }
+
+                // 🔥 VALIDACIÓN STOCK
+                if (nuevaCantidad > stock) {
+                    alert("Stock insuficiente");
+                    renderTabla();
+                    return;
+                }
+
+                if (item) {
+                    item.cantidad = nuevaCantidad;
+                    item.subTotal = item.cantidad * item.precio;
+                }
+
+                renderTabla();
+            };
+
+            // =========================
+            // 🔥 RENDER TABLA
+            // =========================
+            function renderTabla() {
+
+                let tbody = document.querySelector("#tabla tbody");
+                tbody.innerHTML = "";
+
+                total = 0;
+
+                detalles.forEach(d => {
+
+                    total += d.subTotal;
+
+                    let fila = `
+                        <tr>
+                            <td>${d.nombre}</td>
+                            <td>
+                                <input type="number"
+                                       min="1"
+                                       class="form-control"
+                                       value="${d.cantidad}"
+                                       onchange="actualizarCantidad(${d.idProducto}, this.value)" />
+                            </td>
+                            <td>${d.precio.toFixed(2)}</td>
+                            <td>${d.subTotal.toFixed(2)}</td>
+                            <td>
+                                <button type="button"
+                                        class="btn btn-danger btn-sm"
+                                        onclick="eliminar(${d.idProducto})">
+                                    ❌
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+
+                    tbody.innerHTML += fila;
+                });
+
+                document.getElementById("total").innerText = total.toFixed(2);
+            }
+
+            // =========================
+            // 🔥 SUBMIT FORM
+            // =========================
+            if (form) {
+                form.onsubmit = function (e) {
+
+                    if (detalles.length === 0) {
+                        alert("Debes agregar al menos un producto");
+                        e.preventDefault();
+                        return false;
+                    }
+
+                    document.getElementById("detalleJson").value = JSON.stringify(detalles);
+
+                    return true;
+                };
+            }
+
+        });
+
+    </script>
+}
