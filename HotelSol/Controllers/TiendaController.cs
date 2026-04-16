@@ -1,4 +1,5 @@
-﻿using HotelSol.Data;
+﻿using System.Text.Json;
+using HotelSol.Data;
 using HotelSol.Models;
 using HotelSol.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -22,37 +23,42 @@ namespace HotelSol.Controllers
         {
             var hoy = DateTime.Today;
 
-            var habitaciones = await _context.Habitacions
+            var habitacionesQuery = _context.Habitacions
                 .Include(h => h.IdCategoriaNavigation)
                 .Include(h => h.IdPisoNavigation)
-                .Where(h =>
-                    h.IdEstadoHabitacion == 2 // 🔴 OCUPADO
-                )
-                .ToListAsync();
+                .AsQueryable();
 
-            // 🔥 SOLO HABITACIONES CON RECEPCIÓN ACTIVA
-            var habitacionesOcupadas = new List<Habitacion>();
-
-            foreach (var h in habitaciones)
+            if (pisoId.HasValue && pisoId.Value > 0)
             {
-                var tieneRecepcion = await _context.Recepcions.AnyAsync(r =>
-                    r.IdHabitacion == h.IdHabitacion &&
-                    r.FechaEntrada <= hoy &&
-                    r.FechaSalida > hoy
-                );
-
-                if (tieneRecepcion)
-                    habitacionesOcupadas.Add(h);
+                habitacionesQuery = habitacionesQuery
+                    .Where(h => h.IdPiso == pisoId.Value);
             }
+
+            var habitaciones = await habitacionesQuery.ToListAsync();
+
+            // SOLO HABITACIONES CON RECEPCION ACTIVA HOY
+            var habitacionesOcupadas = habitaciones
+                .Where(h => _context.Recepcions.Any(r =>
+                    r.IdHabitacion == h.IdHabitacion &&
+                    r.FechaEntrada != null &&
+                    r.FechaSalida != null &&
+                    hoy >= r.FechaEntrada.Value.Date &&
+                    hoy < r.FechaSalida.Value.Date))
+                .ToList();
 
             ViewBag.PisoSeleccionado = pisoId;
 
             ViewBag.Pisos = await _context.Pisos
                 .Where(p => p.Estado == true)
+                .OrderBy(p => p.IdPiso)
                 .ToListAsync();
 
             return View(habitacionesOcupadas);
         }
+
+        // ============================
+        // FORMULARIO VENTA
+        // ============================
         public async Task<IActionResult> Venta(int idHabitacion)
         {
             var hoy = DateTime.Today;
@@ -68,13 +74,15 @@ namespace HotelSol.Controllers
             var recepcion = await _context.Recepcions
                 .FirstOrDefaultAsync(r =>
                     r.IdHabitacion == idHabitacion &&
-                    r.FechaEntrada <= hoy &&
-                    r.FechaSalida > hoy);
+                    r.FechaEntrada != null &&
+                    r.FechaSalida != null &&
+                    hoy >= r.FechaEntrada.Value.Date &&
+                    hoy < r.FechaSalida.Value.Date);
 
             if (recepcion == null)
             {
-                TempData["Error"] = "No hay hospedaje activo.";
-                return RedirectToAction("Index");
+                TempData["Error"] = "No hay una recepción activa para esta habitación.";
+                return RedirectToAction(nameof(Index));
             }
 
             var cliente = await _context.Personas
@@ -84,22 +92,128 @@ namespace HotelSol.Controllers
             {
                 IdHabitacion = habitacion.IdHabitacion,
                 IdRecepcion = recepcion.IdRecepcion,
-
                 NumeroHabitacion = habitacion.Numero ?? "",
-                Categoria = habitacion.IdCategoriaNavigation?.Descripcion ?? "",
-                Piso = habitacion.IdPisoNavigation?.Descripcion ?? "",
-
                 Cliente = cliente == null ? "" : $"{cliente.Nombre} {cliente.Apellido}",
                 Documento = cliente?.Documento ?? "",
-
+                Categoria = habitacion.IdCategoriaNavigation?.Descripcion ?? "",
+                Piso = habitacion.IdPisoNavigation?.Descripcion ?? "",
                 FechaEntrada = recepcion.FechaEntrada,
-
                 Productos = await _context.Productos
-                    .Where(p => p.Estado == true)
+                    .Where(p => p.Estado == true && (p.Cantidad ?? 0) > 0)
+                    .OrderBy(p => p.Nombre)
                     .ToListAsync()
             };
 
             return View(vm);
         }
+
+        // ============================
+        // GUARDAR VENTA
+        // ============================
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> FinalizarVenta(int IdRecepcion, string detalleJson)
+        {
+            Console.WriteLine("ENTRE");
+            Console.WriteLine(detalleJson);
+            Console.WriteLine("LLEGÓ AL CONTROLLER");
+            Console.WriteLine(detalleJson);
+
+            if (string.IsNullOrWhiteSpace(detalleJson))
+            {
+                TempData["Error"] = "No hay productos para registrar.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var detalles = JsonSerializer.Deserialize<List<DetalleTemp>>(detalleJson);
+
+            if (detalles == null || !detalles.Any())
+            {
+                TempData["Error"] = "No hay productos válidos para registrar.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var recepcion = await _context.Recepcions
+                .FirstOrDefaultAsync(r => r.IdRecepcion == IdRecepcion);
+
+            if (recepcion == null)
+            {
+                TempData["Error"] = "La recepción no existe.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            decimal total = 0;
+
+            foreach (var d in detalles)
+            {
+                if (d.cantidad <= 0)
+                {
+                    TempData["Error"] = "Hay cantidades inválidas en la venta.";
+                    return RedirectToAction(nameof(Venta), new { idHabitacion = recepcion.IdHabitacion });
+                }
+
+                var productoValidacion = await _context.Productos
+                    .FirstOrDefaultAsync(p => p.IdProducto == d.idProducto);
+
+                if (productoValidacion == null)
+                {
+                    TempData["Error"] = "Uno de los productos ya no existe.";
+                    return RedirectToAction(nameof(Venta), new { idHabitacion = recepcion.IdHabitacion });
+                }
+
+                if ((productoValidacion.Cantidad ?? 0) < d.cantidad)
+                {
+                    TempData["Error"] = $"No hay stock suficiente para el producto {productoValidacion.Nombre}.";
+                    return RedirectToAction(nameof(Venta), new { idHabitacion = recepcion.IdHabitacion });
+                }
+
+                total += d.subTotal;
+            }
+
+            var venta = new Ventum
+            {
+                IdRecepcion = IdRecepcion,
+                Total = total,
+                Estado = "PAGADO"
+            };
+
+            _context.Venta.Add(venta);
+            await _context.SaveChangesAsync();
+
+            foreach (var d in detalles)
+            {
+                var producto = await _context.Productos
+                    .FirstOrDefaultAsync(p => p.IdProducto == d.idProducto);
+
+                var detalle = new DetalleVentum
+                {
+                    IdVenta = venta.IdVenta,
+                    IdProducto = d.idProducto,
+                    Cantidad = d.cantidad,
+                    SubTotal = d.subTotal
+                };
+
+                _context.DetalleVenta.Add(detalle);
+
+                if (producto != null)
+                {
+                    producto.Cantidad = (producto.Cantidad ?? 0) - d.cantidad;
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            TempData["Ok"] = "Venta registrada correctamente.";
+
+            return RedirectToAction("Detalle", "Recepcion", new { idHabitacion = recepcion.IdHabitacion });
+        }
+    }
+
+    public class DetalleTemp
+    {
+        public int idProducto { get; set; }
+        public int cantidad { get; set; }
+        public decimal precio { get; set; }
+        public decimal subTotal { get; set; }
     }
 }
