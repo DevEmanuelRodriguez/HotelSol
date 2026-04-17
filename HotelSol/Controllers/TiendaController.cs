@@ -109,6 +109,7 @@ namespace HotelSol.Controllers
 
             return View(vm);
         }
+        
 
         // ============================
         // GUARDAR VENTA
@@ -210,6 +211,81 @@ namespace HotelSol.Controllers
 
             return RedirectToAction("Detalle", "Recepcion", new { idHabitacion = recepcion.IdHabitacion });
         }
+
+        // ============================
+        // LISTA PRODUCTOS
+        // ============================
+        public async Task<IActionResult> Productos()
+        {
+            var productos = await _context.Productos
+                .OrderBy(p => p.Nombre)
+                .ToListAsync();
+
+            return View(productos);
+        }
+
+        // ============================
+        // OBTENER PRODUCTO (EDITAR)
+        // ============================
+        public async Task<IActionResult> ObtenerProducto(int id)
+        {
+            var prod = await _context.Productos.FindAsync(id);
+            return Json(prod);
+        }
+
+        // ============================
+        // GUARDAR (CREAR / EDITAR)
+        // ============================
+        [HttpPost]
+        public async Task<IActionResult> GuardarProducto(Producto model)
+        {
+            if (model.IdProducto == 0)
+            {
+                model.Estado = true;
+                model.FechaCreacion = DateTime.Now;
+
+                _context.Productos.Add(model);
+            }
+            else
+            {
+                var prod = await _context.Productos.FindAsync(model.IdProducto);
+
+                if (prod == null)
+                    return Json(new { ok = false });
+
+                // 🔥 SOLO ACTUALIZAMOS CAMPOS EDITABLES
+                prod.Nombre = model.Nombre;
+                prod.Detalle = model.Detalle;
+                prod.Precio = model.Precio;
+                prod.Cantidad = model.Cantidad;
+
+                // ❌ NO tocar Estado
+                // ❌ NO tocar FechaCreacion
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Json(new { ok = true });
+        }
+
+        // ============================
+        // ELIMINAR
+        // ============================
+        [HttpPost]
+        public async Task<IActionResult> EliminarProducto(int id)
+        {
+            var prod = await _context.Productos.FindAsync(id);
+
+            if (prod != null)
+            {
+                _context.Productos.Remove(prod); // o soft delete si quieres
+                await _context.SaveChangesAsync();
+            }
+
+            return Json(new { ok = true });
+        }
+
+
     }
 
     public class DetalleTemp
@@ -219,4 +295,6 @@ namespace HotelSol.Controllers
         public decimal precio { get; set; }
         public decimal subTotal { get; set; }
     }
+
+
 }
