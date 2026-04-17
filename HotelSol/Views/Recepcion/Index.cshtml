@@ -53,6 +53,12 @@
         text-decoration: none;
         color: inherit;
     }
+
+    .habitacion-bottom.limpieza {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
 </style>
 
 <!-- 🔥 FILTRO COMPLETO -->
@@ -179,35 +185,42 @@
             else if (item.EstadoCss == "limpieza")
             {
                 <!-- 🧼 LIMPIEZA -->
-                <a asp-controller="Recepcion"
-                   asp-action="Limpieza"
-                   class="link-card">
+                <div class="habitacion-card">
 
-                    <div class="habitacion-card">
+                    <div class="habitacion-top">
+                        <div class="d-flex justify-content-between">
 
-                        <div class="habitacion-top">
-                            <div class="d-flex justify-content-between">
+                            <div>
+                                <h5>NRO: @item.Numero</h5>
 
-                                <div>
-                                    <h5>NRO: @item.Numero</h5>
-
-                                    <small class="text-info">
-                                        CATEGORIA: @item.Categoria
-                                    </small>
-                                </div>
-
-                                <i class="fas fa-pump-soap fa-2x text-info"></i>
-
+                                <small class="text-info">
+                                    CATEGORIA: @item.Categoria
+                                </small>
                             </div>
-                        </div>
 
-                        <div class="habitacion-bottom limpieza">
-                            <span>LIMPIEZA</span>
+                            <i class="fas fa-pump-soap fa-2x text-info"></i>
+
                         </div>
+                    </div>
+
+                    <div class="habitacion-bottom limpieza flex-column">
+
+                        <span class="mb-2">LIMPIEZA</span>
+
+                        <!-- 🔥 BOTÓN DIRECTO -->
+                        <form asp-action="MarcarLimpia" method="post" class="w-100">
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden" name="idHabitacion" value="@item.IdHabitacion" />
+
+                            <button class="btn btn-light btn-sm w-100">
+                                ✔ Limpiar ahora
+                            </button>
+                        </form>
 
                     </div>
 
-                </a>
+                </div>
             }
 
         </div>

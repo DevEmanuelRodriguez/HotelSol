@@ -595,7 +595,7 @@ namespace HotelSol.Controllers
 
             TempData["Ok"] = "Habitación lista para usar.";
 
-            return RedirectToAction(nameof(Limpieza));
+            return RedirectToAction(nameof(Index));
         }
     }
 }
