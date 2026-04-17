@@ -1,20 +1,6 @@
 wwwroot\Categoria.xml
-wwwroot\css\sb-admin-2.css
-wwwroot\css\sb-admin-2.min.css
 wwwroot\css\site.css
 wwwroot\favicon.ico
-wwwroot\img\undraw_posting_photo.svg
-wwwroot\img\undraw_profile.svg
-wwwroot\img\undraw_profile_1.svg
-wwwroot\img\undraw_profile_2.svg
-wwwroot\img\undraw_profile_3.svg
-wwwroot\img\undraw_rocket.svg
-wwwroot\js\demo\chart-area-demo.js
-wwwroot\js\demo\chart-bar-demo.js
-wwwroot\js\demo\chart-pie-demo.js
-wwwroot\js\demo\datatables-demo.js
-wwwroot\js\sb-admin-2.js
-wwwroot\js\sb-admin-2.min.js
 wwwroot\js\site.js
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
@@ -76,6 +62,14 @@ wwwroot\lib\jquery\dist\jquery.slim.js
 wwwroot\lib\jquery\dist\jquery.slim.min.js
 wwwroot\lib\jquery\dist\jquery.slim.min.map
 wwwroot\lib\jquery\LICENSE.txt
+wwwroot\css\sb-admin-2.css
+wwwroot\css\sb-admin-2.min.css
+wwwroot\js\demo\chart-area-demo.js
+wwwroot\js\demo\chart-bar-demo.js
+wwwroot\js\demo\chart-pie-demo.js
+wwwroot\js\demo\datatables-demo.js
+wwwroot\js\sb-admin-2.js
+wwwroot\js\sb-admin-2.min.js
 wwwroot\vendor\bootstrap\js\bootstrap.bundle.js
 wwwroot\vendor\bootstrap\js\bootstrap.bundle.js.map
 wwwroot\vendor\bootstrap\js\bootstrap.bundle.min.js
@@ -1894,6 +1888,12 @@ wwwroot\vendor\jquery\jquery.min.map
 wwwroot\vendor\jquery\jquery.slim.js
 wwwroot\vendor\jquery\jquery.slim.min.js
 wwwroot\vendor\jquery\jquery.slim.min.map
+wwwroot\img\undraw_posting_photo.svg
+wwwroot\img\undraw_profile.svg
+wwwroot\img\undraw_profile_1.svg
+wwwroot\img\undraw_profile_2.svg
+wwwroot\img\undraw_profile_3.svg
+wwwroot\img\undraw_rocket.svg
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P2\Producto 2\HotelSol\HotelSol\HotelSol\wwwroot\lib\jquery\dist\jquery.js
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P2\Producto 2\HotelSol\HotelSol\HotelSol\wwwroot\lib\jquery-validation\LICENSE.md
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P2\Producto 2\HotelSol\HotelSol\HotelSol\wwwroot\lib\jquery-validation\dist\jquery.validate.min.js

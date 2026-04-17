@@ -38,13 +38,14 @@ namespace HotelSol.Controllers
 
             // SOLO HABITACIONES CON RECEPCION ACTIVA HOY
             var habitacionesOcupadas = habitaciones
-                .Where(h => _context.Recepcions.Any(r =>
-                    r.IdHabitacion == h.IdHabitacion &&
-                    r.FechaEntrada != null &&
-                    r.FechaSalida != null &&
-                    hoy >= r.FechaEntrada.Value.Date &&
-                    hoy < r.FechaSalida.Value.Date))
-                .ToList();
+            .Where(h => _context.Recepcions.Any(r =>
+                r.IdHabitacion == h.IdHabitacion &&
+                r.FechaEntrada != null &&
+                r.FechaSalida != null &&
+                r.FechaSalidaConfirmacion == null && // 🔥 CLAVE
+                hoy >= r.FechaEntrada.Value.Date &&
+                hoy < r.FechaSalida.Value.Date))
+            .ToList();
 
             ViewBag.PisoSeleccionado = pisoId;
 
@@ -72,12 +73,13 @@ namespace HotelSol.Controllers
                 return NotFound();
 
             var recepcion = await _context.Recepcions
-                .FirstOrDefaultAsync(r =>
-                    r.IdHabitacion == idHabitacion &&
-                    r.FechaEntrada != null &&
-                    r.FechaSalida != null &&
-                    hoy >= r.FechaEntrada.Value.Date &&
-                    hoy < r.FechaSalida.Value.Date);
+            .FirstOrDefaultAsync(r =>
+                r.IdHabitacion == idHabitacion &&
+                r.FechaEntrada != null &&
+                r.FechaSalida != null &&
+                r.FechaSalidaConfirmacion == null && // 🔥 CLAVE
+                hoy >= r.FechaEntrada.Value.Date &&
+                hoy < r.FechaSalida.Value.Date);
 
             if (recepcion == null)
             {

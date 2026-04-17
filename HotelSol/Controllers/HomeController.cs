@@ -28,16 +28,16 @@ namespace HotelSol.Controllers
 
             // 🔴 OCUPADAS HOY (VALIDACIÓN SEGURA)
             var ocupadasHoy = _context.Recepcions
-                .Where(r =>
-                    r.IdHabitacion != null &&
-                    r.FechaEntrada != null &&
-                    r.FechaSalida != null &&
-                    r.FechaEntrada.Value.Date <= hoy &&
-                    r.FechaSalida.Value.Date >= hoy
-                )
-                .Select(r => r.IdHabitacion)
-                .Distinct()
-                .Count();
+            .Where(r =>
+                r.IdHabitacion != null &&
+                r.Estado == true && // 🔥 extra seguridad
+                r.FechaSalidaConfirmacion == null &&
+                r.FechaEntrada <= hoy &&
+                r.FechaSalida > hoy
+            )
+            .Select(r => r.IdHabitacion)
+            .Distinct()
+            .Count();
 
             // 🟡 RESERVAS FUTURAS
             var futuras = _context.Recepcions

@@ -32,9 +32,6 @@ namespace HotelSol.Controllers
         // ================================
         // INDEX (DISPONIBILIDAD REAL)
         // ================================
-        // ================================
-        // INDEX (DISPONIBILIDAD REAL)
-        // ================================
         public async Task<IActionResult> Index(int? pisoId, DateTime? fechaEntrada, DateTime? fechaSalida)
         {
             var habitacionesQuery = _context.Habitacions
@@ -57,18 +54,18 @@ namespace HotelSol.Controllers
 
             // 🔥 OCUPACIÓN REAL
             var habitacionesOcupadas = await _context.Recepcions
-                .Where(r =>
-                    r.IdHabitacion != null &&
-                    r.FechaEntrada != null &&
-                    r.FechaSalida != null &&
-
-                    // 🔥 SOLAPAMIENTO REAL
-                    fechaInicio < r.FechaSalida.Value &&
-                    fechaFin > r.FechaEntrada.Value
-                )
-                .Select(r => r.IdHabitacion)
-                .Distinct()
-                .ToListAsync();
+            .Where(r =>
+                r.IdHabitacion != null &&
+                r.FechaEntrada != null &&
+                r.FechaSalida != null &&
+                r.FechaSalidaConfirmacion == null &&
+                r.Estado == true && // 🔥 AÑADE ESTO
+                fechaInicio < r.FechaSalida.Value &&
+                fechaFin > r.FechaEntrada.Value
+            )
+            .Select(r => r.IdHabitacion)
+            .Distinct()
+            .ToListAsync();
 
             var vm = new RecepcionIndexVM
             {
@@ -92,16 +89,16 @@ namespace HotelSol.Controllers
                     string estadoCss;
                     bool puedeReservar;
 
-                    if (ocupada)
-                    {
-                        estadoTexto = "OCUPADO";
-                        estadoCss = "ocupado";
-                        puedeReservar = false;
-                    }
-                    else if (limpieza)
+                    if (limpieza)
                     {
                         estadoTexto = "LIMPIEZA";
                         estadoCss = "limpieza";
+                        puedeReservar = false;                       
+                    }
+                    else if ( ocupada)
+                    {
+                        estadoTexto = "OCUPADO";
+                        estadoCss = "ocupado";
                         puedeReservar = false;
                     }
                     else
@@ -190,13 +187,15 @@ namespace HotelSol.Controllers
 
             // 🔥 VALIDACIÓN SOLAPAMIENTO
             var conflicto = await _context.Recepcions
-                .AnyAsync(r =>
-                    r.IdHabitacion == vm.IdHabitacion &&
-                    r.FechaEntrada != null &&
-                    r.FechaSalida != null &&
-                    vm.FechaEntrada.Value < r.FechaSalida.Value &&
-                    vm.FechaSalida.Value > r.FechaEntrada.Value
-                );
+            .AnyAsync(r =>
+                r.IdHabitacion == vm.IdHabitacion &&
+                r.FechaEntrada != null &&
+                r.FechaSalida != null &&
+                r.FechaSalidaConfirmacion == null && // 🔥 CLAVE
+                r.Estado == true && // 🔥 RECOMENDADO
+                vm.FechaEntrada.Value < r.FechaSalida.Value &&
+                vm.FechaSalida.Value > r.FechaEntrada.Value
+            );
 
             if (conflicto)
             {
@@ -396,13 +395,14 @@ namespace HotelSol.Controllers
             var habitaciones = await habitacionesQuery.ToListAsync();
 
             var habitacionesOcupadas = habitaciones
-                .Where(h => _context.Recepcions.Any(r =>
-                    r.IdHabitacion == h.IdHabitacion &&
-                    r.FechaEntrada != null &&
-                    r.FechaSalida != null &&
-                    hoy >= r.FechaEntrada.Value.Date &&
-                    hoy < r.FechaSalida.Value.Date))
-                .ToList();
+            .Where(h => _context.Recepcions.Any(r =>
+                r.IdHabitacion == h.IdHabitacion &&
+                r.FechaEntrada != null &&
+                r.FechaSalida != null &&
+                r.FechaSalidaConfirmacion == null && // 🔥 CLAVE
+                hoy >= r.FechaEntrada.Value.Date &&
+                hoy < r.FechaSalida.Value.Date))
+            .ToList();
 
             ViewBag.Pisos = await _context.Pisos
                 .Where(p => p.Estado == true)
@@ -430,12 +430,13 @@ namespace HotelSol.Controllers
                 return NotFound();
 
             var recepcion = await _context.Recepcions
-                .FirstOrDefaultAsync(r =>
-                    r.IdHabitacion == idHabitacion &&
-                    r.FechaEntrada != null &&
-                    r.FechaSalida != null &&
-                    hoy >= r.FechaEntrada.Value.Date &&
-                    hoy < r.FechaSalida.Value.Date);
+            .FirstOrDefaultAsync(r =>
+                r.IdHabitacion == idHabitacion &&
+                r.FechaEntrada != null &&
+                r.FechaSalida != null &&
+                r.FechaSalidaConfirmacion == null && // 🔥 CLAVE
+                hoy >= r.FechaEntrada.Value.Date &&
+                hoy < r.FechaSalida.Value.Date);
 
             if (recepcion == null)
             {
@@ -462,10 +463,14 @@ namespace HotelSol.Controllers
                 }))
                 .ToListAsync();
 
-            var totalConsumos = productos.Sum(x => x.SubTotal);
+            //var totalConsumos = productos.Sum(x => x.SubTotal);
+            var totalConsumos = productos
+                .Where(x => x.EstadoVenta == "PENDIENTE")
+                .Sum(x => x.SubTotal);
             var costoHabitacion = recepcion.PrecioInicial ?? 0;
             var adelanto = recepcion.Adelanto ?? 0;
-            var restante = recepcion.PrecioRestante ?? 0;
+            // CALCULO REAL
+            var restante = costoHabitacion - adelanto;
 
             var vm = new CheckoutVM
             {
@@ -490,7 +495,8 @@ namespace HotelSol.Controllers
                 Penalidad = recepcion.CostoPenalidad ?? 0,
 
                 TotalConsumos = totalConsumos,
-                TotalPagar = restante + totalConsumos + (recepcion.CostoPenalidad ?? 0),
+                //TotalPagar = restante + (recepcion.CostoPenalidad ?? 0),
+                TotalPagar = restante + (recepcion.CostoPenalidad ?? 0),
 
                 Productos = productos
             };
@@ -512,22 +518,30 @@ namespace HotelSol.Controllers
             if (recepcion == null)
                 return NotFound();
 
-            var totalConsumos = await _context.Venta
-                .Where(v => v.IdRecepcion == IdRecepcion)
-                .SumAsync(v => (decimal?)v.Total) ?? 0;
+            var costoHabitacion = recepcion.PrecioInicial ?? 0;
+            var adelanto = recepcion.Adelanto ?? 0;
 
-            var restante = recepcion.PrecioRestante ?? 0;
-            var totalFinal = restante + totalConsumos + Penalidad;
+            // cálculo 
+            var restante = costoHabitacion - adelanto;
+
+            var totalFinal = restante + Penalidad;
 
             recepcion.CostoPenalidad = Penalidad;
+
+            // guarda lo cobrado en checkout
             recepcion.TotalPagado = (recepcion.TotalPagado ?? 0) + totalFinal;
+
             recepcion.PrecioRestante = 0;
+
             recepcion.FechaSalidaConfirmacion = DateTime.Now;
             recepcion.Estado = false;
 
-            if (recepcion.IdHabitacionNavigation != null)
+            var habitacion = await _context.Habitacions
+            .FirstOrDefaultAsync(h => h.IdHabitacion == recepcion.IdHabitacion);
+
+            if (habitacion != null)
             {
-                recepcion.IdHabitacionNavigation.IdEstadoHabitacion = 1; // disponible
+                habitacion.IdEstadoHabitacion = 3; // 🔵 LIMPIEZA
             }
 
             await _context.SaveChangesAsync();
