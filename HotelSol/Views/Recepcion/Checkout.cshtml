@@ -1,0 +1,168 @@
+﻿@model HotelSol.Models.ViewModels.CheckoutVM
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<div class="card shadow mb-3">
+    <div class="card-body">
+        <h5 class="text-primary font-weight-bold mb-3">Resumen de la Habitación</h5>
+
+        <div class="row">
+            <div class="col-md-3">
+                <strong>Número:</strong>
+                <div>@Model.NumeroHabitacion</div>
+            </div>
+            <div class="col-md-3">
+                <strong>Detalles:</strong>
+                <div>@Model.DetalleHabitacion</div>
+            </div>
+            <div class="col-md-3">
+                <strong>Categoría:</strong>
+                <div>@Model.Categoria</div>
+            </div>
+            <div class="col-md-3">
+                <strong>Piso:</strong>
+                <div>@Model.Piso</div>
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="row">
+            <div class="col-md-3">
+                <strong>Cliente:</strong>
+                <div>@Model.Cliente</div>
+            </div>
+            <div class="col-md-3">
+                <strong>Nro. Documento:</strong>
+                <div>@Model.Documento</div>
+            </div>
+            <div class="col-md-3">
+                <strong>Correo:</strong>
+                <div>@Model.Correo</div>
+            </div>
+            <div class="col-md-3">
+                <strong>Fecha Entrada:</strong>
+                <div>@Model.FechaEntrada?.ToString("dd/MM/yyyy")</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form asp-action="ConfirmarCheckout" method="post">
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" name="IdRecepcion" value="@Model.IdRecepcion" />
+
+    <div class="card shadow mb-3">
+        <div class="card-body">
+            <h5 class="text-primary font-weight-bold mb-3">Costo de Hospedaje</h5>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>Costo Habitación:</strong>
+                    <input class="form-control" value="@Model.CostoHabitacion.ToString("0.00")" readonly />
+                </div>
+                <div class="col-md-3">
+                    <strong>Cantidad Adelantado:</strong>
+                    <input class="form-control" value="@Model.Adelanto.ToString("0.00")" readonly />
+                </div>
+                <div class="col-md-3">
+                    <strong>Cantidad Restante:</strong>
+                    <input class="form-control" value="@Model.CantidadRestante.ToString("0.00")" readonly />
+                </div>
+                <div class="col-md-3">
+                    <strong>Costo por Penalidad:</strong>
+                    <input type="number"
+                           step="0.01"
+                           min="0"
+                           id="Penalidad"
+                           name="Penalidad"
+                           value="@Model.Penalidad.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)"
+                           class="form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow mb-3">
+        <div class="card-body">
+            <h5 class="text-primary font-weight-bold mb-3">Servicio a la Habitación</h5>
+
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Estado Venta</th>
+                            <th>Sub Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Productos.Any())
+                        {
+                            @foreach (var item in Model.Productos)
+                            {
+                                <tr>
+                                    <td>@item.Producto</td>
+                                    <td>@item.Cantidad</td>
+                                    <td>@item.PrecioUnitario.ToString("0.00")</td>
+                                    <td>@item.EstadoVenta</td>
+                                    <td>@item.SubTotal.ToString("0.00")</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center">No hay productos registrados.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body d-flex justify-content-end align-items-center">
+            <div class="mr-3">
+                <strong>Total a Pagar</strong>
+                <input id="TotalPagar"
+                       class="form-control d-inline-block ml-2"
+                       style="width: 140px;"
+                       value="@Model.TotalPagar.ToString("0.00")"
+                       readonly />
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Finalizar Recepción
+            </button>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const penalidadInput = document.getElementById("Penalidad");
+            const totalInput = document.getElementById("TotalPagar");
+
+            const restante = @Model.CantidadRestante.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            const consumos = @Model.TotalConsumos.ToString(System.Globalization.CultureInfo.InvariantCulture);
+
+            function recalcular() {
+                let penalidad = parseFloat(penalidadInput.value) || 0;
+                let total = parseFloat(restante) + parseFloat(consumos) + penalidad;
+                totalInput.value = total.toFixed(2);
+            }
+
+            penalidadInput.addEventListener("input", recalcular);
+            recalcular();
+        });
+    </script>
+}

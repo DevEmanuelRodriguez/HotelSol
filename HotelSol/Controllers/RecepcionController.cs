@@ -340,13 +340,13 @@ namespace HotelSol.Controllers
             .Include(v => v.DetalleVenta)
             .ThenInclude(d => d.IdProductoNavigation)
             .SelectMany(v => v.DetalleVenta.Select(d => new RecepcionDetalleProductoVM
-    {
-        Producto = d.IdProductoNavigation!.Nombre!,
-        Cantidad = d.Cantidad ?? 0,
-        PrecioUnitario = d.IdProductoNavigation.Precio ?? 0,
-        EstadoVenta = v.Estado ?? "",
-        SubTotal = d.SubTotal ?? 0
-    }))
+            {
+                Producto = d.IdProductoNavigation!.Nombre!,
+                Cantidad = d.Cantidad ?? 0,
+                PrecioUnitario = d.IdProductoNavigation.Precio ?? 0,
+                EstadoVenta = v.Estado ?? "",
+                SubTotal = d.SubTotal ?? 0
+             }))
     .ToListAsync();
 
             var vm = new RecepcionDetalleVM
@@ -373,6 +373,167 @@ namespace HotelSol.Controllers
             };
 
             return View(vm);
+        }
+
+        // ================================
+        // SALIDAS (TARJETAS DE HABITACIONES OCUPADAS)
+        // ================================
+        public async Task<IActionResult> Salidas(int? pisoId)
+        {
+            var hoy = DateTime.Today;
+
+            var habitacionesQuery = _context.Habitacions
+                .Include(h => h.IdCategoriaNavigation)
+                .Include(h => h.IdPisoNavigation)
+                .Include(h => h.IdEstadoHabitacionNavigation)
+                .AsQueryable();
+
+            if (pisoId.HasValue && pisoId.Value > 0)
+            {
+                habitacionesQuery = habitacionesQuery.Where(h => h.IdPiso == pisoId.Value);
+            }
+
+            var habitaciones = await habitacionesQuery.ToListAsync();
+
+            var habitacionesOcupadas = habitaciones
+                .Where(h => _context.Recepcions.Any(r =>
+                    r.IdHabitacion == h.IdHabitacion &&
+                    r.FechaEntrada != null &&
+                    r.FechaSalida != null &&
+                    hoy >= r.FechaEntrada.Value.Date &&
+                    hoy < r.FechaSalida.Value.Date))
+                .ToList();
+
+            ViewBag.Pisos = await _context.Pisos
+                .Where(p => p.Estado == true)
+                .OrderBy(p => p.IdPiso)
+                .ToListAsync();
+
+            ViewBag.PisoSeleccionado = pisoId;
+
+            return View(habitacionesOcupadas);
+        }
+
+        // ================================
+        // CHECKOUT FORM
+        // ================================
+        public async Task<IActionResult> Checkout(int idHabitacion)
+        {
+            var hoy = DateTime.Today;
+
+            var habitacion = await _context.Habitacions
+                .Include(h => h.IdCategoriaNavigation)
+                .Include(h => h.IdPisoNavigation)
+                .FirstOrDefaultAsync(h => h.IdHabitacion == idHabitacion);
+
+            if (habitacion == null)
+                return NotFound();
+
+            var recepcion = await _context.Recepcions
+                .FirstOrDefaultAsync(r =>
+                    r.IdHabitacion == idHabitacion &&
+                    r.FechaEntrada != null &&
+                    r.FechaSalida != null &&
+                    hoy >= r.FechaEntrada.Value.Date &&
+                    hoy < r.FechaSalida.Value.Date);
+
+            if (recepcion == null)
+            {
+                TempData["Error"] = "La habitación no tiene una recepción activa.";
+                return RedirectToAction(nameof(Salidas));
+            }
+
+            var cliente = await _context.Personas
+                .FirstOrDefaultAsync(p => p.IdPersona == recepcion.IdCliente);
+
+            var productos = await _context.Venta
+                .Where(v => v.IdRecepcion == recepcion.IdRecepcion)
+                .Include(v => v.DetalleVenta)
+                    .ThenInclude(d => d.IdProductoNavigation)
+                .SelectMany(v => v.DetalleVenta.Select(d => new RecepcionDetalleProductoVM
+                {
+                    Producto = d.IdProductoNavigation != null ? d.IdProductoNavigation.Nombre ?? "" : "",
+                    Cantidad = d.Cantidad ?? 0,
+                    //usamos ternaria
+                    PrecioUnitario = d.IdProductoNavigation != null
+                    ? (d.IdProductoNavigation.Precio ?? 0) : 0,
+                    EstadoVenta = v.Estado ?? "",
+                    SubTotal = d.SubTotal ?? 0
+                }))
+                .ToListAsync();
+
+            var totalConsumos = productos.Sum(x => x.SubTotal);
+            var costoHabitacion = recepcion.PrecioInicial ?? 0;
+            var adelanto = recepcion.Adelanto ?? 0;
+            var restante = recepcion.PrecioRestante ?? 0;
+
+            var vm = new CheckoutVM
+            {
+                IdRecepcion = recepcion.IdRecepcion,
+                IdHabitacion = habitacion.IdHabitacion,
+
+                NumeroHabitacion = habitacion.Numero ?? "",
+                DetalleHabitacion = habitacion.Detalle ?? "",
+                Categoria = habitacion.IdCategoriaNavigation?.Descripcion ?? "",
+                Piso = habitacion.IdPisoNavigation?.Descripcion ?? "",
+
+                Cliente = cliente == null ? "" : $"{cliente.Nombre} {cliente.Apellido}",
+                Documento = cliente?.Documento ?? "",
+                Correo = cliente?.Correo ?? "",
+
+                FechaEntrada = recepcion.FechaEntrada,
+                FechaSalida = recepcion.FechaSalida,
+
+                CostoHabitacion = costoHabitacion,
+                Adelanto = adelanto,
+                CantidadRestante = restante,
+                Penalidad = recepcion.CostoPenalidad ?? 0,
+
+                TotalConsumos = totalConsumos,
+                TotalPagar = restante + totalConsumos + (recepcion.CostoPenalidad ?? 0),
+
+                Productos = productos
+            };
+
+            return View(vm);
+        }
+
+        // ================================
+        // CONFIRMAR CHECKOUT
+        // ================================
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConfirmarCheckout(int IdRecepcion, decimal Penalidad)
+        {
+            var recepcion = await _context.Recepcions
+                .Include(r => r.IdHabitacionNavigation)
+                .FirstOrDefaultAsync(r => r.IdRecepcion == IdRecepcion);
+
+            if (recepcion == null)
+                return NotFound();
+
+            var totalConsumos = await _context.Venta
+                .Where(v => v.IdRecepcion == IdRecepcion)
+                .SumAsync(v => (decimal?)v.Total) ?? 0;
+
+            var restante = recepcion.PrecioRestante ?? 0;
+            var totalFinal = restante + totalConsumos + Penalidad;
+
+            recepcion.CostoPenalidad = Penalidad;
+            recepcion.TotalPagado = (recepcion.TotalPagado ?? 0) + totalFinal;
+            recepcion.PrecioRestante = 0;
+            recepcion.FechaSalidaConfirmacion = DateTime.Now;
+            recepcion.Estado = false;
+
+            if (recepcion.IdHabitacionNavigation != null)
+            {
+                recepcion.IdHabitacionNavigation.IdEstadoHabitacion = 1; // disponible
+            }
+
+            await _context.SaveChangesAsync();
+
+            TempData["Ok"] = "Recepción finalizada correctamente.";
+            return RedirectToAction(nameof(Salidas));
         }
 
     }
