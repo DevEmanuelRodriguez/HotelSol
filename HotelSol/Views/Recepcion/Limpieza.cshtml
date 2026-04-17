@@ -1,0 +1,42 @@
+﻿@model List<HotelSol.Models.Habitacion>
+
+<h3 class="mb-4">Habitaciones en Limpieza</h3>
+
+<div class="row">
+
+    @foreach (var h in Model)
+    {
+        <div class="col-md-3 mb-3">
+
+            <div class="card border-info">
+
+                <div class="card-body">
+
+                    <h5>Nro: @h.Numero</h5>
+
+                    <p class="text-muted">
+                        @h.IdCategoriaNavigation?.Descripcion
+                    </p>
+
+                    <p>
+                        Piso: @h.IdPisoNavigation?.Descripcion
+                    </p>
+
+                    <form asp-action="MarcarLimpia" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden" name="idHabitacion" value="@h.IdHabitacion" />
+
+                        <button class="btn btn-success w-100">
+                            ✔ Marcar como limpia
+                        </button>
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+</div>

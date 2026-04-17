@@ -75,9 +75,10 @@ namespace HotelSol.Controllers
             var recepcion = await _context.Recepcions
             .FirstOrDefaultAsync(r =>
                 r.IdHabitacion == idHabitacion &&
+                r.Estado == true && // 🔥 CLAVE
+                r.FechaSalidaConfirmacion == null && // 🔥 CLAVE
                 r.FechaEntrada != null &&
                 r.FechaSalida != null &&
-                r.FechaSalidaConfirmacion == null && // 🔥 CLAVE
                 hoy >= r.FechaEntrada.Value.Date &&
                 hoy < r.FechaSalida.Value.Date);
 

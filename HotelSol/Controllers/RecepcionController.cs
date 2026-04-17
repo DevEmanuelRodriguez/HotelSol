@@ -314,6 +314,8 @@ namespace HotelSol.Controllers
             var recepcion = await _context.Recepcions
                 .FirstOrDefaultAsync(r =>
                     r.IdHabitacion == idHabitacion &&
+                    r.Estado == true && // 🔥 CLAVE
+                    r.FechaSalidaConfirmacion == null && // 🔥 CLAVE
                     r.FechaEntrada != null &&
                     r.FechaSalida != null &&
                     DateTime.Today >= r.FechaEntrada.Value.Date &&
@@ -432,9 +434,10 @@ namespace HotelSol.Controllers
             var recepcion = await _context.Recepcions
             .FirstOrDefaultAsync(r =>
                 r.IdHabitacion == idHabitacion &&
+                r.Estado == true && // 🔥 CLAVE
+                r.FechaSalidaConfirmacion == null && // 🔥 CLAVE
                 r.FechaEntrada != null &&
                 r.FechaSalida != null &&
-                r.FechaSalidaConfirmacion == null && // 🔥 CLAVE
                 hoy >= r.FechaEntrada.Value.Date &&
                 hoy < r.FechaSalida.Value.Date);
 
@@ -550,5 +553,49 @@ namespace HotelSol.Controllers
             return RedirectToAction(nameof(Salidas));
         }
 
+        public async Task<IActionResult> Limpieza(int? pisoId)
+        {
+            var habitacionesQuery = _context.Habitacions
+                .Include(h => h.IdCategoriaNavigation)
+                .Include(h => h.IdPisoNavigation)
+                .Where(h => h.IdEstadoHabitacion == 3) // 🔵 SOLO LIMPIEZA
+                .AsQueryable();
+
+            if (pisoId.HasValue && pisoId.Value > 0)
+            {
+                habitacionesQuery = habitacionesQuery
+                    .Where(h => h.IdPiso == pisoId.Value);
+            }
+
+            var habitaciones = await habitacionesQuery.ToListAsync();
+
+            ViewBag.Pisos = await _context.Pisos
+                .Where(p => p.Estado == true)
+                .OrderBy(p => p.IdPiso)
+                .ToListAsync();
+
+            ViewBag.PisoSeleccionado = pisoId;
+
+            return View(habitaciones);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MarcarLimpia(int idHabitacion)
+        {
+            var habitacion = await _context.Habitacions
+                .FirstOrDefaultAsync(h => h.IdHabitacion == idHabitacion);
+
+            if (habitacion == null)
+                return NotFound();
+
+            habitacion.IdEstadoHabitacion = 1; // 🟢 DISPONIBLE
+
+            await _context.SaveChangesAsync();
+
+            TempData["Ok"] = "Habitación lista para usar.";
+
+            return RedirectToAction(nameof(Limpieza));
+        }
     }
 }

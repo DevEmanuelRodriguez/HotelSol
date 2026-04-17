@@ -179,29 +179,35 @@
             else if (item.EstadoCss == "limpieza")
             {
                 <!-- 🧼 LIMPIEZA -->
-                <div class="habitacion-card">
+                <a asp-controller="Recepcion"
+                   asp-action="Limpieza"
+                   class="link-card">
 
-                    <div class="habitacion-top">
-                        <div class="d-flex justify-content-between">
+                    <div class="habitacion-card">
 
-                            <div>
-                                <h5>NRO: @item.Numero</h5>
+                        <div class="habitacion-top">
+                            <div class="d-flex justify-content-between">
 
-                                <small class="text-info">
-                                    CATEGORIA: @item.Categoria
-                                </small>
+                                <div>
+                                    <h5>NRO: @item.Numero</h5>
+
+                                    <small class="text-info">
+                                        CATEGORIA: @item.Categoria
+                                    </small>
+                                </div>
+
+                                <i class="fas fa-pump-soap fa-2x text-info"></i>
+
                             </div>
-
-                            <i class="fas fa-pump-soap fa-2x text-info"></i>
-
                         </div>
+
+                        <div class="habitacion-bottom limpieza">
+                            <span>LIMPIEZA</span>
+                        </div>
+
                     </div>
 
-                    <div class="habitacion-bottom limpieza">
-                        <span>LIMPIEZA</span>
-                    </div>
-
-                </div>
+                </a>
             }
 
         </div>
