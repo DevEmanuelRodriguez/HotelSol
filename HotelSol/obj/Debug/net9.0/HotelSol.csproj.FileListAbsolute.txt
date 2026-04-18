@@ -2581,3 +2581,11 @@ C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P2\Producto 2\HotelSol\HotelSo
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P2\Producto 2\HotelSol\HotelSol\HotelSol\obj\Debug\net9.0\compressed\mv23czxji5-{0}-njp7vu7jcj-njp7vu7jcj.gz
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P2\Producto 2\HotelSol\HotelSol\HotelSol\obj\Debug\net9.0\compressed\ybhzyi47qq-{0}-eeix3wlwuj-eeix3wlwuj.gz
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P2\Producto 2\HotelSol\HotelSol\HotelSol\obj\Debug\net9.0\compressed\b954wdw8ok-{0}-8c6joi3n26-8c6joi3n26.gz
+C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P2\Producto 2\HotelSol\HotelSol\HotelSol\bin\Debug\net9.0\ClosedXML.dll
+C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P2\Producto 2\HotelSol\HotelSol\HotelSol\bin\Debug\net9.0\ClosedXML.Parser.dll
+C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P2\Producto 2\HotelSol\HotelSol\HotelSol\bin\Debug\net9.0\DocumentFormat.OpenXml.dll
+C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P2\Producto 2\HotelSol\HotelSol\HotelSol\bin\Debug\net9.0\DocumentFormat.OpenXml.Framework.dll
+C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P2\Producto 2\HotelSol\HotelSol\HotelSol\bin\Debug\net9.0\ExcelNumberFormat.dll
+C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P2\Producto 2\HotelSol\HotelSol\HotelSol\bin\Debug\net9.0\RBush.dll
+C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P2\Producto 2\HotelSol\HotelSol\HotelSol\bin\Debug\net9.0\SixLabors.Fonts.dll
+C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P2\Producto 2\HotelSol\HotelSol\HotelSol\bin\Debug\net9.0\System.IO.Packaging.dll

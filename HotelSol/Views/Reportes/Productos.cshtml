@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Reporte Productos";
+}
+
+<h4 class="mb-3 text-primary font-weight-bold">Exportar Productos</h4>
+
+<div class="card shadow">
+    <div class="card-body">
+        <form method="get" asp-controller="Reportes" asp-action="ExportarProductos">
+            <div class="row">
+
+                <div class="col-md-3">
+                    <label class="font-weight-bold">Estado:</label>
+                    <select name="estado" class="form-control">
+                        <option value="Todos">Todos</option>
+                        <option value="Activo">Activo</option>
+                        <option value="No Activo">No Activo</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="font-weight-bold">Fecha Inicio:</label>
+                    <input type="date" name="fechaInicio" class="form-control" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="font-weight-bold">Fecha Fin:</label>
+                    <input type="date" name="fechaFin" class="form-control" />
+                </div>
+
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-success w-100">
+                        <i class="fas fa-cloud-download-alt"></i> Descargar
+                    </button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
