@@ -31,7 +31,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item" asp-controller="Recepcion" asp-action="Index">Recepción</a>
                 <a class="collapse-item" asp-controller="Recepcion" asp-action="Salidas">Salidas</a>
-                <a class="collapse-item" asp-controller="Habitaciones" asp-action="Index">Habitaciones</a>
+                <!-- <a class="collapse-item" asp-controller="Habitaciones" asp-action="Index">Habitaciones</a>-->
                 <a class="collapse-item" asp-controller="Recepcion" asp-action="Limpieza">Limpieza</a>
                 
             </div>
@@ -55,10 +55,6 @@
                     Ventas
                 </a>
 
-                <a class="collapse-item" href="#">
-                    Detalle venta
-                </a>
-
             </div>
         </div>
     </li>
@@ -72,8 +68,9 @@
         </a>
         <div id="collapseMantenimiento" class="collapse" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="#">Estado Habitación</a>
-                <a class="collapse-item" href="#">Tipo Persona</a>
+                <a class="collapse-item" asp-controller="Habitacion" asp-action="Index">Habitación</a>
+                <a class="collapse-item" asp-controller="Categoria" asp-action="Index">Categoría</a>
+                <a class="collapse-item" asp-controller="Piso" asp-action="Index">Pisos</a>
                 <a class="collapse-item" href="#">XML Exportar</a>
                 <a class="collapse-item" href="#">XML Importar</a>
             </div>

@@ -30,6 +30,10 @@ build_property._RazorSourceGeneratorDebug =
 build_property.EffectiveAnalysisLevelStyle = 9.0
 build_property.EnableCodeStyleSeverity = 
 
+[C:/Users/Acer/Desktop/FP UOC/Semestre 1 2026/.NET/P2/Producto 2/HotelSol/HotelSol/HotelSol/Views/Categoria/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcmlhXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Acer/Desktop/FP UOC/Semestre 1 2026/.NET/P2/Producto 2/HotelSol/HotelSol/HotelSol/Views/Datos/Categoria.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGF0b3NcQ2F0ZWdvcmlhLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -74,12 +78,12 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGF0b3NcVmVudGEuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Acer/Desktop/FP UOC/Semestre 1 2026/.NET/P2/Producto 2/HotelSol/HotelSol/HotelSol/Views/Habitaciones/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGFiaXRhY2lvbmVzXENyZWF0ZS5jc2h0bWw=
+[C:/Users/Acer/Desktop/FP UOC/Semestre 1 2026/.NET/P2/Producto 2/HotelSol/HotelSol/HotelSol/Views/Habitacion/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGFiaXRhY2lvblxDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Acer/Desktop/FP UOC/Semestre 1 2026/.NET/P2/Producto 2/HotelSol/HotelSol/HotelSol/Views/Habitaciones/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGFiaXRhY2lvbmVzXEluZGV4LmNzaHRtbA==
+[C:/Users/Acer/Desktop/FP UOC/Semestre 1 2026/.NET/P2/Producto 2/HotelSol/HotelSol/HotelSol/Views/Habitacion/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGFiaXRhY2lvblxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Acer/Desktop/FP UOC/Semestre 1 2026/.NET/P2/Producto 2/HotelSol/HotelSol/HotelSol/Views/Home/Index - Copia.cshtml]
@@ -92,6 +96,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Acer/Desktop/FP UOC/Semestre 1 2026/.NET/P2/Producto 2/HotelSol/HotelSol/HotelSol/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Acer/Desktop/FP UOC/Semestre 1 2026/.NET/P2/Producto 2/HotelSol/HotelSol/HotelSol/Views/Piso/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGlzb1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Acer/Desktop/FP UOC/Semestre 1 2026/.NET/P2/Producto 2/HotelSol/HotelSol/HotelSol/Views/Recepcion/Checkout.cshtml]

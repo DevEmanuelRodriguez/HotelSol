@@ -1,0 +1,119 @@
+﻿@model List<HotelSol.Models.Categorium>
+
+<h4>Categorías</h4>
+
+<div class="card shadow">
+    <div class="card-header bg-primary text-white d-flex justify-content-between">
+        <span>Categorías</span>
+        <button class="btn btn-success btn-sm" onclick="abrirModal()">Crear</button>
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Descripción</th>
+                    <th>Estado</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var c in Model)
+                {
+                    <tr>
+                        <td>@c.Descripcion</td>
+                        <td>
+                            <span class="badge badge-success">Activo</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" onclick="editar(@c.IdCategoria)">✏</button>
+                            <button class="btn btn-danger btn-sm" onclick="eliminar(@c.IdCategoria)">🗑</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<div class="modal fade" id="modalCategoria">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header bg-primary text-white">
+                <h5>Categoría</h5>
+                <button class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+
+                <input type="hidden" id="IdCategoria" />
+
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <input id="Descripcion" class="form-control" />
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button class="btn btn-primary" onclick="guardar()">Guardar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+
+        function abrirModal(){
+            limpiar();
+            $("#modalCategoria").modal("show");
+        }
+
+        function limpiar(){
+            $("#IdCategoria").val(0);
+            $("#Descripcion").val("");
+        }
+
+        function guardar(){
+
+            let data = {
+                IdCategoria: $("#IdCategoria").val(),
+                Descripcion: $("#Descripcion").val()
+            };
+
+            $.post("/Categoria/Guardar", data, function(res){
+                if(res.ok){
+                    location.reload();
+                }
+            });
+        }
+
+        function editar(id){
+
+            $.get("/Categoria/Obtener?id=" + id, function(data){
+
+                $("#IdCategoria").val(data.idCategoria);
+                $("#Descripcion").val(data.descripcion);
+
+                $("#modalCategoria").modal("show");
+            });
+        }
+
+        function eliminar(id){
+
+            if(!confirm("Eliminar categoría?")) return;
+
+            $.post("/Categoria/Eliminar", { id }, function(){
+                location.reload();
+            });
+        }
+
+    </script>
+}

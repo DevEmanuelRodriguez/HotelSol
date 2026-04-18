@@ -1,0 +1,153 @@
+﻿@model List<HotelSol.Models.Piso>
+
+@{
+    ViewData["Title"] = "Pisos";
+}
+
+<h4 class="mb-3">Lista de Pisos</h4>
+
+<div class="card shadow">
+    <div class="card-header bg-primary text-white d-flex justify-content-between">
+        <span>Pisos</span>
+
+        <button class="btn btn-success btn-sm" onclick="abrirModal()">
+            Crear Nuevo
+        </button>
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Descripción</th>
+                    <th>Estado</th>
+                    <th style="width:120px;"></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var p in Model)
+                {
+                    <tr>
+                        <td>@p.Descripcion</td>
+
+                        <td>
+                            @if (p.Estado == true)
+                            {
+                                <span class="badge badge-success">Activo</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-danger">Inactivo</span>
+                            }
+                        </td>
+
+                        <td>
+                            <button class="btn btn-primary btn-sm"
+                                    onclick="editar(@p.IdPiso)">
+                                ✏
+                            </button>
+
+                            <button class="btn btn-danger btn-sm"
+                                    onclick="eliminar(@p.IdPiso)">
+                                🗑
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+
+    </div>
+</div>
+
+<div class="modal fade" id="modalPiso">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header bg-primary text-white">
+                <h5>Piso</h5>
+                <button class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+
+                <input type="hidden" id="IdPiso" />
+
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <input id="Descripcion" class="form-control" />
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button class="btn btn-primary" onclick="guardar()">Guardar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+
+        function abrirModal(){
+            limpiar();
+            $("#modalPiso").modal("show");
+        }
+
+        function limpiar(){
+            $("#IdPiso").val(0);
+            $("#Descripcion").val("");
+        }
+
+        function guardar(){
+
+            if (!$("#Descripcion").val()){
+                alert("La descripción es obligatoria");
+                return;
+            }
+
+            let data = {
+                IdPiso: $("#IdPiso").val(),
+                Descripcion: $("#Descripcion").val()
+            };
+
+            $.post("/Piso/Guardar", data, function(res){
+
+                if(res.ok){
+                    location.reload();
+                }
+                else{
+                    alert(res.msg); // SALE EL ERROR
+                }
+
+            });
+        }
+
+        function editar(id){
+
+            $.get("/Piso/Obtener?id=" + id, function(data){
+
+                $("#IdPiso").val(data.idPiso);
+                $("#Descripcion").val(data.descripcion);
+
+                $("#modalPiso").modal("show");
+            });
+        }
+
+        function eliminar(id){
+
+            if(!confirm("Eliminar piso?")) return;
+
+            $.post("/Piso/Eliminar", { id }, function(){
+                location.reload();
+            });
+        }
+
+    </script>
+}

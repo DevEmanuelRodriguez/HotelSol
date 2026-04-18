@@ -1,0 +1,174 @@
+﻿@model List<HotelSol.Models.Habitacion>
+
+<h4>Habitaciones</h4>
+
+<div class="card shadow">
+    <div class="card-header bg-primary text-white d-flex justify-content-between">
+        <span>Habitaciones</span>
+        <button class="btn btn-success btn-sm" onclick="abrirModal()">Crear</button>
+    </div>
+
+    <div class="card-body">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Número</th>
+                    <th>Detalle</th>
+                    <th>Precio</th>
+                    <th>Categoría</th>
+                    <th>Piso</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var h in Model)
+                {
+                    <tr>
+                        <td>@h.Numero</td>
+                        <td>@h.Detalle</td>
+                        <td>@h.Precio</td>
+                        <td>@h.IdCategoriaNavigation?.Descripcion</td>
+                        <td>@h.IdPisoNavigation?.Descripcion</td>
+
+                        <td>
+                            <button class="btn btn-primary btn-sm" onclick="editar(@h.IdHabitacion)">✏</button>
+                            <button class="btn btn-danger btn-sm" onclick="eliminar(@h.IdHabitacion)">🗑</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="modalHabitacion">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header bg-primary text-white">
+                <h5>Habitación</h5>
+                <button class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+
+                <input type="hidden" id="IdHabitacion" />
+
+                <div class="form-group">
+                    <label>Número</label>
+                    <input id="Numero" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label>Detalle</label>
+                    <input id="Detalle" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label>Precio</label>
+                    <input id="Precio" type="number" step="0.01" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label>Categoría</label>
+                    <select id="IdCategoria" class="form-control">
+                        <option value="">-- Seleccionar --</option>
+                        @foreach (var c in ViewBag.Categorias)
+                        {
+                            <option value="@c.IdCategoria">@c.Descripcion</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Piso</label>
+                    <select id="IdPiso" class="form-control">
+                        <option value="">-- Seleccionar --</option>
+                        @foreach (var p in ViewBag.Pisos)
+                        {
+                            <option value="@p.IdPiso">@p.Descripcion</option>
+                        }
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button class="btn btn-primary" onclick="guardar()">Guardar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+
+        function abrirModal(){
+            limpiar();
+            $("#modalHabitacion").modal("show");
+        }
+
+        function limpiar(){
+            $("#IdHabitacion").val(0);
+            $("#Numero").val("");
+            $("#Detalle").val("");
+            $("#Precio").val("");
+            $("#IdCategoria").val("");
+            $("#IdPiso").val("");
+        }
+
+        // 🔥 GUARDAR
+        function guardar(){
+
+            if (!$("#Numero").val()){
+                alert("Número obligatorio");
+                return;
+            }
+
+            let data = {
+                IdHabitacion: $("#IdHabitacion").val(),
+                Numero: $("#Numero").val(),
+                Detalle: $("#Detalle").val(),
+                Precio: $("#Precio").val(),
+                IdCategoria: $("#IdCategoria").val(),
+                IdPiso: $("#IdPiso").val()
+            };
+
+            $.post("/Habitacion/Guardar", data, function(res){
+                if(res.ok){
+                    location.reload();
+                }
+            });
+        }
+
+        // 🔥 EDITAR
+        function editar(id){
+
+            $.get("/Habitacion/Obtener?id=" + id, function(data){
+
+                $("#IdHabitacion").val(data.idHabitacion);
+                $("#Numero").val(data.numero);
+                $("#Detalle").val(data.detalle);
+                $("#Precio").val(data.precio);
+                $("#IdCategoria").val(data.idCategoria);
+                $("#IdPiso").val(data.idPiso);
+
+                $("#modalHabitacion").modal("show");
+            });
+        }
+
+        // 🔥 ELIMINAR
+        function eliminar(id){
+
+            if(!confirm("Eliminar habitación?")) return;
+
+            $.post("/Habitacion/Eliminar", { id }, function(){
+                location.reload();
+            });
+        }
+
+    </script>
+}

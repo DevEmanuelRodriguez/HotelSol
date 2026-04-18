@@ -10,45 +10,81 @@ using HotelSol.Models;
 
 namespace HotelSol.Controllers;
 
-public class HabitacionesController : Controller
+using HotelSol.Data;
+using HotelSol.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
+public class HabitacionController : Controller
 {
-    // Acceso a la base de datos
     private readonly DbHotelContext _context;
 
-    public HabitacionesController(DbHotelContext context)
+    public HabitacionController(DbHotelContext context)
     {
         _context = context;
     }
 
-    // Muestra todas las habitaciones
     public async Task<IActionResult> Index()
     {
-        // Obtiene los datos desde la BD
-        return View(await _context.Habitacions.ToListAsync());
+        ViewBag.Categorias = await _context.Categoria
+            .Where(c => c.Estado == true)
+            .ToListAsync();
+
+        ViewBag.Pisos = await _context.Pisos
+            .Where(p => p.Estado == true)
+            .ToListAsync();
+
+        var lista = await _context.Habitacions
+            .Include(h => h.IdCategoriaNavigation)
+            .Include(h => h.IdPisoNavigation)
+            .ToListAsync();
+
+        return View(lista);
     }
 
-    // Muestra formulario para crear habitación
-    public IActionResult Create()
+    public async Task<IActionResult> Obtener(int id)
     {
-        return View();
+        var item = await _context.Habitacions.FindAsync(id);
+        return Json(item);
     }
 
-    // Recibe datos del formulario
     [HttpPost]
-    public async Task<IActionResult> Create(Habitacion habitacion)
+    public async Task<IActionResult> Guardar(Habitacion model)
     {
-        // Validación del modelo
-        if (!ModelState.IsValid) {
-            return View(habitacion); 
+        if (model.IdHabitacion == 0)
+        {
+            model.Estado = true;
+            model.FechaCreacion = DateTime.Now;
+
+            // Estado habitacion
+            model.IdEstadoHabitacion = 1; // 1 = DISPONIBLE
+
+            _context.Habitacions.Add(model);
+        }
+        else
+        {
+            var h = await _context.Habitacions.FindAsync(model.IdHabitacion);
+
+            h.Numero = model.Numero;
+            h.Detalle = model.Detalle;
+            h.Precio = model.Precio;
+            h.IdCategoria = model.IdCategoria;
+            h.IdPiso = model.IdPiso;
         }
 
-        // Inserta en BD
-        _context.Add(habitacion);
-
-        // Guarda cambios
         await _context.SaveChangesAsync();
+        return Json(new { ok = true });
+    }
 
-        // Redirige a la lista
-        return RedirectToAction(nameof(Index));
+    [HttpPost]
+    public async Task<IActionResult> Eliminar(int id)
+    {
+        var h = await _context.Habitacions.FindAsync(id);
+        if (h != null)
+        {
+            _context.Habitacions.Remove(h);
+            await _context.SaveChangesAsync();
+        }
+        return Json(new { ok = true });
     }
 }
