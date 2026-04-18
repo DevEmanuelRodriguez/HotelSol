@@ -1,0 +1,233 @@
+﻿@model List<HotelSol.Models.Persona>
+
+@{
+    ViewData["Title"] = "Usuarios";
+}
+
+<h4 class="mb-3">Lista de Usuarios</h4>
+
+<div class="card shadow">
+
+    <div class="card-header bg-primary text-white d-flex justify-content-between">
+        <span>Lista de Usuarios</span>
+
+        <button class="btn btn-success btn-sm" onclick="nuevo()">
+            Crear Nuevo
+        </button>
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-bordered table-hover">
+
+            <thead>
+                <tr>
+                    <th>Nro Documento</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Correo</th>
+                    <th>Tipo</th>
+                    <th>Estado</th>
+                    <th width="120"></th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (var x in Model)
+                {
+                    <tr>
+                        <td>@x.Documento</td>
+                        <td>@x.Nombre</td>
+                        <td>@x.Apellido</td>
+                        <td>@x.Correo</td>
+                        <td>@x.IdTipoPersonaNavigation?.Descripcion</td>
+                        <td>
+                            @if (x.Estado == true)
+                            {
+                                <span class="badge badge-success">Activo</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-danger">Inactivo</span>
+                            }
+                        </td>
+
+                        <td>
+                            <button class="btn btn-primary btn-sm"
+                                    onclick="editar(@x.IdPersona)">
+                                ✏
+                            </button>
+
+                            <button class="btn btn-danger btn-sm"
+                                    onclick="eliminar(@x.IdPersona)">
+                                🗑
+                            </button>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+</div>
+
+<!-- MODAL -->
+
+<div class="modal fade" id="modalUsuario">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header bg-primary text-white">
+                <h5>Usuario</h5>
+                <button class="close text-white" data-dismiss="modal">
+                    &times;
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <input type="hidden" id="IdPersona" />
+
+                <div class="form-group">
+                    <label>Documento</label>
+                    <input id="Documento" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input id="Nombre" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label>Apellido</label>
+                    <input id="Apellido" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label>Correo</label>
+                    <input id="Correo" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label>Clave</label>
+                    <input id="Clave" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label>Tipo Usuario</label>
+
+                    <select id="IdTipoPersona" class="form-control">
+
+                        @foreach (var t in ViewBag.Tipos)
+                        {
+                            <option value="@t.IdTipoPersona">
+                                @t.Descripcion
+                            </option>
+                        }
+
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Estado</label>
+
+                    <select id="Estado" class="form-control">
+                        <option value="true">Activo</option>
+                        <option value="false">Inactivo</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal">
+                    Cerrar
+                </button>
+
+                <button class="btn btn-primary" onclick="guardar()">
+                    Guardar
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+
+        function nuevo(){
+
+            limpiar();
+            $("#modalUsuario").modal("show");
+        }
+
+        function limpiar(){
+
+            $("#IdPersona").val(0);
+            $("#Documento").val("");
+            $("#Nombre").val("");
+            $("#Apellido").val("");
+            $("#Correo").val("");
+            $("#Clave").val("");
+            $("#Estado").val("true");
+        }
+
+        function guardar(){
+
+            let data = {
+
+                IdPersona: $("#IdPersona").val(),
+                Documento: $("#Documento").val(),
+                Nombre: $("#Nombre").val(),
+                Apellido: $("#Apellido").val(),
+                Correo: $("#Correo").val(),
+                Clave: $("#Clave").val(),
+                IdTipoPersona: $("#IdTipoPersona").val(),
+                Estado: $("#Estado").val()
+            };
+
+            $.post("/Usuario/Guardar", data, function(r){
+
+                if(r.ok){
+                    location.reload();
+                }
+            });
+        }
+
+        function editar(id){
+
+            $.get("/Usuario/Obtener?id=" + id, function(x){
+
+                $("#IdPersona").val(x.idPersona);
+                $("#Documento").val(x.documento);
+                $("#Nombre").val(x.nombre);
+                $("#Apellido").val(x.apellido);
+                $("#Correo").val(x.correo);
+                $("#Clave").val(x.clave);
+                $("#IdTipoPersona").val(x.idTipoPersona);
+                $("#Estado").val(x.estado.toString());
+
+                $("#modalUsuario").modal("show");
+            });
+        }
+
+        function eliminar(id){
+
+            if(!confirm("Eliminar usuario?")) return;
+
+            $.post("/Usuario/Eliminar", { id }, function(r){
+
+                if(r.ok){
+                    location.reload();
+                }
+            });
+        }
+
+    </script>
+
+}
