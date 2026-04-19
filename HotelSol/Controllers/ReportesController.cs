@@ -17,9 +17,9 @@ namespace HotelSol.Controllers
             _context = context;
         }
 
-        // ============================
+        
         // VISTAS
-        // ============================
+        
         public IActionResult Recepcion()
         {
             return View();
@@ -30,9 +30,9 @@ namespace HotelSol.Controllers
             return View();
         }
 
-        // ============================
+        
         // EXCEL RECEPCIONES
-        // ============================
+        
         [HttpGet]
         public async Task<IActionResult> ExportarRecepciones(string estado, DateTime? fechaInicio, DateTime? fechaFin)
         {
@@ -114,9 +114,9 @@ namespace HotelSol.Controllers
             );
         }
 
-        // ============================
+        
         // EXCEL PRODUCTOS
-        // ============================
+        
         [HttpGet]
         public async Task<IActionResult> ExportarProductos(string estado, DateTime? fechaInicio, DateTime? fechaFin)
         {

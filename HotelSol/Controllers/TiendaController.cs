@@ -18,9 +18,8 @@ namespace HotelSol.Controllers
             _context = context;
         }
 
-        // ============================
         // INDEX (HABITACIONES OCUPADAS)
-        // ============================
+        
         public async Task<IActionResult> Index(int? pisoId)
         {
             var hoy = DateTime.Today;
@@ -44,7 +43,7 @@ namespace HotelSol.Controllers
                 r.IdHabitacion == h.IdHabitacion &&
                 r.FechaEntrada != null &&
                 r.FechaSalida != null &&
-                r.FechaSalidaConfirmacion == null && // 🔥 CLAVE
+                r.FechaSalidaConfirmacion == null && 
                 hoy >= r.FechaEntrada.Value.Date &&
                 hoy < r.FechaSalida.Value.Date))
             .ToList();
@@ -59,9 +58,9 @@ namespace HotelSol.Controllers
             return View(habitacionesOcupadas);
         }
 
-        // ============================
+        
         // FORMULARIO VENTA
-        // ============================
+        
         public async Task<IActionResult> Venta(int idHabitacion)
         {
             var hoy = DateTime.Today;
@@ -77,8 +76,8 @@ namespace HotelSol.Controllers
             var recepcion = await _context.Recepcions
             .FirstOrDefaultAsync(r =>
                 r.IdHabitacion == idHabitacion &&
-                r.Estado == true && // 🔥 CLAVE
-                r.FechaSalidaConfirmacion == null && // 🔥 CLAVE
+                r.Estado == true && 
+                r.FechaSalidaConfirmacion == null && 
                 r.FechaEntrada != null &&
                 r.FechaSalida != null &&
                 hoy >= r.FechaEntrada.Value.Date &&
@@ -113,9 +112,9 @@ namespace HotelSol.Controllers
         }
         
 
-        // ============================
+        
         // GUARDAR VENTA
-        // ============================
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> FinalizarVenta(int IdRecepcion, string detalleJson)
@@ -214,9 +213,9 @@ namespace HotelSol.Controllers
             return RedirectToAction("Detalle", "Recepcion", new { idHabitacion = recepcion.IdHabitacion });
         }
 
-        // ============================
+        
         // LISTA PRODUCTOS
-        // ============================
+        
         public async Task<IActionResult> Productos()
         {
             var productos = await _context.Productos
@@ -226,18 +225,17 @@ namespace HotelSol.Controllers
             return View(productos);
         }
 
-        // ============================
+        
         // OBTENER PRODUCTO (EDITAR)
-        // ============================
-        public async Task<IActionResult> ObtenerProducto(int id)
+         public async Task<IActionResult> ObtenerProducto(int id)
         {
             var prod = await _context.Productos.FindAsync(id);
             return Json(prod);
         }
 
-        // ============================
+        
         // GUARDAR (CREAR / EDITAR)
-        // ============================
+        
         [HttpPost]
         public async Task<IActionResult> GuardarProducto(Producto model)
         {
@@ -255,14 +253,13 @@ namespace HotelSol.Controllers
                 if (prod == null)
                     return Json(new { ok = false });
 
-                // 🔥 SOLO ACTUALIZAMOS CAMPOS EDITABLES
+                // ACTUALIZA CAMPOS EDITABLES
                 prod.Nombre = model.Nombre;
                 prod.Detalle = model.Detalle;
                 prod.Precio = model.Precio;
                 prod.Cantidad = model.Cantidad;
 
-                // ❌ NO tocar Estado
-                // ❌ NO tocar FechaCreacion
+                
             }
 
             await _context.SaveChangesAsync();
@@ -270,9 +267,8 @@ namespace HotelSol.Controllers
             return Json(new { ok = true });
         }
 
-        // ============================
+        
         // ELIMINAR
-        // ============================
         [HttpPost]
         public async Task<IActionResult> EliminarProducto(int id)
         {

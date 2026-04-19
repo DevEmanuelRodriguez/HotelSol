@@ -18,9 +18,9 @@ namespace HotelSol.Controllers
             _context = context;
         }
 
-        // ================================
+        
         // DASHBOARD 
-        // ================================
+        
         public IActionResult Index()
         {
             var hoy = DateTime.Today;
@@ -28,11 +28,11 @@ namespace HotelSol.Controllers
             // TOTAL habitaciones
             var total = _context.Habitacions.Count();
 
-            // 🔴 OCUPADAS HOY (VALIDACIÓN SEGURA)
+            //  OCUPADAS HOY 
             var ocupadasHoy = _context.Recepcions
             .Where(r =>
                 r.IdHabitacion != null &&
-                r.Estado == true && // 🔥 extra seguridad
+                r.Estado == true && // para seguridad
                 r.FechaSalidaConfirmacion == null &&
                 r.FechaEntrada <= hoy &&
                 r.FechaSalida > hoy
@@ -41,7 +41,7 @@ namespace HotelSol.Controllers
             .Distinct()
             .Count();
 
-            // 🟡 RESERVAS FUTURAS
+            // RESERVAS FUTURAS
             var futuras = _context.Recepcions
                 .Where(r =>
                     r.FechaEntrada != null &&
@@ -49,21 +49,21 @@ namespace HotelSol.Controllers
                 )
                 .Count();
 
-            // 🔵 LIMPIEZA
+            // LIMPIEZA
             var limpieza = _context.Habitacions
                 .Count(h => h.IdEstadoHabitacion == 3);
 
-            // 🟢 DISPONIBLES HOY
+            // DISPONIBLES HOY
             var disponibles = total - ocupadasHoy - limpieza;
 
-            // 📊 PORCENTAJE OCUPACIÓN
+            // PORCENTAJE OCUPACIÓN
             var porcentaje = total > 0
                 ? (ocupadasHoy * 100.0) / total
                 : 0;
 
-            // ================================
+         
             // VIEWBAG
-            // ================================
+           
             ViewBag.TotalHabitaciones = total;
             ViewBag.OcupadasHoy = ocupadasHoy;
             ViewBag.ReservasFuturas = futuras;

@@ -30,7 +30,7 @@ public class PisoController : Controller
     {
         var descripcion = model.Descripcion.Trim();
 
-        // 🔥 VALIDAR DUPLICADO
+        // VALIDAR DUPLICADO
         var existe = await _context.Pisos
             .AnyAsync(p => p.Descripcion.ToLower() == descripcion.ToLower()
                         && p.IdPiso != model.IdPiso);

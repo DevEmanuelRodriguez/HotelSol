@@ -3,8 +3,8 @@
 @{
     ViewData["Title"] = "Recepción";
 
-    // 🔥 USAR EL MODELO (NO Query directamente)
-    // 🔥 FIX: si no hay fechas → usar HOY automáticamente
+    // USAR EL MODELO (NO Query directamente)
+    // si no hay fechas usar HOY automáticamente
     var fechaEntrada = (Model.FechaEntrada ?? DateTime.Today).ToString("yyyy-MM-dd");
     var fechaSalida = (Model.FechaSalida ?? DateTime.Today.AddDays(1)).ToString("yyyy-MM-dd");
 }
@@ -61,7 +61,7 @@
     }
 </style>
 
-<!-- 🔥 FILTRO COMPLETO -->
+<!-- FILTRO COMPLETO -->
 <div class="card shadow mb-4">
     <div class="card-body">
 
@@ -81,7 +81,7 @@
                 }
             </select>
 
-            <!-- 🔥 FECHAS -->
+            <!-- FECHAS -->
             <label class="mr-2 font-weight-bold">Entrada</label>
             <input type="date" name="fechaEntrada"
                    value="@fechaEntrada"
@@ -100,7 +100,7 @@
     </div>
 </div>
 
-<!-- 🔥 TARJETAS -->
+<!-- TARJETAS -->
 <div class="row">
     @foreach (var item in Model.Habitaciones)
     {
@@ -112,7 +112,7 @@
 
             @if (item.PuedeReservar && !bloqueada)
             {
-                <!-- 🟢 DISPONIBLE -->
+                <!-- DISPONIBLE -->
                 <a asp-action="Create"
                    asp-route-id="@item.IdHabitacion"
                    asp-route-fechaEntrada="@fechaEntrada"
@@ -143,7 +143,7 @@
             }
             else if (bloqueada || item.EstadoCss == "ocupado")
             {
-                <!-- 🔴 OCUPADO / RESERVADO -->
+                <!-- OCUPADO / RESERVADO -->
                 <a asp-action="Detalle"
                    asp-route-idHabitacion="@item.IdHabitacion"
                    class="link-card">
@@ -184,7 +184,7 @@
             }
             else if (item.EstadoCss == "limpieza")
             {
-                <!-- 🧼 LIMPIEZA -->
+                <!-- LIMPIEZA -->
                 <div class="habitacion-card">
 
                     <div class="habitacion-top">
@@ -207,7 +207,7 @@
 
                         <span class="mb-2">LIMPIEZA</span>
 
-                        <!-- 🔥 BOTÓN DIRECTO -->
+                        <!-- BOTÓN DIRECTO -->
                         <form asp-action="MarcarLimpia" method="post" class="w-100">
                             @Html.AntiForgeryToken()
 

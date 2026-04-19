@@ -6,7 +6,7 @@
 
 <h4 class="mb-3">Detalle Venta</h4>
 
-<!-- 🔷 RESUMEN -->
+<!-- RESUMEN -->
 <div class="card mb-3">
     <div class="card-body">
 
@@ -35,7 +35,7 @@
     </div>
 </div>
 
-<!-- 🔥 FORMULARIO -->
+<!-- FORMULARIO -->
 <form id="formVenta" asp-controller="Tienda" asp-action="FinalizarVenta" method="post">
 
     @Html.AntiForgeryToken()
@@ -128,7 +128,7 @@
             const precioInput = document.getElementById("precio");
             const form = document.getElementById("formVenta");
 
-            // 🔹 ACTUALIZAR PRECIO AL CAMBIAR PRODUCTO
+            // ACTUALIZAR PRECIO AL CAMBIAR PRODUCTO
             producto.addEventListener("change", function () {
 
                 let precio = this.selectedOptions[0].dataset.precio;
@@ -140,9 +140,9 @@
 
             producto.dispatchEvent(new Event("change"));
 
-            // =========================
-            // 🔥 AGREGAR PRODUCTO
-            // =========================
+            
+            // AGREGAR PRODUCTO
+            
             window.agregar = function () {
 
                 let select = document.getElementById("producto");
@@ -157,7 +157,7 @@
                     return;
                 }
 
-                // 🔥 VALIDACIÓN STOCK
+                //  VALIDACIÓN STOCK
                 if (cantidad > stock) {
                     alert("No hay suficiente stock disponible");
                     return;
@@ -167,7 +167,7 @@
 
                 if (existente) {
 
-                    // 🔥 VALIDAR SUMA TOTAL
+                    // VALIDAR SUMA TOTAL
                     if (existente.cantidad + cantidad > stock) {
                         alert("Supera el stock disponible");
                         return;
@@ -190,17 +190,17 @@
                 renderTabla();
             };
 
-            // =========================
-            // 🔥 ELIMINAR PRODUCTO
-            // =========================
+            
+            // ELIMINAR PRODUCTO
+          
             window.eliminar = function (idProducto) {
                 detalles = detalles.filter(x => x.idProducto !== idProducto);
                 renderTabla();
             };
 
-            // =========================
-            // 🔥 EDITAR CANTIDAD EN VIVO
-            // =========================
+            
+            // EDITAR CANTIDAD EN VIVO
+            
             window.actualizarCantidad = function (idProducto, nuevaCantidad) {
 
                 nuevaCantidad = parseInt(nuevaCantidad);
@@ -215,7 +215,7 @@
                     return;
                 }
 
-                // 🔥 VALIDACIÓN STOCK
+                // VALIDACIÓN STOCK
                 if (nuevaCantidad > stock) {
                     alert("Stock insuficiente");
                     renderTabla();
@@ -230,9 +230,9 @@
                 renderTabla();
             };
 
-            // =========================
-            // 🔥 RENDER TABLA
-            // =========================
+            
+            // RENDER TABLA
+           
             function renderTabla() {
 
                 let tbody = document.querySelector("#tabla tbody");
@@ -272,9 +272,9 @@
                 document.getElementById("total").innerText = total.toFixed(2);
             }
 
-            // =========================
-            // 🔥 SUBMIT FORM
-            // =========================
+           
+            // SUBMIT FORM
+          
             if (form) {
                 form.onsubmit = function (e) {
 

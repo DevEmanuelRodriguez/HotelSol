@@ -1,13 +1,14 @@
-﻿using HotelSol.Data;
+﻿using System.Diagnostics;
+using HotelSol.Data;
 using HotelSol.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authentication.Cookies;//para autentificar
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Servicios
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
-//para sesiones
 builder.Services.AddSession();
 
 builder.Services.AddAuthentication(
@@ -16,26 +17,47 @@ builder.Services.AddAuthentication(
 {
     options.LoginPath = "/Login";
 });
+
 builder.Services.AddScoped<XmlService>();
 
 builder.Services.AddDbContext<DbHotelContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
-//Para autentificaciones
-app.UseSession();
-app.UseAuthentication();
-app.UseAuthorization();
+
+
+// Middleware
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-//app.UseAuthorization();
 
+app.UseSession();
+app.UseAuthentication();
+app.UseAuthorization();
+
+
+// Rutas
 app.MapControllerRoute(
     name: "default",
-    //pattern: "{controller=Home}/{action=Index}/{id?}");
-    pattern: "{controller=Login}/{action=Index}/{id?}");//inicia en pantalla login
+    pattern: "{controller=Login}/{action=Index}/{id?}");
 
 
-app.Run();
+// Abrir navegador automático
+var url = "http://localhost:5000";
+
+Task.Run(() =>
+{
+    Thread.Sleep(1500);
+
+    Process.Start(new ProcessStartInfo
+    {
+        FileName = url,
+        UseShellExecute = true
+    });
+});
+
+app.Run(url);
+
+//app.Run();

@@ -13,17 +13,16 @@ namespace HotelSol.Controllers
             _context = context;
         }
 
-        // ======================
+ 
         // VISTA LOGIN
-        // ======================
+       
         public IActionResult Index()
         {
             return View();
         }
 
-        // ======================
         // INGRESAR
-        // ======================
+     
         [HttpPost]
         public async Task<IActionResult> Ingresar(string usuario, string clave)
         {
@@ -56,9 +55,9 @@ namespace HotelSol.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // ======================
+
         // SALIR
-        // ======================
+        
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();

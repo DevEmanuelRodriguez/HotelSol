@@ -16,9 +16,9 @@ namespace HotelSol.Controllers
             _context = context;
         }
 
-        // =========================
+        
         // INDEX
-        // =========================
+        
         public async Task<IActionResult> Index()
         {
             var lista = await _context.Personas
@@ -33,9 +33,9 @@ namespace HotelSol.Controllers
             return View(lista);
         }
 
-        // =========================
+        
         // OBTENER
-        // =========================
+        
         public async Task<IActionResult> Obtener(int id)
         {
             var p = await _context.Personas.FindAsync(id);
@@ -45,9 +45,9 @@ namespace HotelSol.Controllers
             return Json(p);
         }
 
-        // =========================
+        
         // GUARDAR
-        // =========================
+        
         [HttpPost]
         public async Task<IActionResult> Guardar(Persona model)
         {
@@ -77,9 +77,9 @@ namespace HotelSol.Controllers
             return Json(new { ok = true });
         }
 
-        // =========================
+        
         // ELIMINAR
-        // =========================
+        
         [HttpPost]
         public async Task<IActionResult> Eliminar(int id)
         {

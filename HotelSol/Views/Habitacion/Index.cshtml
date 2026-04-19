@@ -120,7 +120,7 @@
             $("#IdPiso").val("");
         }
 
-        // 🔥 GUARDAR
+        // GUARDAR
         function guardar(){
 
             if (!$("#Numero").val()){
@@ -144,7 +144,7 @@
             });
         }
 
-        // 🔥 EDITAR
+        // EDITAR
         function editar(id){
 
             $.get("/Habitacion/Obtener?id=" + id, function(data){
@@ -160,7 +160,7 @@
             });
         }
 
-        // 🔥 ELIMINAR
+        // ELIMINAR
         function eliminar(id){
 
             if(!confirm("Eliminar habitación?")) return;

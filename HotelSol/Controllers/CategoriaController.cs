@@ -38,10 +38,11 @@ public class CategoriaController : Controller
         }
         else
         {
+            // NO tocar Estado ni FechaCreacion
             var cat = await _context.Categoria.FindAsync(model.IdCategoria);
 
             cat.Descripcion = model.Descripcion;
-            // 🔥 NO tocar Estado ni FechaCreacion
+            
         }
 
         await _context.SaveChangesAsync();
