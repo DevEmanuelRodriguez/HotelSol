@@ -3,13 +3,14 @@
  y visualizar su contenido.
  Utiliza Entity Framework para obtener los datos desde SQL Server.
 */
-
+using HotelSol.Filters;//para mostrar segun sesion
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HotelSol.Data;
 
 namespace HotelSol.Controllers;
 
+[Login]
 public class DatosController : Controller
 {
     // DbContext: permite acceder a la base de datos

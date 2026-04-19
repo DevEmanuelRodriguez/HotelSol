@@ -1,18 +1,34 @@
-﻿<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Accessor
+
+@{
+    var rol = Accessor.HttpContext.Session.GetString("Rol");
+}
+
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Logo / Marca -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-controller="Home" asp-action="Index">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center"
+       asp-controller="Home"
+       asp-action="Index">
+
         <div class="sidebar-brand-icon">
             <i class="fas fa-hotel"></i>
         </div>
-        <div class="sidebar-brand-text mx-2">MI HOTEL</div>
+
+        <div class="sidebar-brand-text mx-2">
+            MI HOTEL
+        </div>
     </a>
 
     <hr class="sidebar-divider my-0">
 
     <!-- Dashboard -->
     <li class="nav-item">
-        <a class="nav-link" asp-controller="Home" asp-action="Index">
+        <a class="nav-link"
+           asp-controller="Home"
+           asp-action="Index">
+
             <i class="fas fa-tachometer-alt"></i>
             <span>Dashboard</span>
         </a>
@@ -20,110 +36,221 @@
 
     <hr class="sidebar-divider">
 
-    <!-- Gestion -->
+    <!-- ===================================== -->
+    <!-- GESTION (ADMIN + EMPLEADO) -->
+    <!-- ===================================== -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseGestion"
-           aria-expanded="false" aria-controls="collapseGestion">
+
+        <a class="nav-link collapsed"
+           href="#"
+           data-toggle="collapse"
+           data-target="#collapseGestion">
+
             <i class="fas fa-caret-up"></i>
-            <span>Gestion</span>
+            <span>Gestión</span>
         </a>
-        <div id="collapseGestion" class="collapse" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" asp-controller="Recepcion" asp-action="Index">Recepción</a>
-                <a class="collapse-item" asp-controller="Recepcion" asp-action="Salidas">Salidas</a>
-                <!-- <a class="collapse-item" asp-controller="Habitaciones" asp-action="Index">Habitaciones</a>-->
-                <a class="collapse-item" asp-controller="Recepcion" asp-action="Limpieza">Limpieza</a>
-                
-            </div>
-        </div>
-    </li>
 
-    <!-- Tienda -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTienda"
-           aria-expanded="false" aria-controls="collapseTienda">
-            <i class="fas fa-shopping-bag"></i>
-            <span>Tienda</span>
-        </a>
-        <div id="collapseTienda" class="collapse" data-parent="#accordionSidebar">
+        <div id="collapseGestion"
+             class="collapse"
+             data-parent="#accordionSidebar">
+
             <div class="bg-white py-2 collapse-inner rounded">
 
-                <a class="collapse-item" asp-controller="Tienda" asp-action="Productos">
-                    Productos</a>
+                <a class="collapse-item"
+                   asp-controller="Recepcion"
+                   asp-action="Index">
+                    Recepción
+                </a>
 
-                <a class="collapse-item" asp-controller="Tienda" asp-action="Index">
-                    Ventas
+                <a class="collapse-item"
+                   asp-controller="Recepcion"
+                   asp-action="Salidas">
+                    Salidas
+                </a>
+
+                <a class="collapse-item"
+                   asp-controller="Recepcion"
+                   asp-action="Limpieza">
+                    Limpieza
                 </a>
 
             </div>
         </div>
+
     </li>
 
-    <!-- Mantenimiento -->
+    <!-- ===================================== -->
+    <!-- TIENDA (ADMIN + EMPLEADO) -->
+    <!-- ===================================== -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMantenimiento"
-           aria-expanded="false" aria-controls="collapseMantenimiento">
-            <i class="fas fa-wrench"></i>
-            <span>Mantenimiento</span>
+
+        <a class="nav-link collapsed"
+           href="#"
+           data-toggle="collapse"
+           data-target="#collapseTienda">
+
+            <i class="fas fa-shopping-bag"></i>
+            <span>Tienda</span>
         </a>
-        <div id="collapseMantenimiento" class="collapse" data-parent="#accordionSidebar">
+
+        <div id="collapseTienda"
+             class="collapse"
+             data-parent="#accordionSidebar">
+
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" asp-controller="Habitacion" asp-action="Index">Habitación</a>
-                <a class="collapse-item" asp-controller="Categoria" asp-action="Index">Categoría</a>
-                <a class="collapse-item" asp-controller="Piso" asp-action="Index">Pisos</a>
-                <a class="collapse-item" href="#">XML Exportar</a>
-                <a class="collapse-item" href="#">XML Importar</a>
+
+                <a class="collapse-item"
+                   asp-controller="Tienda"
+                   asp-action="Index">
+                    Ventas
+                </a>
+
+                @if (rol == "ADMIN")
+                {
+                    <a class="collapse-item"
+                       asp-controller="Tienda"
+                       asp-action="Productos">
+                        Productos
+                    </a>
+                }
+
             </div>
         </div>
+
     </li>
 
-    <!-- Reportes -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReportes"
-           aria-expanded="false" aria-controls="collapseReportes">
-            <i class="fas fa-chart-line"></i>
-            <span>Reportes</span>
-        </a>
-        <div id="collapseReportes" class="collapse" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" asp-controller="Reportes" asp-action="Recepcion">Recepción</a>
-                <a class="collapse-item" asp-controller="Reportes" asp-action="Productos">Productos</a>
-            </div>
-        </div>
-    </li>
-
-    <!-- Usuarios -->
+    <!-- ===================================== -->
+    <!-- CLIENTES (ADMIN + EMPLEADO) -->
+    <!-- ===================================== -->
     <li class="nav-item">
         <a class="nav-link"
-           asp-controller="Usuario"
+           asp-controller="Cliente"
            asp-action="Index">
 
-            <i class="fas fa-user-cog"></i>
-            <span>Usuarios</span>
-        </a>
-    </li>
-
-    <!-- Clientes -->
-    <li class="nav-item">
-        <a class="nav-link" href="#">
             <i class="fas fa-users"></i>
             <span>Clientes</span>
         </a>
     </li>
 
-    <!-- Odoo -->
-    <li class="nav-item">
-        <a class="nav-link" href="#">
-            <i class="fas fa-gem"></i>
-            <span>Odoo</span>
-        </a>
-    </li>
+    <!-- ===================================== -->
+    <!-- SOLO ADMIN -->
+    <!-- ===================================== -->
+    @if (rol == "ADMIN")
+    {
+        <!-- Mantenimiento -->
+        <li class="nav-item">
+
+            <a class="nav-link collapsed"
+               href="#"
+               data-toggle="collapse"
+               data-target="#collapseMantenimiento">
+
+                <i class="fas fa-wrench"></i>
+                <span>Mantenimiento</span>
+            </a>
+
+            <div id="collapseMantenimiento"
+                 class="collapse"
+                 data-parent="#accordionSidebar">
+
+                <div class="bg-white py-2 collapse-inner rounded">
+
+                    <a class="collapse-item"
+                       asp-controller="Habitacion"
+                       asp-action="Index">
+                        Habitación
+                    </a>
+
+                    <a class="collapse-item"
+                       asp-controller="Categoria"
+                       asp-action="Index">
+                        Categoría
+                    </a>
+
+                    <a class="collapse-item"
+                       asp-controller="Piso"
+                       asp-action="Index">
+                        Pisos
+                    </a>
+
+                    <a class="collapse-item" href="#">
+                        XML Exportar
+                    </a>
+
+                    <a class="collapse-item" href="#">
+                        XML Importar
+                    </a>
+
+                </div>
+            </div>
+
+        </li>
+
+        <!-- Reportes -->
+        <li class="nav-item">
+
+            <a class="nav-link collapsed"
+               href="#"
+               data-toggle="collapse"
+               data-target="#collapseReportes">
+
+                <i class="fas fa-chart-line"></i>
+                <span>Reportes</span>
+            </a>
+
+            <div id="collapseReportes"
+                 class="collapse"
+                 data-parent="#accordionSidebar">
+
+                <div class="bg-white py-2 collapse-inner rounded">
+
+                    <a class="collapse-item"
+                       asp-controller="Reportes"
+                       asp-action="Recepcion">
+                        Recepción
+                    </a>
+
+                    <a class="collapse-item"
+                       asp-controller="Reportes"
+                       asp-action="Productos">
+                        Productos
+                    </a>
+
+                </div>
+            </div>
+
+        </li>
+
+        <!-- Usuarios -->
+        <li class="nav-item">
+            <a class="nav-link"
+               asp-controller="Usuario"
+               asp-action="Index">
+
+                <i class="fas fa-user-cog"></i>
+                <span>Usuarios</span>
+            </a>
+        </li>
+
+        <!-- Odoo -->
+        <li class="nav-item">
+            <a class="nav-link"
+               asp-controller="Odoo"
+               asp-action="Index">
+
+                <i class="fas fa-gem"></i>
+                <span>Odoo</span>
+            </a>
+        </li>
+    }
 
     <hr class="sidebar-divider d-none d-md-block">
 
     <!-- Botón colapsar -->
     <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        <button class="rounded-circle border-0"
+                id="sidebarToggle">
+        </button>
     </div>
 
 </ul>

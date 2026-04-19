@@ -1,8 +1,10 @@
-﻿using HotelSol.Data;
+﻿using HotelSol.Filters;//filtro para mostrar segun sesion
+using HotelSol.Data;
 using HotelSol.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+[RolAdmin]
 public class CategoriaController : Controller
 {
     private readonly DbHotelContext _context;

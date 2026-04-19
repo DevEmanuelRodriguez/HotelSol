@@ -2,7 +2,7 @@
  Este controller gestiona, visualiza y crear habitaciones en la base de datos utilizando Entity Framework.
 Se ha realizado a modo de ejemplo únicamente en la clase habitación
 */
-
+using HotelSol.Filters;//filtro para mostrar segun sesion
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HotelSol.Data;
@@ -15,6 +15,7 @@ using HotelSol.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+[RolAdmin]
 public class HabitacionController : Controller
 {
     private readonly DbHotelContext _context;

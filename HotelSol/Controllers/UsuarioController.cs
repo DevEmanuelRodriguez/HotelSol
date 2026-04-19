@@ -1,10 +1,12 @@
-﻿using HotelSol.Data;
+﻿using HotelSol.Filters;//filtro para mostrar segun sesion
+using HotelSol.Data;
 using HotelSol.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelSol.Controllers
 {
+    [RolAdmin]
     public class UsuarioController : Controller
     {
         private readonly DbHotelContext _context;

@@ -1,4 +1,5 @@
-﻿using ClosedXML.Excel;
+﻿using HotelSol.Filters;//filtro para mostrar segun sesion
+using ClosedXML.Excel;
 using HotelSol.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +7,7 @@ using System.Globalization;
 
 namespace HotelSol.Controllers
 {
+    [RolAdmin]
     public class ReportesController : Controller
     {
         private readonly DbHotelContext _context;

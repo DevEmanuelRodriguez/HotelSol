@@ -1,10 +1,12 @@
-﻿using System.Diagnostics;
+﻿using HotelSol.Filters;//para mostrar segun sesion
+using System.Diagnostics;
 using HotelSol.Models;
 using HotelSol.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelSol.Controllers
 {
+    [Login]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

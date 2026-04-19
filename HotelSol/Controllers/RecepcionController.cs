@@ -1,4 +1,5 @@
-﻿using HotelSol.Data;
+﻿using HotelSol.Filters;//para mostrar segun sesion
+using HotelSol.Data;
 using HotelSol.Models;
 using HotelSol.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HotelSol.Controllers
 {
+    [Login]
     public class RecepcionController : Controller
     {
         private readonly DbHotelContext _context;

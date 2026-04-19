@@ -1,11 +1,14 @@
-﻿<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Accessor
+
+<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
     <!-- Botón sidebar móvil -->
     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
         <i class="fa fa-bars"></i>
     </button>
 
-    <!-- Buscador -->
+    <!-- Buscador 
     <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
         <div class="input-group">
             <input type="text" class="form-control bg-light border-0 small"
@@ -18,11 +21,13 @@
             </div>
         </div>
     </form>
+    
+    -->
 
     <!-- Navbar derecha -->
     <ul class="navbar-nav ml-auto">
-
-        <!-- Notificaciones -->
+        <!--
+         //Notificaciones 
         <li class="nav-item dropdown no-arrow mx-1">
             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown"
                role="button" data-toggle="dropdown">
@@ -48,7 +53,7 @@
             </div>
         </li>
 
-        <!-- Mensajes -->
+         //Mensajes 
         <li class="nav-item dropdown no-arrow mx-1">
             <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown"
                role="button" data-toggle="dropdown">
@@ -68,17 +73,41 @@
 
             </div>
         </li>
+        -->
 
         <div class="topbar-divider d-none d-sm-block"></div>
 
         <!-- Usuario -->
         <li class="nav-item dropdown no-arrow">
-            <a class="nav-link dropdown-toggle" href="#" id="userDropdown"
-               role="button" data-toggle="dropdown">
 
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
-                    Admin
-                </span>
+            <a class="nav-link dropdown-toggle"
+               href="#"
+               id="userDropdown"
+               role="button"
+               data-toggle="dropdown">
+
+                <div class="text-right mr-2 d-none d-lg-inline">
+
+                    <!-- NOMBRE -->
+                    <div class="text-gray-700 small font-weight-bold">
+                        @Accessor.HttpContext.Session.GetString("Usuario")
+                    </div>
+
+                    <!-- ROL -->
+                    @if (Accessor.HttpContext.Session.GetString("Rol") == "ADMIN")
+                    {
+                        <div class="text-danger small font-weight-bold">
+                            ADMIN
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-success small font-weight-bold">
+                            EMPLEADO
+                        </div>
+                    }
+
+                </div>
 
                 <img class="img-profile rounded-circle"
                      src="~/img/undraw_profile.svg">
@@ -86,24 +115,18 @@
 
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in">
 
-                <a class="dropdown-item" href="#">
-                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Perfil
-                </a>
-
-                <a class="dropdown-item" href="#">
-                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Configuración
-                </a>
-
                 <div class="dropdown-divider"></div>
 
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item"
+                   asp-controller="Login"
+                   asp-action="Logout">
+
                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                     Cerrar sesión
                 </a>
 
             </div>
+
         </li>
 
     </ul>

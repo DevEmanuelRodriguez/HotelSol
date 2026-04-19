@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using HotelSol.Filters;//para mostrar segun sesion
+using System.Text.Json;
 using HotelSol.Data;
 using HotelSol.Models;
 using HotelSol.Models.ViewModels;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HotelSol.Controllers
 {
+    [Login]
     public class TiendaController : Controller
     {
         private readonly DbHotelContext _context;

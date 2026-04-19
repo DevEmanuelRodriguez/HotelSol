@@ -5,12 +5,13 @@
 
  Utiliza un servicio (XmlService).
 */
-
+using HotelSol.Filters;//filtro para mostrar segun sesion
 using Microsoft.AspNetCore.Mvc;
 using HotelSol.Services;//para usar XmlService
 
 namespace HotelSol.Controllers;
 
+[RolAdmin]
 public class XmlController : Controller
 {
     // Servicio que contiene la lógica XML
