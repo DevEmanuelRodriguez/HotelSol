@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Recepción";
 
-    // USAR EL MODELO (NO Query directamente)
+    
     // si no hay fechas usar HOY automáticamente
     var fechaEntrada = (Model.FechaEntrada ?? DateTime.Today).ToString("yyyy-MM-dd");
     var fechaSalida = (Model.FechaSalida ?? DateTime.Today.AddDays(1)).ToString("yyyy-MM-dd");

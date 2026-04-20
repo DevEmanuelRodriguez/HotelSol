@@ -18,17 +18,16 @@ namespace HotelSol.Models.ViewModels
         public string Piso { get; set; } = "";
 
         // Texto que se muestra en la tarjeta
-        // Ej: DISPONIBLE / OCUPADO / LIMPIEZA
         public string EstadoTexto { get; set; } = "";
 
         // Clase CSS para color visual
-        // Ej: disponible / ocupado / limpieza
+        
         public string EstadoCss { get; set; } = "";
 
         // Indica si se puede hacer clic (permitir reserva)
         public bool PuedeReservar { get; set; }
 
-        // 🔥 NUEVO (MUY IMPORTANTE):
+        
         // Indica si está ocupada en el rango de fechas seleccionado
         // (esto será clave para disponibilidad real)
         public bool OcupadaEnFechas { get; set; }
@@ -41,11 +40,11 @@ namespace HotelSol.Models.ViewModels
         // Piso seleccionado en el filtro
         public int? PisoSeleccionado { get; set; }
 
-        // 🔥 NUEVO: Fecha de entrada seleccionada
+        // Fecha de entrada seleccionada
         // Permite filtrar disponibilidad
         public DateTime? FechaEntrada { get; set; }
 
-        // 🔥 NUEVO: Fecha de salida seleccionada
+        // Fecha de salida seleccionada
         public DateTime? FechaSalida { get; set; }
 
         // Lista de pisos para el dropdown

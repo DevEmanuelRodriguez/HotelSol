@@ -113,7 +113,7 @@
                         </div>
                     </div>
 
-                    <!-- NOCHES + TEMPORADA -->
+                    <!-- NOCHES / TEMPORADA -->
                     <div class="row">
                         <div class="col-md-6">
                             <label>Noches:</label>
@@ -225,7 +225,7 @@
                 $('#modalClientes').modal('hide');
             };
 
-            // ================= PRECIO + TEMPORADA =================
+            // ================= PRECIO / TEMPORADA =================
             function obtenerMultiplicador(fecha) {
                 let mes = fecha.getMonth() + 1;
 
@@ -317,7 +317,7 @@
 
             document.getElementById("FechaEntrada").addEventListener("change", calcularTotal);
             document.getElementById("FechaSalida").addEventListener("change", calcularTotal);
-            //  SOLUCIÓN CLAVE
+            
             calcularTotal();
         });
     </script>
