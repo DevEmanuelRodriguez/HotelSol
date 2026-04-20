@@ -4997,23 +4997,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Acer\\.nuget\\packages\\": {},
+    "C:\\Users\\Lenovo\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\P2\\Producto 2\\HotelSol\\HotelSol\\HotelSol\\HotelSol.csproj",
+      "projectUniqueName": "C:\\Users\\Lenovo\\Desktop\\Técnicas_persistencia_datos_con_NET_yprogramas_ERP_Aula 1\\Proyecto 3\\P3 Final\\HotelSol\\HotelSol\\HotelSol.csproj",
       "projectName": "HotelSol",
-      "projectPath": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\P2\\Producto 2\\HotelSol\\HotelSol\\HotelSol\\HotelSol.csproj",
-      "packagesPath": "C:\\Users\\Acer\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Acer\\Desktop\\FP UOC\\Semestre 1 2026\\.NET\\P2\\Producto 2\\HotelSol\\HotelSol\\HotelSol\\obj\\",
+      "projectPath": "C:\\Users\\Lenovo\\Desktop\\Técnicas_persistencia_datos_con_NET_yprogramas_ERP_Aula 1\\Proyecto 3\\P3 Final\\HotelSol\\HotelSol\\HotelSol.csproj",
+      "packagesPath": "C:\\Users\\Lenovo\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Lenovo\\Desktop\\Técnicas_persistencia_datos_con_NET_yprogramas_ERP_Aula 1\\Proyecto 3\\P3 Final\\HotelSol\\HotelSol\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Acer\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -5040,7 +5040,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "10.0.100"
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net9.0": {
@@ -5084,7 +5084,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.312/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

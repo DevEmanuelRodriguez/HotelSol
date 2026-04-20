@@ -52,12 +52,18 @@
                     <div class="input-group mb-3">
                         <input asp-for="DocumentoBusqueda" class="form-control" id="DocumentoBusqueda" />
                         <div class="input-group-append">
-                            <!-- botón correcto -->
+                            <!-- botón 
                             <button type="button" class="btn btn-success"
                                     data-toggle="modal"
                                     data-target="#modalClientes">
                                 Buscar
+                            </button>-->
+                            <button type="button"
+                                    class="btn btn-primary"
+                                    onclick="buscarCliente()">
+                                Buscar
                             </button>
+
                         </div>
                     </div>
 
@@ -180,7 +186,7 @@
                                     <td>
                                         <button type="button" class="btn btn-primary btn-sm"
                                                 onclick="seleccionarCliente(@c.IdPersona, '@c.Documento', '@c.Nombre', '@c.Apellido', '@c.Correo', '@c.TipoDocumento')">
-                                            ✔
+                                            <i class="fa-solid fa-check"></i>
                                         </button>
                                     </td>
                                     <td>@c.Documento</td>
@@ -231,6 +237,45 @@
 
                 return { mult: 1, nombre: "MEDIA 🟡" };
             }
+
+            //Funcion buscar cliente
+            window.buscarCliente = function () {
+
+            let doc = document.getElementById("DocumentoBusqueda").value;
+
+            fetch('/Recepcion/BuscarCliente?documento=' + doc)
+                .then(response => response.json())
+                .then(data => {
+
+                    let tbody = document.querySelector("#tablaClientes tbody");
+                    tbody.innerHTML = "";
+
+                    data.forEach(c => {
+
+                        tbody.innerHTML += `
+                        <tr>
+                            <td>
+                            <button type="button"
+                                class="btn btn-primary btn-sm"
+                                onclick="seleccionarCliente(
+                                ${c.idPersona},
+                                '${c.documento}',
+                                '${c.nombre}',
+                                '${c.apellido}',
+                                '${c.correo}',
+                                '${c.tipoDocumento}'
+                            )">✔</button>
+                            </td>
+                            <td>${c.documento}</td>
+                            <td>${c.nombre}</td>
+                            <td>${c.apellido}</td>
+                            <td>${c.correo}</td>
+                        </tr>`;
+                    });
+
+                    $('#modalClientes').modal('show');
+                });
+        }
 
             function calcularTotal() {
 

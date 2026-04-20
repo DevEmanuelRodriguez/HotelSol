@@ -23,12 +23,12 @@ namespace HotelSol.Controllers
         private decimal ObtenerMultiplicador(DateTime fecha)
         {
             if (fecha.Month >= 6 && fecha.Month <= 8)
-                return 1.5m; // 🔴 ALTA
+                return 1.5m; //  ALTA
 
             if (fecha.Month == 1 || fecha.Month == 2)
-                return 0.8m; // 🟢 BAJA
+                return 0.8m; // BAJA
 
-            return 1m; // 🟡 MEDIA
+            return 1m; // MEDIA
         }
 
         // INDEX (DISPONIBILIDAD REAL)
@@ -594,5 +594,28 @@ namespace HotelSol.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        //Buscar por numero documento
+        [HttpGet]
+        public async Task<IActionResult> BuscarCliente(string documento)
+        {
+            var clientes = await _context.Personas
+                .Where(p => p.IdTipoPersona == 3 &&
+                       (string.IsNullOrEmpty(documento) ||
+                        p.Documento.Contains(documento)))
+                .Select(p => new
+                {
+                    p.IdPersona,
+                    p.Documento,
+                    p.Nombre,
+                    p.Apellido,
+                    p.Correo,
+                    p.TipoDocumento
+                })
+                .ToListAsync();
+
+            return Json(clientes);
+        }
+
     }
 }

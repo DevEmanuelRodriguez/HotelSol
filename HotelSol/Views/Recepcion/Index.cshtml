@@ -59,6 +59,11 @@
         flex-direction: column;
         align-items: stretch;
     }
+
+    .text-limpieza {
+        color: #36b9cc !important;
+        font-weight: 600;
+    }
 </style>
 
 <!-- FILTRO COMPLETO -->
@@ -213,8 +218,8 @@
 
                             <input type="hidden" name="idHabitacion" value="@item.IdHabitacion" />
 
-                            <button class="btn btn-light btn-sm w-100">
-                                ✔ Limpiar ahora
+                            <button class="btn btn-light btn-sm w-100 text-limpieza">
+                                <i class="fa-solid fa-check"></i> Marcar como limpia
                             </button>
                         </form>
 
