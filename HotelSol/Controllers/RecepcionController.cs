@@ -46,7 +46,14 @@ namespace HotelSol.Controllers
 
             var fechaInicio = fechaEntrada ?? DateTime.Today;
             var fechaFin = fechaSalida ?? DateTime.Today.AddDays(1);
-            var hoy = DateTime.Today;
+
+            // UNA SOLA CONSULTA A RECEPCIONES
+            var recepciones = await _context.Recepcions
+                .Where(r =>
+                    r.FechaSalidaConfirmacion == null &&
+                    r.FechaEntrada != null &&
+                    r.FechaSalida != null)
+                .ToListAsync();
 
             var vm = new RecepcionIndexVM
             {
@@ -61,25 +68,32 @@ namespace HotelSol.Controllers
 
                 Habitaciones = habitaciones.Select(h =>
                 {
-                    var reserva = _context.Recepcions
+                    // ===============================
+                    // RESERVA FUTURA O DEL RANGO
+                    // Estado = false
+                    // ===============================
+                    var reserva = recepciones
                         .Where(r =>
                             r.IdHabitacion == h.IdHabitacion &&
                             r.Estado == false &&
-                            r.FechaSalidaConfirmacion == null &&
-                            r.FechaEntrada != null &&
-                            r.FechaSalida != null)
+                            fechaInicio < r.FechaSalida!.Value &&
+                            fechaFin > r.FechaEntrada!.Value)
                         .OrderBy(r => r.FechaEntrada)
                         .FirstOrDefault();
 
-                    var ocupada = _context.Recepcions.Any(r =>
+                    // ===============================
+                    // OCUPADA EN RANGO
+                    // Estado = true
+                    // ===============================
+                    var ocupada = recepciones.Any(r =>
                         r.IdHabitacion == h.IdHabitacion &&
                         r.Estado == true &&
-                        r.FechaSalidaConfirmacion == null &&
-                        r.FechaEntrada != null &&
-                        r.FechaSalida != null &&
-                        hoy >= r.FechaEntrada.Value.Date &&
-                        hoy < r.FechaSalida.Value.Date);
+                        fechaInicio < r.FechaSalida!.Value &&
+                        fechaFin > r.FechaEntrada!.Value);
 
+                    // ===============================
+                    // LIMPIEZA
+                    // ===============================
                     var limpieza = h.IdEstadoHabitacion == 3;
 
                     string estadoTexto;
@@ -117,19 +131,29 @@ namespace HotelSol.Controllers
                         Numero = h.Numero ?? "",
                         Categoria = h.IdCategoriaNavigation?.Descripcion ?? "",
                         Piso = h.IdPisoNavigation?.Descripcion ?? "",
+
                         EstadoTexto = estadoTexto,
                         EstadoCss = estadoCss,
                         PuedeReservar = puedeReservar,
+
                         OcupadaEnFechas = ocupada,
                         Reservada = reserva != null,
                         Ocupada = ocupada,
-                        IdRecepcion = reserva?.IdRecepcion ?? 0
+                        IdRecepcion = reserva?.IdRecepcion ?? 0,
+
+                        // NUEVO CHECKIN INTELIGENTE
+                        PuedeCheckin = reserva != null &&
+                                       reserva.FechaEntrada!.Value.Date <= DateTime.Today,
+
+                        FechaReserva = reserva?.FechaEntrada
                     };
+
                 }).ToList()
             };
 
             return View(vm);
         }
+
 
         public async Task<IActionResult> Create(int id, DateTime? fechaEntrada, DateTime? fechaSalida)
         {
@@ -571,6 +595,7 @@ namespace HotelSol.Controllers
             return Json(clientes);
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Checkin(int idRecepcion)
@@ -581,6 +606,14 @@ namespace HotelSol.Controllers
             if (recepcion == null)
                 return NotFound();
 
+            // Ya hizo check-in
+            if (recepcion.Estado == true)
+            {
+                TempData["Error"] = "La reserva ya fue ingresada.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Aún no corresponde fecha
             if (recepcion.FechaEntrada.HasValue &&
                 DateTime.Today < recepcion.FechaEntrada.Value.Date)
             {
@@ -588,6 +621,15 @@ namespace HotelSol.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            // Reserva vencida
+            if (recepcion.FechaSalida.HasValue &&
+                DateTime.Today >= recepcion.FechaSalida.Value.Date)
+            {
+                TempData["Error"] = "La reserva ya venció.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Activar ocupación
             recepcion.Estado = true;
 
             var habitacion = await _context.Habitacions
@@ -595,13 +637,48 @@ namespace HotelSol.Controllers
 
             if (habitacion != null)
             {
-                habitacion.IdEstadoHabitacion = 2;
+                habitacion.IdEstadoHabitacion = 2; // ocupada
             }
 
             await _context.SaveChangesAsync();
 
             TempData["Ok"] = "Check-In realizado correctamente.";
+
             return RedirectToAction(nameof(Index));
+        }
+
+
+        public async Task<IActionResult> Calendario(int? anio, int? mes)
+        {
+            var hoy = DateTime.Today;
+
+            int year = anio ?? hoy.Year;
+            int month = mes ?? hoy.Month;
+
+            var inicioMes = new DateTime(year, month, 1);
+            var finMes = inicioMes.AddMonths(1).AddDays(-1);
+
+            var habitaciones = await _context.Habitacions
+                .Include(h => h.IdCategoriaNavigation)
+                .OrderBy(h => h.Numero)
+                .ToListAsync();
+
+            var reservas = await _context.Recepcions
+                .Where(r =>
+                    r.FechaEntrada != null &&
+                    r.FechaSalida != null &&
+                    r.FechaSalidaConfirmacion == null &&
+                    r.FechaEntrada <= finMes &&
+                    r.FechaSalida >= inicioMes)
+                .ToListAsync();
+
+            ViewBag.Habitaciones = habitaciones;
+            ViewBag.Reservas = reservas;
+            ViewBag.InicioMes = inicioMes;
+            ViewBag.Anio = year;
+            ViewBag.Mes = month;
+
+            return View();
         }
     }
 }

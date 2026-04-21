@@ -7,7 +7,7 @@
 
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-    <!-- Logo / Marca -->
+    <!-- Logo-->
     <a class="sidebar-brand d-flex align-items-center justify-content-center"
        asp-controller="Home"
        asp-action="Index">
@@ -36,8 +36,8 @@
 
     <hr class="sidebar-divider">
 
-    <!-- GESTION (ADMIN / EMPLEADO) -->
-    
+    <!-- GESTION (ADMIN + EMPLEADO) -->
+
     <li class="nav-item">
 
         <a class="nav-link collapsed"
@@ -45,7 +45,7 @@
            data-toggle="collapse"
            data-target="#collapseGestion">
 
-            <i class="fa-solid fa-bell-concierge"></i>
+            <i class="fas fa-caret-up"></i>
             <span>Gestión</span>
         </a>
 
@@ -69,6 +69,12 @@
 
                 <a class="collapse-item"
                    asp-controller="Recepcion"
+                   asp-action="Calendario">
+                    Calendario Reservas
+                </a>
+
+                <a class="collapse-item"
+                   asp-controller="Recepcion"
                    asp-action="Limpieza">
                     Limpieza
                 </a>
@@ -78,9 +84,9 @@
 
     </li>
 
-    
-    <!-- TIENDA (ADMIN / EMPLEADO) -->
-    
+
+    <!-- TIENDA (ADMIN + EMPLEADO) -->
+
     <li class="nav-item">
 
         <a class="nav-link collapsed"
@@ -118,9 +124,9 @@
 
     </li>
 
-   
-    <!-- CLIENTES (ADMIN / EMPLEADO) -->
-    
+
+    <!-- CLIENTES (ADMIN + EMPLEADO) -->
+
     <li class="nav-item">
         <a class="nav-link"
            asp-controller="Cliente"
@@ -131,9 +137,8 @@
         </a>
     </li>
 
-    
+
     <!-- SOLO ADMIN -->
-    
     @if (rol == "ADMIN")
     {
         <!-- Mantenimiento -->
@@ -172,7 +177,14 @@
                         Pisos
                     </a>
 
-                    
+                    <a class="collapse-item" href="#">
+                        XML Exportar
+                    </a>
+
+                    <a class="collapse-item" href="#">
+                        XML Importar
+                    </a>
+
                 </div>
             </div>
 
@@ -222,40 +234,17 @@
                 <i class="fas fa-user-cog"></i>
                 <span>Usuarios</span>
             </a>
-
         </li>
 
         <!-- Odoo -->
-        
         <li class="nav-item">
-            <a class="nav-link collapsed"
-               href="#"
-               data-toggle="collapse"
-               data-target="#collapseOdoo">
+            <a class="nav-link"
+               asp-controller="Odoo"
+               asp-action="Index">
 
-                <i class="fa-solid fa-arrow-down-up-across-line"></i>
+                <i class="fas fa-gem"></i>
                 <span>Odoo</span>
             </a>
-            <div id="collapseOdoo"
-                 class="collapse"
-                 data-parent="#accordionSidebar">
-
-                <div class="bg-white py-2 collapse-inner rounded">
-
-                    <a class="collapse-item"
-                       asp-controller="XML"
-                       asp-action="Exportar">
-                        Exportar
-                    </a>
-
-                    <a class="collapse-item"
-                       asp-controller="XML"
-                       asp-action="Importar">
-                        Importar
-                    </a>
-
-                </div>
-            </div>
         </li>
     }
 

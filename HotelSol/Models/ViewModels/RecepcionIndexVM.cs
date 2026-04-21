@@ -40,6 +40,9 @@ namespace HotelSol.Models.ViewModels
 
         // Id de recepción para botón Check-In
         public int IdRecepcion { get; set; }
+
+        public bool PuedeCheckin { get; set; }
+        public DateTime? FechaReserva { get; set; }
     }
 
     // =====================================================

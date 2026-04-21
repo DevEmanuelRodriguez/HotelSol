@@ -1,4 +1,4 @@
-﻿model HotelSol.Models.ViewModels.RecepcionIndexVM
+﻿@@model HotelSol.Models.ViewModels.RecepcionIndexVM
 
 @{
     ViewData["Title"] = "Recepción";
@@ -57,7 +57,8 @@
         color: inherit;
     }
 
-    .habitacion-bottom.limpieza {
+    .habitacion-bottom.limpieza,
+    .habitacion-bottom.reservada {
         display: flex;
         flex-direction: column;
         align-items: stretch;
@@ -112,43 +113,8 @@
     {
         <div class="col-xl-3 col-md-6 mb-4">
 
-            @* ================= DISPONIBLE ================= *@
-            @if (item.PuedeReservar)
-            {
-                <a asp-action="Create"
-                   asp-route-id="@item.IdHabitacion"
-                   asp-route-fechaEntrada="@fechaEntrada"
-                   asp-route-fechaSalida="@fechaSalida"
-                   class="link-card">
-
-                    <div class="habitacion-card">
-
-                        <div class="habitacion-top">
-                            <div class="d-flex justify-content-between">
-
-                                <div>
-                                    <h5>NRO: @item.Numero</h5>
-                                    <small class="text-success">
-                                        CATEGORÍA: @item.Categoria
-                                    </small>
-                                </div>
-
-                                <i class="fas fa-check-circle fa-2x text-success"></i>
-
-                            </div>
-                        </div>
-
-                        <div class="habitacion-bottom disponible">
-                            <span>DISPONIBLE</span>
-                        </div>
-
-                    </div>
-
-                </a>
-            }
-
-            @* ================= RESERVADA ================= *@
-            else if (item.Reservada)
+            @* ================= LIMPIEZA ================= *@
+            @if (item.EstadoCss == "limpieza")
             {
                 <div class="habitacion-card">
 
@@ -157,29 +123,29 @@
 
                             <div>
                                 <h5>NRO: @item.Numero</h5>
-                                <small class="text-warning">
+                                <small class="text-info">
                                     CATEGORÍA: @item.Categoria
                                 </small>
                             </div>
 
-                            <i class="fas fa-calendar-check fa-2x text-warning"></i>
+                            <i class="fas fa-pump-soap fa-2x text-info"></i>
 
                         </div>
                     </div>
 
-                    <div class="habitacion-bottom reservada flex-column">
+                    <div class="habitacion-bottom limpieza flex-column">
 
-                        <span class="mb-2">RESERVADA</span>
+                        <span class="mb-2">LIMPIEZA</span>
 
-                        <form asp-action="Checkin" method="post" class="w-100">
+                        <form asp-action="MarcarLimpia" method="post" class="w-100">
                             @Html.AntiForgeryToken()
 
                             <input type="hidden"
-                                   name="idRecepcion"
-                                   value="@item.IdRecepcion" />
+                                   name="idHabitacion"
+                                   value="@item.IdHabitacion" />
 
-                            <button class="btn btn-dark btn-sm w-100">
-                                ✔ Confirmar Check-In
+                            <button class="btn btn-light btn-sm w-100">
+                                <i class="fa-solid fa-check"></i> Limpiar ahora
                             </button>
                         </form>
 
@@ -221,8 +187,8 @@
                 </a>
             }
 
-            @* ================= LIMPIEZA ================= *@
-            else if (item.EstadoCss == "limpieza")
+            @* ================= RESERVADA ================= *@
+            else if (item.Reservada)
             {
                 <div class="habitacion-card">
 
@@ -231,35 +197,81 @@
 
                             <div>
                                 <h5>NRO: @item.Numero</h5>
-                                <small class="text-info">
+                                <small class="text-warning">
                                     CATEGORÍA: @item.Categoria
                                 </small>
                             </div>
 
-                            <i class="fas fa-pump-soap fa-2x text-info"></i>
+                            <i class="fas fa-calendar-check fa-2x text-warning"></i>
 
                         </div>
                     </div>
 
-                    <div class="habitacion-bottom limpieza flex-column">
+                    <div class="habitacion-bottom reservada flex-column">
 
-                        <span class="mb-2">LIMPIEZA</span>
+                        <span class="mb-2">RESERVADA</span>
 
-                        <form asp-action="MarcarLimpia" method="post" class="w-100">
-                            @Html.AntiForgeryToken()
+                        @if (item.PuedeCheckin)
+                        {
+                            <form asp-action="Checkin" method="post" class="w-100">
+                                @Html.AntiForgeryToken()
 
-                            <input type="hidden"
-                                   name="idHabitacion"
-                                   value="@item.IdHabitacion" />
+                                <input type="hidden"
+                                       name="idRecepcion"
+                                       value="@item.IdRecepcion" />
 
-                            <button class="btn btn-light btn-sm w-100">
-                                ✔ Limpiar ahora
-                            </button>
-                        </form>
+                                <button class="btn btn-dark btn-sm w-100">
+                                    <i class="fa-solid fa-check"></i> Confirmar Check-In
+                                </button>
+                            </form>
+                        }
+
+                        else
+                        {
+                            <small class="text-dark font-weight-bold">
+                                Check-In:
+                                @item.FechaReserva?.ToString("dd/MM/yyyy")
+                            </small>
+                        }
 
                     </div>
 
                 </div>
+            }
+
+            @* ================= DISPONIBLE ================= *@
+            else
+            {
+                <a asp-action="Create"
+                   asp-route-id="@item.IdHabitacion"
+                   asp-route-fechaEntrada="@fechaEntrada"
+                   asp-route-fechaSalida="@fechaSalida"
+                   class="link-card">
+
+                    <div class="habitacion-card">
+
+                        <div class="habitacion-top">
+                            <div class="d-flex justify-content-between">
+
+                                <div>
+                                    <h5>NRO: @item.Numero</h5>
+                                    <small class="text-success">
+                                        CATEGORÍA: @item.Categoria
+                                    </small>
+                                </div>
+
+                                <i class="fas fa-check-circle fa-2x text-success"></i>
+
+                            </div>
+                        </div>
+
+                        <div class="habitacion-bottom disponible">
+                            <span>DISPONIBLE</span>
+                        </div>
+
+                    </div>
+
+                </a>
             }
 
         </div>

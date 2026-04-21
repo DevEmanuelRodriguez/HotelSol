@@ -1,0 +1,144 @@
+﻿@* Views/Recepcion/Calendario.cshtml *@
+
+@using HotelSol.Models
+
+@{
+    ViewData["Title"] = "Calendario Reservas";
+
+    var habitaciones = ViewBag.Habitaciones as List<Habitacion>;
+    var reservas = ViewBag.Reservas as List<Recepcion>;
+
+    DateTime inicioMes = ViewBag.InicioMes;
+    int anio = ViewBag.Anio;
+    int mes = ViewBag.Mes;
+
+    int diasMes = DateTime.DaysInMonth(anio, mes);
+
+    var anterior = inicioMes.AddMonths(-1);
+    var siguiente = inicioMes.AddMonths(1);
+}
+
+<style>
+    .celda {
+        min-width: 38px;
+        height: 38px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .libre {
+        background: #f8f9fc;
+    }
+
+    .reservada {
+        background: #f6c23e;
+        color: #212529;
+    }
+
+    .ocupada {
+        background: #e74a3b;
+        color: white;
+    }
+
+    .tabla-cal td,
+    .tabla-cal th {
+        text-align: center;
+        vertical-align: middle;
+        padding: 4px;
+    }
+
+    .sticky-col {
+        position: sticky;
+        left: 0;
+        background: white;
+        z-index: 2;
+    }
+</style>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <a asp-action="Calendario"
+       asp-route-anio="@anterior.Year"
+       asp-route-mes="@anterior.Month"
+       class="btn btn-outline-primary">
+        <i class="fa-solid fa-angles-left"></i> Mes anterior
+    </a>
+
+    <h3 class="mb-0">
+        @inicioMes.ToString("MMMM yyyy").ToUpper()
+    </h3>
+
+    <a asp-action="Calendario"
+       asp-route-anio="@siguiente.Year"
+       asp-route-mes="@siguiente.Month"
+       class="btn btn-outline-primary">
+        Mes siguiente <i class="fa-solid fa-angles-right"></i>
+    </a>
+
+</div>
+
+<div class="table-responsive">
+
+    <table class="table table-bordered tabla-cal">
+
+        <thead class="thead-light">
+            <tr>
+                <th class="sticky-col">Hab.</th>
+
+                @for (int d = 1; d <= diasMes; d++)
+                {
+                    <th>@d</th>
+                }
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var hab in habitaciones)
+            {
+                <tr>
+
+                    <td class="sticky-col font-weight-bold">
+                        @hab.Numero
+                    </td>
+
+                    @for (int d = 1; d <= diasMes; d++)
+                    {
+                        var fecha = new DateTime(anio, mes, d);
+
+                        var reserva = reservas.FirstOrDefault(r =>
+                        r.IdHabitacion == hab.IdHabitacion &&
+                        fecha >= r.FechaEntrada.Value.Date &&
+                        fecha < r.FechaSalida.Value.Date);
+
+                        if (reserva != null)
+                        {
+                            if (reserva.Estado == true)
+                            {
+                                <td class="celda ocupada">O</td>
+                            }
+                            else
+                            {
+                                <td class="celda reservada">R</td>
+                            }
+                        }
+                        else
+                        {
+                            <td class="celda libre"></td>
+                        }
+                    }
+
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+</div>
+
+<div class="mt-3">
+    <span class="badge badge-warning">R</span> Reservada
+    <span class="badge badge-danger ml-3">O</span> Ocupada
+</div>
+
