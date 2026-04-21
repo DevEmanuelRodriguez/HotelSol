@@ -52,18 +52,12 @@
                     <div class="input-group mb-3">
                         <input asp-for="DocumentoBusqueda" class="form-control" id="DocumentoBusqueda" />
                         <div class="input-group-append">
-                            <!-- botón 
-                            <button type="button" class="btn btn-success"
-                                    data-toggle="modal"
-                                    data-target="#modalClientes">
-                                Buscar
-                            </button>-->
+                            <!-- botón correcto -->
                             <button type="button"
                                     class="btn btn-primary"
                                     onclick="buscarCliente()">
                                 Buscar
                             </button>
-
                         </div>
                     </div>
 
@@ -113,7 +107,7 @@
                         </div>
                     </div>
 
-                    <!-- NOCHES / TEMPORADA -->
+                    <!-- NOCHES + TEMPORADA -->
                     <div class="row">
                         <div class="col-md-6">
                             <label>Noches:</label>
@@ -186,7 +180,7 @@
                                     <td>
                                         <button type="button" class="btn btn-primary btn-sm"
                                                 onclick="seleccionarCliente(@c.IdPersona, '@c.Documento', '@c.Nombre', '@c.Apellido', '@c.Correo', '@c.TipoDocumento')">
-                                            <i class="fa-solid fa-check"></i>
+                                            ✔
                                         </button>
                                     </td>
                                     <td>@c.Documento</td>
@@ -225,7 +219,7 @@
                 $('#modalClientes').modal('hide');
             };
 
-            // ================= PRECIO / TEMPORADA =================
+            // ================= PRECIO + TEMPORADA =================
             function obtenerMultiplicador(fecha) {
                 let mes = fecha.getMonth() + 1;
 
@@ -238,44 +232,43 @@
                 return { mult: 1, nombre: "MEDIA 🟡" };
             }
 
-            //Funcion buscar cliente
             window.buscarCliente = function () {
 
-            let doc = document.getElementById("DocumentoBusqueda").value;
+                let doc = document.getElementById("DocumentoBusqueda").value;
 
-            fetch('/Recepcion/BuscarCliente?documento=' + doc)
-                .then(response => response.json())
-                .then(data => {
+                fetch('/Recepcion/BuscarCliente?documento=' + doc)
+                    .then(response => response.json())
+                    .then(data => {
 
-                    let tbody = document.querySelector("#tablaClientes tbody");
-                    tbody.innerHTML = "";
+                        let tbody = document.querySelector("#tablaClientes tbody");
+                        tbody.innerHTML = "";
 
-                    data.forEach(c => {
+                        data.forEach(c => {
 
-                        tbody.innerHTML += `
-                        <tr>
-                            <td>
-                            <button type="button"
-                                class="btn btn-primary btn-sm"
-                                onclick="seleccionarCliente(
-                                ${c.idPersona},
-                                '${c.documento}',
-                                '${c.nombre}',
-                                '${c.apellido}',
-                                '${c.correo}',
-                                '${c.tipoDocumento}'
-                            )">✔</button>
-                            </td>
-                            <td>${c.documento}</td>
-                            <td>${c.nombre}</td>
-                            <td>${c.apellido}</td>
-                            <td>${c.correo}</td>
-                        </tr>`;
+                            tbody.innerHTML += `
+                            <tr>
+                                <td>
+                                <button type="button"
+                                    class="btn btn-primary btn-sm"
+                                    onclick="seleccionarCliente(
+                                    ${c.idPersona},
+                                    '${c.documento}',
+                                    '${c.nombre}',
+                                    '${c.apellido}',
+                                    '${c.correo}',
+                                    '${c.tipoDocumento}'
+                                )">✔</button>
+                                </td>
+                                <td>${c.documento}</td>
+                                <td>${c.nombre}</td>
+                                <td>${c.apellido}</td>
+                                <td>${c.correo}</td>
+                            </tr>`;
+                        });
+
+                        $('#modalClientes').modal('show');
                     });
-
-                    $('#modalClientes').modal('show');
-                });
-        }
+            }
 
             function calcularTotal() {
 
@@ -317,7 +310,7 @@
 
             document.getElementById("FechaEntrada").addEventListener("change", calcularTotal);
             document.getElementById("FechaSalida").addEventListener("change", calcularTotal);
-            
+            //  SOLUCIÓN CLAVE
             calcularTotal();
         });
     </script>

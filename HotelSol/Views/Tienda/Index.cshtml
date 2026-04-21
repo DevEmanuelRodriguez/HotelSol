@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Ventas";
+    var pisoSeleccionado = ViewBag.PisoSeleccionado;
 }
 
 <h1 class="h4 mb-4 text-gray-800">Ventas</h1>
@@ -12,6 +13,7 @@
         border-radius: 6px;
         overflow: hidden;
         transition: 0.2s;
+        background: #fff;
     }
 
         .card-hab:hover {
@@ -22,6 +24,7 @@
     .card-top {
         padding: 15px;
         background: #fff;
+        min-height: 110px;
     }
 
     .card-bottom {
@@ -42,7 +45,7 @@
 <div class="card shadow mb-4">
     <div class="card-body">
 
-        <form method="get" class="form-inline">
+        <form method="get" asp-action="Index" class="form-inline">
 
             <label class="mr-2 font-weight-bold">Seleccionar Piso</label>
 
@@ -51,13 +54,16 @@
 
                 @foreach (var piso in ViewBag.Pisos)
                 {
-                    <option value="@piso.IdPiso">
+                    <option value="@piso.IdPiso"
+                            selected="@(pisoSeleccionado == piso.IdPiso)">
                         @piso.Descripcion
                     </option>
                 }
             </select>
 
-            <button class="btn btn-primary">Filtrar</button>
+            <button type="submit" class="btn btn-primary">
+                Filtrar
+            </button>
 
         </form>
 
@@ -69,7 +75,7 @@
 
     @foreach (var item in Model)
     {
-        <div class="col-md-4 mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
 
             <a asp-controller="Tienda"
                asp-action="Venta"
@@ -78,12 +84,17 @@
 
                 <div class="card-hab">
 
-                    <div class="card-top d-flex justify-content-between">
+                    <div class="card-top d-flex justify-content-between align-items-start">
 
                         <div>
-                            <h5>NRO: @item.Numero</h5>
-                            <small class="text-warning">
-                                CATEGORIA: @item.IdCategoriaNavigation?.Descripcion
+                            <h5 class="mb-1">NRO: @item.Numero</h5>
+
+                            <small class="text-warning d-block">
+                                CATEGORÍA: @item.IdCategoriaNavigation?.Descripcion
+                            </small>
+
+                            <small class="text-muted d-block mt-1">
+                                PISO: @item.IdPisoNavigation?.Descripcion
                             </small>
                         </div>
 
@@ -92,7 +103,7 @@
                     </div>
 
                     <div class="card-bottom">
-                        INICIAR VENTA <i class="fa-solid fa-angles-right"></i>
+                        INICIAR VENTA →
                     </div>
 
                 </div>
@@ -107,6 +118,6 @@
 @if (!Model.Any())
 {
     <div class="alert alert-info">
-        No hay habitaciones ocupadas.
+        No hay habitaciones ocupadas actualmente.
     </div>
 }

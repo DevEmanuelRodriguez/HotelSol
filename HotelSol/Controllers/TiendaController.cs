@@ -1,4 +1,4 @@
-﻿using HotelSol.Filters;//para mostrar segun sesion
+﻿using HotelSol.Filters;
 using System.Text.Json;
 using HotelSol.Data;
 using HotelSol.Models;
@@ -18,8 +18,7 @@ namespace HotelSol.Controllers
             _context = context;
         }
 
-        // INDEX (HABITACIONES OCUPADAS)
-        
+        // INDEX (SOLO HABITACIONES OCUPADAS - CHECKIN REALIZADO)
         public async Task<IActionResult> Index(int? pisoId)
         {
             var hoy = DateTime.Today;
@@ -37,16 +36,17 @@ namespace HotelSol.Controllers
 
             var habitaciones = await habitacionesQuery.ToListAsync();
 
-            // SOLO HABITACIONES CON RECEPCION ACTIVA HOY
+            // SOLO OCUPADAS (Estado = true)
             var habitacionesOcupadas = habitaciones
-            .Where(h => _context.Recepcions.Any(r =>
-                r.IdHabitacion == h.IdHabitacion &&
-                r.FechaEntrada != null &&
-                r.FechaSalida != null &&
-                r.FechaSalidaConfirmacion == null && 
-                hoy >= r.FechaEntrada.Value.Date &&
-                hoy < r.FechaSalida.Value.Date))
-            .ToList();
+                .Where(h => _context.Recepcions.Any(r =>
+                    r.IdHabitacion == h.IdHabitacion &&
+                    r.Estado == true &&
+                    r.FechaSalidaConfirmacion == null &&
+                    r.FechaEntrada != null &&
+                    r.FechaSalida != null &&
+                    hoy >= r.FechaEntrada.Value.Date &&
+                    hoy < r.FechaSalida.Value.Date))
+                .ToList();
 
             ViewBag.PisoSeleccionado = pisoId;
 
@@ -58,7 +58,7 @@ namespace HotelSol.Controllers
             return View(habitacionesOcupadas);
         }
 
-        
+       
         // FORMULARIO VENTA
         
         public async Task<IActionResult> Venta(int idHabitacion)
@@ -73,19 +73,20 @@ namespace HotelSol.Controllers
             if (habitacion == null)
                 return NotFound();
 
+            // SOLO RECEPCION OCUPADA
             var recepcion = await _context.Recepcions
-            .FirstOrDefaultAsync(r =>
-                r.IdHabitacion == idHabitacion &&
-                r.Estado == true && 
-                r.FechaSalidaConfirmacion == null && 
-                r.FechaEntrada != null &&
-                r.FechaSalida != null &&
-                hoy >= r.FechaEntrada.Value.Date &&
-                hoy < r.FechaSalida.Value.Date);
+                .FirstOrDefaultAsync(r =>
+                    r.IdHabitacion == idHabitacion &&
+                    r.Estado == true &&
+                    r.FechaSalidaConfirmacion == null &&
+                    r.FechaEntrada != null &&
+                    r.FechaSalida != null &&
+                    hoy >= r.FechaEntrada.Value.Date &&
+                    hoy < r.FechaSalida.Value.Date);
 
             if (recepcion == null)
             {
-                TempData["Error"] = "No hay una recepción activa para esta habitación.";
+                TempData["Error"] = "No hay una habitación ocupada para vender.";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -102,6 +103,7 @@ namespace HotelSol.Controllers
                 Categoria = habitacion.IdCategoriaNavigation?.Descripcion ?? "",
                 Piso = habitacion.IdPisoNavigation?.Descripcion ?? "",
                 FechaEntrada = recepcion.FechaEntrada,
+
                 Productos = await _context.Productos
                     .Where(p => p.Estado == true && (p.Cantidad ?? 0) > 0)
                     .OrderBy(p => p.Nombre)
@@ -110,20 +112,14 @@ namespace HotelSol.Controllers
 
             return View(vm);
         }
-        
 
-        
-        // GUARDAR VENTA
-        
+       
+        // FINALIZAR VENTA
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> FinalizarVenta(int IdRecepcion, string detalleJson)
         {
-            Console.WriteLine("ENTRE");
-            Console.WriteLine(detalleJson);
-            Console.WriteLine("LLEGÓ AL CONTROLLER");
-            Console.WriteLine(detalleJson);
-
             if (string.IsNullOrWhiteSpace(detalleJson))
             {
                 TempData["Error"] = "No hay productos para registrar.";
@@ -134,7 +130,7 @@ namespace HotelSol.Controllers
 
             if (detalles == null || !detalles.Any())
             {
-                TempData["Error"] = "No hay productos válidos para registrar.";
+                TempData["Error"] = "No hay productos válidos.";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -153,23 +149,26 @@ namespace HotelSol.Controllers
             {
                 if (d.cantidad <= 0)
                 {
-                    TempData["Error"] = "Hay cantidades inválidas en la venta.";
-                    return RedirectToAction(nameof(Venta), new { idHabitacion = recepcion.IdHabitacion });
+                    TempData["Error"] = "Cantidad inválida.";
+                    return RedirectToAction(nameof(Venta),
+                        new { idHabitacion = recepcion.IdHabitacion });
                 }
 
-                var productoValidacion = await _context.Productos
+                var producto = await _context.Productos
                     .FirstOrDefaultAsync(p => p.IdProducto == d.idProducto);
 
-                if (productoValidacion == null)
+                if (producto == null)
                 {
-                    TempData["Error"] = "Uno de los productos ya no existe.";
-                    return RedirectToAction(nameof(Venta), new { idHabitacion = recepcion.IdHabitacion });
+                    TempData["Error"] = "Producto no existe.";
+                    return RedirectToAction(nameof(Venta),
+                        new { idHabitacion = recepcion.IdHabitacion });
                 }
 
-                if ((productoValidacion.Cantidad ?? 0) < d.cantidad)
+                if ((producto.Cantidad ?? 0) < d.cantidad)
                 {
-                    TempData["Error"] = $"No hay stock suficiente para el producto {productoValidacion.Nombre}.";
-                    return RedirectToAction(nameof(Venta), new { idHabitacion = recepcion.IdHabitacion });
+                    TempData["Error"] = $"Stock insuficiente: {producto.Nombre}";
+                    return RedirectToAction(nameof(Venta),
+                        new { idHabitacion = recepcion.IdHabitacion });
                 }
 
                 total += d.subTotal;
@@ -210,11 +209,12 @@ namespace HotelSol.Controllers
 
             TempData["Ok"] = "Venta registrada correctamente.";
 
-            return RedirectToAction("Detalle", "Recepcion", new { idHabitacion = recepcion.IdHabitacion });
+            return RedirectToAction("Detalle", "Recepcion",
+                new { idHabitacion = recepcion.IdHabitacion });
         }
 
-        
-        // LISTA PRODUCTOS
+       
+        // PRODUCTOS
         
         public async Task<IActionResult> Productos()
         {
@@ -225,17 +225,17 @@ namespace HotelSol.Controllers
             return View(productos);
         }
 
+       
+        // OBTENER PRODUCTO
         
-        // OBTENER PRODUCTO (EDITAR)
-         public async Task<IActionResult> ObtenerProducto(int id)
+        public async Task<IActionResult> ObtenerProducto(int id)
         {
             var prod = await _context.Productos.FindAsync(id);
             return Json(prod);
         }
 
         
-        // GUARDAR (CREAR / EDITAR)
-        
+        // GUARDAR PRODUCTO
         [HttpPost]
         public async Task<IActionResult> GuardarProducto(Producto model)
         {
@@ -253,13 +253,10 @@ namespace HotelSol.Controllers
                 if (prod == null)
                     return Json(new { ok = false });
 
-                // ACTUALIZA CAMPOS EDITABLES
                 prod.Nombre = model.Nombre;
                 prod.Detalle = model.Detalle;
                 prod.Precio = model.Precio;
                 prod.Cantidad = model.Cantidad;
-
-                
             }
 
             await _context.SaveChangesAsync();
@@ -268,7 +265,8 @@ namespace HotelSol.Controllers
         }
 
         
-        // ELIMINAR
+        // ELIMINAR PRODUCTO
+        
         [HttpPost]
         public async Task<IActionResult> EliminarProducto(int id)
         {
@@ -276,15 +274,16 @@ namespace HotelSol.Controllers
 
             if (prod != null)
             {
-                _context.Productos.Remove(prod); // o soft delete si quieres
+                _context.Productos.Remove(prod);
                 await _context.SaveChangesAsync();
             }
 
             return Json(new { ok = true });
         }
-
-
     }
+
+    
+    // CLASE TEMPORAL 
 
     public class DetalleTemp
     {
@@ -293,6 +292,4 @@ namespace HotelSol.Controllers
         public decimal precio { get; set; }
         public decimal subTotal { get; set; }
     }
-
-
 }

@@ -1,10 +1,8 @@
-﻿@model HotelSol.Models.ViewModels.RecepcionIndexVM
+﻿model HotelSol.Models.ViewModels.RecepcionIndexVM
 
 @{
     ViewData["Title"] = "Recepción";
 
-    
-    // si no hay fechas usar HOY automáticamente
     var fechaEntrada = (Model.FechaEntrada ?? DateTime.Today).ToString("yyyy-MM-dd");
     var fechaSalida = (Model.FechaSalida ?? DateTime.Today.AddDays(1)).ToString("yyyy-MM-dd");
 }
@@ -45,6 +43,11 @@
         background: #e74a3b;
     }
 
+    .reservada {
+        background: #f6c23e;
+        color: #212529;
+    }
+
     .limpieza {
         background: #36b9cc;
     }
@@ -59,21 +62,16 @@
         flex-direction: column;
         align-items: stretch;
     }
-
-    .text-limpieza {
-        color: #36b9cc !important;
-        font-weight: 600;
-    }
 </style>
 
-<!-- FILTRO COMPLETO -->
+<!-- FILTRO -->
 <div class="card shadow mb-4">
     <div class="card-body">
 
         <form method="get" asp-action="Index" class="form-inline">
 
-            <!-- PISO -->
             <label class="mr-2 font-weight-bold">Piso</label>
+
             <select name="pisoId" class="form-control mr-3">
                 <option value="">Todos</option>
 
@@ -86,14 +84,15 @@
                 }
             </select>
 
-            <!-- FECHAS -->
             <label class="mr-2 font-weight-bold">Entrada</label>
-            <input type="date" name="fechaEntrada"
+            <input type="date"
+                   name="fechaEntrada"
                    value="@fechaEntrada"
                    class="form-control mr-3" />
 
             <label class="mr-2 font-weight-bold">Salida</label>
-            <input type="date" name="fechaSalida"
+            <input type="date"
+                   name="fechaSalida"
                    value="@fechaSalida"
                    class="form-control mr-3" />
 
@@ -102,22 +101,20 @@
             </button>
 
         </form>
+
     </div>
 </div>
 
 <!-- TARJETAS -->
 <div class="row">
+
     @foreach (var item in Model.Habitaciones)
     {
         <div class="col-xl-3 col-md-6 mb-4">
 
-            @{
-                var bloqueada = item.OcupadaEnFechas;
-            }
-
-            @if (item.PuedeReservar && !bloqueada)
+            @* ================= DISPONIBLE ================= *@
+            @if (item.PuedeReservar)
             {
-                <!-- DISPONIBLE -->
                 <a asp-action="Create"
                    asp-route-id="@item.IdHabitacion"
                    asp-route-fechaEntrada="@fechaEntrada"
@@ -128,14 +125,16 @@
 
                         <div class="habitacion-top">
                             <div class="d-flex justify-content-between">
+
                                 <div>
                                     <h5>NRO: @item.Numero</h5>
                                     <small class="text-success">
-                                        CATEGORIA: @item.Categoria
+                                        CATEGORÍA: @item.Categoria
                                     </small>
                                 </div>
 
                                 <i class="fas fa-check-circle fa-2x text-success"></i>
+
                             </div>
                         </div>
 
@@ -144,11 +143,54 @@
                         </div>
 
                     </div>
+
                 </a>
             }
-            else if (bloqueada || item.EstadoCss == "ocupado")
+
+            @* ================= RESERVADA ================= *@
+            else if (item.Reservada)
             {
-                <!-- OCUPADO / RESERVADO -->
+                <div class="habitacion-card">
+
+                    <div class="habitacion-top">
+                        <div class="d-flex justify-content-between">
+
+                            <div>
+                                <h5>NRO: @item.Numero</h5>
+                                <small class="text-warning">
+                                    CATEGORÍA: @item.Categoria
+                                </small>
+                            </div>
+
+                            <i class="fas fa-calendar-check fa-2x text-warning"></i>
+
+                        </div>
+                    </div>
+
+                    <div class="habitacion-bottom reservada flex-column">
+
+                        <span class="mb-2">RESERVADA</span>
+
+                        <form asp-action="Checkin" method="post" class="w-100">
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden"
+                                   name="idRecepcion"
+                                   value="@item.IdRecepcion" />
+
+                            <button class="btn btn-dark btn-sm w-100">
+                                ✔ Confirmar Check-In
+                            </button>
+                        </form>
+
+                    </div>
+
+                </div>
+            }
+
+            @* ================= OCUPADA ================= *@
+            else if (item.Ocupada)
+            {
                 <a asp-action="Detalle"
                    asp-route-idHabitacion="@item.IdHabitacion"
                    class="link-card">
@@ -160,36 +202,28 @@
 
                                 <div>
                                     <h5>NRO: @item.Numero</h5>
-
                                     <small class="text-danger">
-                                        CATEGORIA: @item.Categoria
+                                        CATEGORÍA: @item.Categoria
                                     </small>
                                 </div>
 
-                                @if (bloqueada)
-                                {
-                                    <i class="fas fa-calendar-times fa-2x text-danger"></i>
-                                }
-                                else
-                                {
-                                    <i class="fas fa-bed fa-2x text-danger"></i>
-                                }
+                                <i class="fas fa-bed fa-2x text-danger"></i>
 
                             </div>
                         </div>
 
                         <div class="habitacion-bottom ocupado">
-                            <span>
-                                @(bloqueada ? "RESERVADA EN FECHAS" : "OCUPADO")
-                            </span>
+                            <span>OCUPADA</span>
                         </div>
 
                     </div>
+
                 </a>
             }
+
+            @* ================= LIMPIEZA ================= *@
             else if (item.EstadoCss == "limpieza")
             {
-                <!-- LIMPIEZA -->
                 <div class="habitacion-card">
 
                     <div class="habitacion-top">
@@ -197,9 +231,8 @@
 
                             <div>
                                 <h5>NRO: @item.Numero</h5>
-
                                 <small class="text-info">
-                                    CATEGORIA: @item.Categoria
+                                    CATEGORÍA: @item.Categoria
                                 </small>
                             </div>
 
@@ -212,14 +245,15 @@
 
                         <span class="mb-2">LIMPIEZA</span>
 
-                        <!-- BOTÓN DIRECTO -->
                         <form asp-action="MarcarLimpia" method="post" class="w-100">
                             @Html.AntiForgeryToken()
 
-                            <input type="hidden" name="idHabitacion" value="@item.IdHabitacion" />
+                            <input type="hidden"
+                                   name="idHabitacion"
+                                   value="@item.IdHabitacion" />
 
-                            <button class="btn btn-light btn-sm w-100 text-limpieza">
-                                <i class="fa-solid fa-check"></i> Marcar como limpia
+                            <button class="btn btn-light btn-sm w-100">
+                                ✔ Limpiar ahora
                             </button>
                         </form>
 
@@ -230,4 +264,5 @@
 
         </div>
     }
+
 </div>

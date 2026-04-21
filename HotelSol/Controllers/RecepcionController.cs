@@ -1,4 +1,4 @@
-﻿using HotelSol.Filters;//para mostrar segun sesion
+﻿using HotelSol.Filters;
 using HotelSol.Data;
 using HotelSol.Models;
 using HotelSol.Models.ViewModels;
@@ -17,22 +17,17 @@ namespace HotelSol.Controllers
             _context = context;
         }
 
-        
-        // FUNCIÓN TEMPORADAS
-    
         private decimal ObtenerMultiplicador(DateTime fecha)
         {
             if (fecha.Month >= 6 && fecha.Month <= 8)
-                return 1.5m; //  ALTA
+                return 1.5m;
 
             if (fecha.Month == 1 || fecha.Month == 2)
-                return 0.8m; // BAJA
+                return 0.8m;
 
-            return 1m; // MEDIA
+            return 1m;
         }
 
-        // INDEX (DISPONIBILIDAD REAL)
-        
         public async Task<IActionResult> Index(int? pisoId, DateTime? fechaEntrada, DateTime? fechaSalida)
         {
             var habitacionesQuery = _context.Habitacions
@@ -49,30 +44,13 @@ namespace HotelSol.Controllers
 
             var habitaciones = await habitacionesQuery.ToListAsync();
 
-            // SI NO HAY FECHAS USAR HOY
             var fechaInicio = fechaEntrada ?? DateTime.Today;
             var fechaFin = fechaSalida ?? DateTime.Today.AddDays(1);
-
-            // OCUPACIÓN REAL
-            var habitacionesOcupadas = await _context.Recepcions
-            .Where(r =>
-                r.IdHabitacion != null &&
-                r.FechaEntrada != null &&
-                r.FechaSalida != null &&
-                r.FechaSalidaConfirmacion == null &&
-                r.Estado == true && 
-                fechaInicio < r.FechaSalida.Value &&
-                fechaFin > r.FechaEntrada.Value
-            )
-            .Select(r => r.IdHabitacion)
-            .Distinct()
-            .ToListAsync();
+            var hoy = DateTime.Today;
 
             var vm = new RecepcionIndexVM
             {
                 PisoSeleccionado = pisoId,
-
-                // enviar fechas a la vista
                 FechaEntrada = fechaInicio,
                 FechaSalida = fechaFin,
 
@@ -83,7 +61,25 @@ namespace HotelSol.Controllers
 
                 Habitaciones = habitaciones.Select(h =>
                 {
-                    var ocupada = habitacionesOcupadas.Contains(h.IdHabitacion);
+                    var reserva = _context.Recepcions
+                        .Where(r =>
+                            r.IdHabitacion == h.IdHabitacion &&
+                            r.Estado == false &&
+                            r.FechaSalidaConfirmacion == null &&
+                            r.FechaEntrada != null &&
+                            r.FechaSalida != null)
+                        .OrderBy(r => r.FechaEntrada)
+                        .FirstOrDefault();
+
+                    var ocupada = _context.Recepcions.Any(r =>
+                        r.IdHabitacion == h.IdHabitacion &&
+                        r.Estado == true &&
+                        r.FechaSalidaConfirmacion == null &&
+                        r.FechaEntrada != null &&
+                        r.FechaSalida != null &&
+                        hoy >= r.FechaEntrada.Value.Date &&
+                        hoy < r.FechaSalida.Value.Date);
+
                     var limpieza = h.IdEstadoHabitacion == 3;
 
                     string estadoTexto;
@@ -94,12 +90,18 @@ namespace HotelSol.Controllers
                     {
                         estadoTexto = "LIMPIEZA";
                         estadoCss = "limpieza";
-                        puedeReservar = false;                       
+                        puedeReservar = false;
                     }
-                    else if ( ocupada)
+                    else if (ocupada)
                     {
-                        estadoTexto = "OCUPADO";
+                        estadoTexto = "OCUPADA";
                         estadoCss = "ocupado";
+                        puedeReservar = false;
+                    }
+                    else if (reserva != null)
+                    {
+                        estadoTexto = "RESERVADA";
+                        estadoCss = "reservada";
                         puedeReservar = false;
                     }
                     else
@@ -118,9 +120,10 @@ namespace HotelSol.Controllers
                         EstadoTexto = estadoTexto,
                         EstadoCss = estadoCss,
                         PuedeReservar = puedeReservar,
-
-                        // PARA LA VISTA
-                        OcupadaEnFechas = ocupada
+                        OcupadaEnFechas = ocupada,
+                        Reservada = reserva != null,
+                        Ocupada = ocupada,
+                        IdRecepcion = reserva?.IdRecepcion ?? 0
                     };
                 }).ToList()
             };
@@ -128,9 +131,6 @@ namespace HotelSol.Controllers
             return View(vm);
         }
 
-        
-        // FORMULARIO CREATE
-        
         public async Task<IActionResult> Create(int id, DateTime? fechaEntrada, DateTime? fechaSalida)
         {
             var habitacion = await _context.Habitacions
@@ -149,14 +149,9 @@ namespace HotelSol.Controllers
                 Piso = habitacion.IdPisoNavigation?.Descripcion ?? "",
                 DetalleHabitacion = habitacion.Detalle ?? "",
                 PrecioHabitacion = habitacion.Precio ?? 0,
-
-                // FECHAS (SIN HORA)
                 FechaEntrada = fechaEntrada?.Date ?? DateTime.Today,
                 FechaSalida = fechaSalida?.Date ?? DateTime.Today,
-
                 PrecioInicial = habitacion.Precio ?? 0,
-
-                //  ADELANTO
                 Adelanto = 0.00m,
 
                 Clientes = await _context.Personas
@@ -167,9 +162,6 @@ namespace HotelSol.Controllers
             return View(vm);
         }
 
-    
-        // GUARDAR RESERVA
-        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(RecepcionCreateVM vm)
@@ -180,23 +172,20 @@ namespace HotelSol.Controllers
             if (habitacion == null)
                 return NotFound();
 
-            // VALIDAR FECHAS
             if (!vm.FechaEntrada.HasValue || !vm.FechaSalida.HasValue)
             {
                 ModelState.AddModelError("", "Debe ingresar fechas.");
             }
 
-            // VALIDACIÓN SOLAPAMIENTO
             var conflicto = await _context.Recepcions
-            .AnyAsync(r =>
-                r.IdHabitacion == vm.IdHabitacion &&
-                r.FechaEntrada != null &&
-                r.FechaSalida != null &&
-                r.FechaSalidaConfirmacion == null && 
-                r.Estado == true && 
-                vm.FechaEntrada.Value < r.FechaSalida.Value &&
-                vm.FechaSalida.Value > r.FechaEntrada.Value
-            );
+                .AnyAsync(r =>
+                    r.IdHabitacion == vm.IdHabitacion &&
+                    r.FechaEntrada != null &&
+                    r.FechaSalida != null &&
+                    r.FechaSalidaConfirmacion == null &&
+                    vm.FechaEntrada.Value < r.FechaSalida.Value &&
+                    vm.FechaSalida.Value > r.FechaEntrada.Value
+                );
 
             if (conflicto)
             {
@@ -224,7 +213,6 @@ namespace HotelSol.Controllers
                 return View(vm);
             }
 
-            // ================= CLIENTE =================
             int idCliente;
 
             if (vm.IdClienteExistente.HasValue)
@@ -261,7 +249,6 @@ namespace HotelSol.Controllers
                 }
             }
 
-            // ================= PRECIO =================
             decimal precioTotal = 0;
 
             for (var fecha = vm.FechaEntrada.Value; fecha < vm.FechaSalida.Value; fecha = fecha.AddDays(1))
@@ -281,18 +268,14 @@ namespace HotelSol.Controllers
                 PrecioRestante = precioTotal - (vm.Adelanto ?? 0),
                 TotalPagado = vm.Adelanto ?? 0,
                 Observacion = vm.Observacion,
-                Estado = true
+                Estado = false
             };
 
             _context.Recepcions.Add(recepcion);
-
-            habitacion.IdEstadoHabitacion = 2;
-
             await _context.SaveChangesAsync();
 
             TempData["Ok"] = "Reserva registrada correctamente.";
 
-            // FORMATO FECHAS EN REDIRECT
             return RedirectToAction(nameof(Index), new
             {
                 fechaEntrada = vm.FechaEntrada.Value.ToString("yyyy-MM-dd"),
@@ -300,7 +283,6 @@ namespace HotelSol.Controllers
             });
         }
 
-        //DETALLE DE RESERVA
         public async Task<IActionResult> Detalle(int idHabitacion)
         {
             var habitacion = await _context.Habitacions
@@ -311,16 +293,10 @@ namespace HotelSol.Controllers
             if (habitacion == null)
                 return NotFound();
 
-            // Recepción activa de esa habitación
             var recepcion = await _context.Recepcions
                 .FirstOrDefaultAsync(r =>
                     r.IdHabitacion == idHabitacion &&
-                    r.Estado == true &&
-                    r.FechaSalidaConfirmacion == null && 
-                    r.FechaEntrada != null &&
-                    r.FechaSalida != null &&
-                    DateTime.Today >= r.FechaEntrada.Value.Date &&
-                    DateTime.Today < r.FechaSalida.Value.Date);
+                    r.FechaSalidaConfirmacion == null);
 
             if (recepcion == null)
             {
@@ -331,21 +307,19 @@ namespace HotelSol.Controllers
             var cliente = await _context.Personas
                 .FirstOrDefaultAsync(p => p.IdPersona == recepcion.IdCliente);
 
-            // PRODUCTOS COMPRADOS EN TIENDA
-            
             var productos = await _context.Venta
-            .Where(v => v.IdRecepcion == recepcion.IdRecepcion)
-            .Include(v => v.DetalleVenta)
-            .ThenInclude(d => d.IdProductoNavigation)
-            .SelectMany(v => v.DetalleVenta.Select(d => new RecepcionDetalleProductoVM
-            {
-                Producto = d.IdProductoNavigation!.Nombre!,
-                Cantidad = d.Cantidad ?? 0,
-                PrecioUnitario = d.IdProductoNavigation.Precio ?? 0,
-                EstadoVenta = v.Estado ?? "",
-                SubTotal = d.SubTotal ?? 0
-             }))
-    .ToListAsync();
+                .Where(v => v.IdRecepcion == recepcion.IdRecepcion)
+                .Include(v => v.DetalleVenta)
+                .ThenInclude(d => d.IdProductoNavigation)
+                .SelectMany(v => v.DetalleVenta.Select(d => new RecepcionDetalleProductoVM
+                {
+                    Producto = d.IdProductoNavigation!.Nombre!,
+                    Cantidad = d.Cantidad ?? 0,
+                    PrecioUnitario = d.IdProductoNavigation.Precio ?? 0,
+                    EstadoVenta = v.Estado ?? "",
+                    SubTotal = d.SubTotal ?? 0
+                }))
+                .ToListAsync();
 
             var vm = new RecepcionDetalleVM
             {
@@ -373,9 +347,6 @@ namespace HotelSol.Controllers
             return View(vm);
         }
 
-       
-        // SALIDAS (TARJETAS DE HABITACIONES OCUPADAS)
-        
         public async Task<IActionResult> Salidas(int? pisoId)
         {
             var hoy = DateTime.Today;
@@ -394,14 +365,15 @@ namespace HotelSol.Controllers
             var habitaciones = await habitacionesQuery.ToListAsync();
 
             var habitacionesOcupadas = habitaciones
-            .Where(h => _context.Recepcions.Any(r =>
-                r.IdHabitacion == h.IdHabitacion &&
-                r.FechaEntrada != null &&
-                r.FechaSalida != null &&
-                r.FechaSalidaConfirmacion == null && 
-                hoy >= r.FechaEntrada.Value.Date &&
-                hoy < r.FechaSalida.Value.Date))
-            .ToList();
+                .Where(h => _context.Recepcions.Any(r =>
+                    r.IdHabitacion == h.IdHabitacion &&
+                    r.Estado == true &&
+                    r.FechaEntrada != null &&
+                    r.FechaSalida != null &&
+                    r.FechaSalidaConfirmacion == null &&
+                    hoy >= r.FechaEntrada.Value.Date &&
+                    hoy < r.FechaSalida.Value.Date))
+                .ToList();
 
             ViewBag.Pisos = await _context.Pisos
                 .Where(p => p.Estado == true)
@@ -413,9 +385,6 @@ namespace HotelSol.Controllers
             return View(habitacionesOcupadas);
         }
 
-        
-        // CHECKOUT FORM
-        
         public async Task<IActionResult> Checkout(int idHabitacion)
         {
             var hoy = DateTime.Today;
@@ -429,14 +398,14 @@ namespace HotelSol.Controllers
                 return NotFound();
 
             var recepcion = await _context.Recepcions
-            .FirstOrDefaultAsync(r =>
-                r.IdHabitacion == idHabitacion &&
-                r.Estado == true &&
-                r.FechaSalidaConfirmacion == null && 
-                r.FechaEntrada != null &&
-                r.FechaSalida != null &&
-                hoy >= r.FechaEntrada.Value.Date &&
-                hoy < r.FechaSalida.Value.Date);
+                .FirstOrDefaultAsync(r =>
+                    r.IdHabitacion == idHabitacion &&
+                    r.Estado == true &&
+                    r.FechaSalidaConfirmacion == null &&
+                    r.FechaEntrada != null &&
+                    r.FechaSalida != null &&
+                    hoy >= r.FechaEntrada.Value.Date &&
+                    hoy < r.FechaSalida.Value.Date);
 
             if (recepcion == null)
             {
@@ -450,26 +419,25 @@ namespace HotelSol.Controllers
             var productos = await _context.Venta
                 .Where(v => v.IdRecepcion == recepcion.IdRecepcion)
                 .Include(v => v.DetalleVenta)
-                    .ThenInclude(d => d.IdProductoNavigation)
+                .ThenInclude(d => d.IdProductoNavigation)
                 .SelectMany(v => v.DetalleVenta.Select(d => new RecepcionDetalleProductoVM
                 {
                     Producto = d.IdProductoNavigation != null ? d.IdProductoNavigation.Nombre ?? "" : "",
                     Cantidad = d.Cantidad ?? 0,
-                    //usamos ternaria
                     PrecioUnitario = d.IdProductoNavigation != null
-                    ? (d.IdProductoNavigation.Precio ?? 0) : 0,
+                        ? (d.IdProductoNavigation.Precio ?? 0)
+                        : 0,
                     EstadoVenta = v.Estado ?? "",
                     SubTotal = d.SubTotal ?? 0
                 }))
                 .ToListAsync();
 
-            //var totalConsumos = productos.Sum(x => x.SubTotal);
             var totalConsumos = productos
                 .Where(x => x.EstadoVenta == "PENDIENTE")
                 .Sum(x => x.SubTotal);
+
             var costoHabitacion = recepcion.PrecioInicial ?? 0;
             var adelanto = recepcion.Adelanto ?? 0;
-            // CALCULO REAL
             var restante = costoHabitacion - adelanto;
 
             var vm = new CheckoutVM
@@ -495,7 +463,6 @@ namespace HotelSol.Controllers
                 Penalidad = recepcion.CostoPenalidad ?? 0,
 
                 TotalConsumos = totalConsumos,
-                //TotalPagar = restante + (recepcion.CostoPenalidad ?? 0),
                 TotalPagar = restante + (recepcion.CostoPenalidad ?? 0),
 
                 Productos = productos
@@ -504,9 +471,6 @@ namespace HotelSol.Controllers
             return View(vm);
         }
 
-        
-        // CONFIRMAR CHECKOUT
-        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ConfirmarCheckout(int IdRecepcion, decimal Penalidad)
@@ -520,28 +484,21 @@ namespace HotelSol.Controllers
 
             var costoHabitacion = recepcion.PrecioInicial ?? 0;
             var adelanto = recepcion.Adelanto ?? 0;
-
-            // cálculo 
             var restante = costoHabitacion - adelanto;
-
             var totalFinal = restante + Penalidad;
 
             recepcion.CostoPenalidad = Penalidad;
-
-            // guarda lo cobrado en checkout
             recepcion.TotalPagado = (recepcion.TotalPagado ?? 0) + totalFinal;
-
             recepcion.PrecioRestante = 0;
-
             recepcion.FechaSalidaConfirmacion = DateTime.Now;
             recepcion.Estado = false;
 
             var habitacion = await _context.Habitacions
-            .FirstOrDefaultAsync(h => h.IdHabitacion == recepcion.IdHabitacion);
+                .FirstOrDefaultAsync(h => h.IdHabitacion == recepcion.IdHabitacion);
 
             if (habitacion != null)
             {
-                habitacion.IdEstadoHabitacion = 3; // LIMPIEZA
+                habitacion.IdEstadoHabitacion = 3;
             }
 
             await _context.SaveChangesAsync();
@@ -555,7 +512,7 @@ namespace HotelSol.Controllers
             var habitacionesQuery = _context.Habitacions
                 .Include(h => h.IdCategoriaNavigation)
                 .Include(h => h.IdPisoNavigation)
-                .Where(h => h.IdEstadoHabitacion == 3) // SOLO LIMPIEZA
+                .Where(h => h.IdEstadoHabitacion == 3)
                 .AsQueryable();
 
             if (pisoId.HasValue && pisoId.Value > 0)
@@ -586,23 +543,20 @@ namespace HotelSol.Controllers
             if (habitacion == null)
                 return NotFound();
 
-            habitacion.IdEstadoHabitacion = 1; // DISPONIBLE
+            habitacion.IdEstadoHabitacion = 1;
 
             await _context.SaveChangesAsync();
 
             TempData["Ok"] = "Habitación lista para usar.";
-
             return RedirectToAction(nameof(Index));
         }
 
-        //Buscar por numero documento
         [HttpGet]
         public async Task<IActionResult> BuscarCliente(string documento)
         {
             var clientes = await _context.Personas
                 .Where(p => p.IdTipoPersona == 3 &&
-                       (string.IsNullOrEmpty(documento) ||
-                        p.Documento.Contains(documento)))
+                    (string.IsNullOrEmpty(documento) || p.Documento.Contains(documento)))
                 .Select(p => new
                 {
                     p.IdPersona,
@@ -617,5 +571,37 @@ namespace HotelSol.Controllers
             return Json(clientes);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Checkin(int idRecepcion)
+        {
+            var recepcion = await _context.Recepcions
+                .FirstOrDefaultAsync(r => r.IdRecepcion == idRecepcion);
+
+            if (recepcion == null)
+                return NotFound();
+
+            if (recepcion.FechaEntrada.HasValue &&
+                DateTime.Today < recepcion.FechaEntrada.Value.Date)
+            {
+                TempData["Error"] = "Aún no corresponde realizar el check-in.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            recepcion.Estado = true;
+
+            var habitacion = await _context.Habitacions
+                .FirstOrDefaultAsync(h => h.IdHabitacion == recepcion.IdHabitacion);
+
+            if (habitacion != null)
+            {
+                habitacion.IdEstadoHabitacion = 2;
+            }
+
+            await _context.SaveChangesAsync();
+
+            TempData["Ok"] = "Check-In realizado correctamente.";
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

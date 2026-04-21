@@ -2,55 +2,63 @@
 
 namespace HotelSol.Models.ViewModels
 {
+    // =====================================================
     // ViewModel para cada tarjeta de habitación
+    // =====================================================
     public class HabitacionCardVM
     {
-        // ID de la habitación (clave primaria)
+        // ID habitación
         public int IdHabitacion { get; set; }
 
-        // Número de la habitación (ej: 101)
+        // Número habitación (101, 102, etc)
         public string Numero { get; set; } = "";
 
-        // Categoría (Simple, Doble, Suite, etc.)
+        // Categoría
         public string Categoria { get; set; } = "";
 
-        // Piso (Primero, Segundo, etc.)
+        // Piso
         public string Piso { get; set; } = "";
 
-        // Texto que se muestra en la tarjeta
+        // Texto visual
+        // DISPONIBLE / RESERVADA / OCUPADA / LIMPIEZA
         public string EstadoTexto { get; set; } = "";
 
-        // Clase CSS para color visual
-        
+        // Clase CSS
         public string EstadoCss { get; set; } = "";
 
-        // Indica si se puede hacer clic (permitir reserva)
+        // Puede crear nueva reserva
         public bool PuedeReservar { get; set; }
 
-        
-        // Indica si está ocupada en el rango de fechas seleccionado
-        // (esto será clave para disponibilidad real)
+        // Compatibilidad con filtro por fechas
         public bool OcupadaEnFechas { get; set; }
 
+        // Nueva reserva pendiente check-in
+        public bool Reservada { get; set; }
+
+        // Cliente hospedado actualmente
+        public bool Ocupada { get; set; }
+
+        // Id de recepción para botón Check-In
+        public int IdRecepcion { get; set; }
     }
 
-    // ViewModel principal de la vista Recepción (Index)
+    // =====================================================
+    // ViewModel principal pantalla Recepción
+    // =====================================================
     public class RecepcionIndexVM
     {
-        // Piso seleccionado en el filtro
+        // Piso seleccionado
         public int? PisoSeleccionado { get; set; }
 
-        // Fecha de entrada seleccionada
-        // Permite filtrar disponibilidad
+        // Filtro fechas
         public DateTime? FechaEntrada { get; set; }
 
-        // Fecha de salida seleccionada
         public DateTime? FechaSalida { get; set; }
 
-        // Lista de pisos para el dropdown
+        // Combo pisos
         public List<Piso> Pisos { get; set; } = new();
 
-        // Lista de habitaciones (tarjetas)
+        // Tarjetas habitaciones
         public List<HabitacionCardVM> Habitaciones { get; set; } = new();
     }
 }
