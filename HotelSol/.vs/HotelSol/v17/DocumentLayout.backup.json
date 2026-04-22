@@ -3,32 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\Lenovo\\Desktop\\T\u00E9cnicas_persistencia_datos_con_NET_yprogramas_ERP_Aula 1\\Proyecto 3\\P3 Final\\HotelSol\\HotelSol\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|c:\\users\\lenovo\\desktop\\t\u00E9cnicas_persistencia_datos_con_net_yprogramas_erp_aula 1\\proyecto 3\\p3 final\\hotelsol\\hotelsol\\views\\tienda\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|solutionrelative:views\\tienda\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|c:\\users\\lenovo\\desktop\\t\u00E9cnicas_persistencia_datos_con_net_yprogramas_erp_aula 1\\proyecto 3\\p3 final\\hotelsol\\hotelsol\\views\\tienda\\venta.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|solutionrelative:views\\tienda\\venta.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|c:\\users\\lenovo\\desktop\\t\u00E9cnicas_persistencia_datos_con_net_yprogramas_erp_aula 1\\proyecto 3\\p3 final\\hotelsol\\hotelsol\\views\\recepcion\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|solutionrelative:views\\recepcion\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|c:\\users\\lenovo\\desktop\\t\u00E9cnicas_persistencia_datos_con_net_yprogramas_erp_aula 1\\proyecto 3\\p3 final\\hotelsol\\hotelsol\\upgradelog.htm||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|solutionrelative:upgradelog.htm||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|c:\\users\\lenovo\\desktop\\t\u00E9cnicas_persistencia_datos_con_net_yprogramas_erp_aula 1\\proyecto 3\\p3 final\\hotelsol\\hotelsol\\controllers\\recepcioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|solutionrelative:controllers\\recepcioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|c:\\users\\lenovo\\desktop\\t\u00E9cnicas_persistencia_datos_con_net_yprogramas_erp_aula 1\\proyecto 3\\p3 final\\hotelsol\\hotelsol\\views\\shared\\_sidebar.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|solutionrelative:views\\shared\\_sidebar.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|c:\\users\\lenovo\\desktop\\t\u00E9cnicas_persistencia_datos_con_net_yprogramas_erp_aula 1\\proyecto 3\\p3 final\\hotelsol\\hotelsol\\views\\recepcion\\calendario.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|solutionrelative:views\\recepcion\\calendario.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|c:\\users\\lenovo\\desktop\\t\u00E9cnicas_persistencia_datos_con_net_yprogramas_erp_aula 1\\proyecto 3\\p3 final\\hotelsol\\hotelsol\\models\\viewmodels\\recepcionindexvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4F03D112-C2DE-4370-B0EA-9B99F7967B98}|HotelSol.csproj|solutionrelative:models\\viewmodels\\recepcionindexvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,76 +18,28 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\Lenovo\\Desktop\\T\u00E9cnicas_persistencia_datos_con_NET_yprogramas_ERP_Aula 1\\Proyecto 3\\P3 Final\\HotelSol\\HotelSol\\Views\\Tienda\\Index.cshtml",
-              "RelativeDocumentMoniker": "Views\\Tienda\\Index.cshtml",
-              "ToolTip": "C:\\Users\\Lenovo\\Desktop\\T\u00E9cnicas_persistencia_datos_con_NET_yprogramas_ERP_Aula 1\\Proyecto 3\\P3 Final\\HotelSol\\HotelSol\\Views\\Tienda\\Index.cshtml",
-              "RelativeToolTip": "Views\\Tienda\\Index.cshtml",
-              "ViewState": "AgIAAF0AAAAAAAAAAAAAAGkAAABOAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-21T08:03:00.102Z",
+              "Title": "UpgradeLog.htm",
+              "DocumentMoniker": "C:\\Users\\Lenovo\\Desktop\\T\u00E9cnicas_persistencia_datos_con_NET_yprogramas_ERP_Aula 1\\Proyecto 3\\P3 Final\\HotelSol\\HotelSol\\UpgradeLog.htm",
+              "RelativeDocumentMoniker": "UpgradeLog.htm",
+              "ToolTip": "C:\\Users\\Lenovo\\Desktop\\T\u00E9cnicas_persistencia_datos_con_NET_yprogramas_ERP_Aula 1\\Proyecto 3\\P3 Final\\HotelSol\\HotelSol\\UpgradeLog.htm",
+              "RelativeToolTip": "UpgradeLog.htm",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2026-04-21T08:22:02.902Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Venta.cshtml",
-              "DocumentMoniker": "C:\\Users\\Lenovo\\Desktop\\T\u00E9cnicas_persistencia_datos_con_NET_yprogramas_ERP_Aula 1\\Proyecto 3\\P3 Final\\HotelSol\\HotelSol\\Views\\Tienda\\Venta.cshtml",
-              "RelativeDocumentMoniker": "Views\\Tienda\\Venta.cshtml",
-              "ToolTip": "C:\\Users\\Lenovo\\Desktop\\T\u00E9cnicas_persistencia_datos_con_NET_yprogramas_ERP_Aula 1\\Proyecto 3\\P3 Final\\HotelSol\\HotelSol\\Views\\Tienda\\Venta.cshtml",
-              "RelativeToolTip": "Views\\Tienda\\Venta.cshtml",
-              "ViewState": "AgIAAE4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-21T08:01:30.231Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\Lenovo\\Desktop\\T\u00E9cnicas_persistencia_datos_con_NET_yprogramas_ERP_Aula 1\\Proyecto 3\\P3 Final\\HotelSol\\HotelSol\\Views\\Recepcion\\Index.cshtml",
-              "RelativeDocumentMoniker": "Views\\Recepcion\\Index.cshtml",
-              "ToolTip": "C:\\Users\\Lenovo\\Desktop\\T\u00E9cnicas_persistencia_datos_con_NET_yprogramas_ERP_Aula 1\\Proyecto 3\\P3 Final\\HotelSol\\HotelSol\\Views\\Recepcion\\Index.cshtml",
-              "RelativeToolTip": "Views\\Recepcion\\Index.cshtml",
-              "ViewState": "AgIAANsAAAAAAAAAAAAAAN8AAABFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-21T07:49:38.597Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Calendario.cshtml",
-              "DocumentMoniker": "C:\\Users\\Lenovo\\Desktop\\T\u00E9cnicas_persistencia_datos_con_NET_yprogramas_ERP_Aula 1\\Proyecto 3\\P3 Final\\HotelSol\\HotelSol\\Views\\Recepcion\\Calendario.cshtml",
-              "RelativeDocumentMoniker": "Views\\Recepcion\\Calendario.cshtml",
-              "ToolTip": "C:\\Users\\Lenovo\\Desktop\\T\u00E9cnicas_persistencia_datos_con_NET_yprogramas_ERP_Aula 1\\Proyecto 3\\P3 Final\\HotelSol\\HotelSol\\Views\\Recepcion\\Calendario.cshtml",
-              "RelativeToolTip": "Views\\Recepcion\\Calendario.cshtml",
-              "ViewState": "AgIAAHgAAAAAAAAAAAAAAD8AAAAvAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-21T07:49:13.702Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "_Sidebar.cshtml",
-              "DocumentMoniker": "C:\\Users\\Lenovo\\Desktop\\T\u00E9cnicas_persistencia_datos_con_NET_yprogramas_ERP_Aula 1\\Proyecto 3\\P3 Final\\HotelSol\\HotelSol\\Views\\Shared\\_Sidebar.cshtml",
-              "RelativeDocumentMoniker": "Views\\Shared\\_Sidebar.cshtml",
-              "ToolTip": "C:\\Users\\Lenovo\\Desktop\\T\u00E9cnicas_persistencia_datos_con_NET_yprogramas_ERP_Aula 1\\Proyecto 3\\P3 Final\\HotelSol\\HotelSol\\Views\\Shared\\_Sidebar.cshtml",
-              "RelativeToolTip": "Views\\Shared\\_Sidebar.cshtml",
-              "ViewState": "AgIAADYAAAAAAAAAAAAAAAkAAAANAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-21T07:47:27.207Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
               "Title": "RecepcionController.cs",
               "DocumentMoniker": "C:\\Users\\Lenovo\\Desktop\\T\u00E9cnicas_persistencia_datos_con_NET_yprogramas_ERP_Aula 1\\Proyecto 3\\P3 Final\\HotelSol\\HotelSol\\Controllers\\RecepcionController.cs",
               "RelativeDocumentMoniker": "Controllers\\RecepcionController.cs",
@@ -116,19 +48,6 @@
               "ViewState": "AgIAADgCAAAAAAAAAAAcwJAAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-21T00:12:56.403Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "RecepcionIndexVM.cs",
-              "DocumentMoniker": "C:\\Users\\Lenovo\\Desktop\\T\u00E9cnicas_persistencia_datos_con_NET_yprogramas_ERP_Aula 1\\Proyecto 3\\P3 Final\\HotelSol\\HotelSol\\Models\\ViewModels\\RecepcionIndexVM.cs",
-              "RelativeDocumentMoniker": "Models\\ViewModels\\RecepcionIndexVM.cs",
-              "ToolTip": "C:\\Users\\Lenovo\\Desktop\\T\u00E9cnicas_persistencia_datos_con_NET_yprogramas_ERP_Aula 1\\Proyecto 3\\P3 Final\\HotelSol\\HotelSol\\Models\\ViewModels\\RecepcionIndexVM.cs",
-              "RelativeToolTip": "Models\\ViewModels\\RecepcionIndexVM.cs",
-              "ViewState": "AgIAACsAAAAAAAAAAAAzwDQAAAAcAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-21T00:12:04.334Z",
               "EditorCaption": ""
             }
           ]

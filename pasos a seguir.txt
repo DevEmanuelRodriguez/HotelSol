@@ -1,8 +1,0 @@
-1-Se hizo el modelado en SQL server 
-2-se conecto a la db en explorer DB 
-3-Se descargo EFcore,tools y sql
-4-Se hizo el DB first (ver comando en video de freecodecamp)usa scaffolding
-5-Se ajusto los fichero appsettings.json con la conexion
-6-Se ajusto Program.cs con builder.Services.AddControllersWithViews() y builder.Services.AddDbContext<DbHotelContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-7-
