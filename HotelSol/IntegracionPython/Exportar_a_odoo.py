@@ -1,121 +1,165 @@
 import xml.etree.ElementTree as ET
 import xmlrpc.client
 import os
+import sys
 
-base = os.path.dirname(__file__)
+# --------------------------------------------------
+# CARPETA DOCUMENTOS HOTELSOL
+# --------------------------------------------------
 
+carpeta = os.path.join(
+    os.path.expanduser("~"),
+    "Documents",
+    "HotelSOL"
+)
 
-# CONFIGURACION ODOO
+os.makedirs(carpeta, exist_ok=True)
+
+# --------------------------------------------------
+# RUTA XML
+# --------------------------------------------------
+
+ruta_xml = os.path.join(carpeta, "Producto.xml")
+
+# --------------------------------------------------
+# CONFIGURACIÓN ODOO
+# --------------------------------------------------
 
 url = "http://localhost:8069"
 db = "odoo18"
 username = "milenamartinez091993@gmail.com"
 password = "53efe908442501a9fc1b1ff4cbaa059c239a263d"
 
-
-# RUTA XML
-
-ruta_xml = os.path.abspath(
-    os.path.join(base, "..", "wwwroot", "Producto.xml")
-)
-
-
-# FUNCION NORMALIZAR
+# --------------------------------------------------
+# FUNCIONES
+# --------------------------------------------------
 
 def normalizar(texto):
     if texto is None:
         return ""
-    return texto.strip().upper()
+    return str(texto).strip().upper()
 
+# --------------------------------------------------
+# COMPROBAR XML
+# --------------------------------------------------
 
-# CONEXION ODOO
+if not os.path.exists(ruta_xml):
+    print("No existe Producto.xml")
+    sys.exit()
 
-common = xmlrpc.client.ServerProxy(f"{url}/xmlrpc/2/common")
-uid = common.authenticate(db, username, password, {})
+# --------------------------------------------------
+# CONEXIÓN ODOO
+# --------------------------------------------------
 
-if not uid:
-    print("Error login Odoo")
-    exit()
+try:
+    common = xmlrpc.client.ServerProxy(f"{url}/xmlrpc/2/common")
+    uid = common.authenticate(db, username, password, {})
 
-models = xmlrpc.client.ServerProxy(f"{url}/xmlrpc/2/object")
+    if not uid:
+        print("Error login Odoo")
+        sys.exit()
+
+    models = xmlrpc.client.ServerProxy(f"{url}/xmlrpc/2/object")
+
+except Exception as e:
+    print("No se pudo conectar con Odoo")
+    print(str(e))
+    sys.exit()
 
 print("Conectado a Odoo")
 
-
+# --------------------------------------------------
 # LEER XML
+# --------------------------------------------------
 
-tree = ET.parse(ruta_xml)
-root = tree.getroot()
+try:
+    tree = ET.parse(ruta_xml)
+    root = tree.getroot()
 
+except Exception as e:
+    print("Error leyendo Producto.xml")
+    print(str(e))
+    sys.exit()
 
-# OBTENER PRODUCTOS EXISTENTES
+# --------------------------------------------------
+# PRODUCTOS EXISTENTES EN ODOO
+# --------------------------------------------------
 
-productos_odoo = models.execute_kw(
-    db, uid, password,
-    'product.template', 'search_read',
-    [[]],
-    {
-        'fields': ['id', 'name'],
-        'limit': 500
-    }
-)
+try:
+    productos_odoo = models.execute_kw(
+        db, uid, password,
+        'product.template', 'search_read',
+        [[]],
+        {
+            'fields': ['id', 'name'],
+            'limit': 500
+        }
+    )
 
+except Exception as e:
+    print("Error leyendo productos Odoo")
+    print(str(e))
+    sys.exit()
 
-# PROCESAR XML
+# --------------------------------------------------
+# PROCESAR PRODUCTOS
+# --------------------------------------------------
 
 for nodo in root.findall("Producto"):
 
-    nombre = nodo.findtext("Nombre", "").strip()
-    detalle = nodo.findtext("Detalle", "").strip()
-    precio = float(nodo.findtext("Precio", "0"))
+    try:
+        nombre = nodo.findtext("Nombre", "").strip()
+        detalle = nodo.findtext("Detalle", "").strip()
 
-    nombre_normalizado = normalizar(nombre)
+        try:
+            precio = float(nodo.findtext("Precio", "0"))
+        except:
+            precio = 0
 
-    template_id = False
+        nombre_normalizado = normalizar(nombre)
 
-    # Buscar si existe ignorando mayúsculas/minúsculas
-    for p in productos_odoo:
-        if normalizar(p["name"]) == nombre_normalizado:
-            template_id = p["id"]
-            break
+        template_id = False
 
-    
-    # SI NO EXISTE: CREAR
-    
-    if not template_id:
+        for p in productos_odoo:
+            if normalizar(p["name"]) == nombre_normalizado:
+                template_id = p["id"]
+                break
 
-        nuevo_id = models.execute_kw(
-            db, uid, password,
-            'product.template', 'create',
-            [{
-                'name': nombre,
-                'description': detalle,
-                'list_price': precio
-            }]
-        )
+        # CREAR
+        if not template_id:
 
-        print(f"Creado: {nombre}")
+            nuevo_id = models.execute_kw(
+                db, uid, password,
+                'product.template', 'create',
+                [{
+                    'name': nombre,
+                    'description': detalle,
+                    'list_price': precio
+                }]
+            )
 
-        # añadir a lista local para evitar duplicados
-        productos_odoo.append({
-            "id": nuevo_id,
-            "name": nombre
-        })
+            productos_odoo.append({
+                "id": nuevo_id,
+                "name": nombre
+            })
 
-    
-    # SI EXISTE : ACTUALIZAR
-    
-    else:
+            print("Creado:", nombre)
 
-        models.execute_kw(
-            db, uid, password,
-            'product.template', 'write',
-            [[template_id], {
-                'description': detalle,
-                'list_price': precio
-            }]
-        )
+        # ACTUALIZAR
+        else:
 
-        print(f"Actualizado: {nombre}")
+            models.execute_kw(
+                db, uid, password,
+                'product.template', 'write',
+                [[template_id], {
+                    'description': detalle,
+                    'list_price': precio
+                }]
+            )
 
-print("Proceso terminado")
+            print("Actualizado:", nombre)
+
+    except Exception as e:
+        print("Error procesando producto:", str(e))
+
+print("Proceso terminado correctamente")

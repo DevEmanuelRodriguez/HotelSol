@@ -23,7 +23,13 @@ public class XmlService
     public async Task ExportarTabla(string tabla)
     {
         //ruta donde se guardará el XML
-        var ruta = Path.Combine(_env.WebRootPath, $"{tabla}.xml");
+        var carpeta = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+        "HotelSOL");
+
+        Directory.CreateDirectory(carpeta);
+
+        var ruta = Path.Combine(carpeta, $"{tabla}.xml");
 
         XDocument xml;
 

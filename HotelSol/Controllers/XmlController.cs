@@ -74,9 +74,9 @@ public class XmlController : Controller
                 ViewBag.Mensaje = "Clientes exportados correctamente a Odoo";
             }
         }
-        catch
+        catch (Exception ex)
         {
-            ViewBag.Mensaje = "Error al exportar a Odoo";
+            ViewBag.Mensaje = ex.Message;
         }
 
         return View("Exportar");
@@ -124,7 +124,11 @@ public class XmlController : Controller
             {
                 EjecutarPython("Importar_desde_odoo.py");
 
-                ruta = Path.Combine(_env.WebRootPath, "ProductosDesdeOdoo.xml");
+                var carpeta = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                "HotelSOL");
+
+                ruta = Path.Combine(carpeta, "ProductosDesdeOdoo.xml");
 
                 ViewBag.Mensaje = "Productos importados correctamente desde Odoo";
             }
@@ -132,7 +136,11 @@ public class XmlController : Controller
             {
                 EjecutarPython("Importar_cliente_odoo.py");
 
-                ruta = Path.Combine(_env.WebRootPath, "ClientesDesdeOdoo.xml");
+                var carpeta = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                "HotelSOL");
+
+                ruta = Path.Combine(carpeta, "ClientesDesdeOdoo.xml");
 
                 ViewBag.Mensaje = "Clientes importados correctamente desde Odoo";
             }
@@ -143,30 +151,43 @@ public class XmlController : Controller
 
             await _xml.ImportarDesdeArchivo(archivo);
         }
-        catch
+        catch (Exception ex)
         {
-            ViewBag.Mensaje = "Error al importar desde Odoo";
+            ViewBag.Mensaje = ex.Message;
         }
 
         return View("Importar");
     }
 
-   
+
     // EJECUTAR PYTHON
-   
+
     private void EjecutarPython(string archivoPy)
     {
-        var rutaScripts = Path.Combine(_env.ContentRootPath, "IntegracionPython");
+        var basePath = AppContext.BaseDirectory;
+        var rutaScripts = Path.Combine(basePath, "IntegracionPython");
+        var rutaArchivo = Path.Combine(rutaScripts, archivoPy);
 
         Process proceso = new Process();
 
-        proceso.StartInfo.FileName = "python";
-        proceso.StartInfo.Arguments = archivoPy;
+        proceso.StartInfo.FileName = "cmd.exe";
+        proceso.StartInfo.Arguments = $"/c python \"{rutaArchivo}\"";
         proceso.StartInfo.WorkingDirectory = rutaScripts;
         proceso.StartInfo.CreateNoWindow = true;
         proceso.StartInfo.UseShellExecute = false;
+        proceso.StartInfo.RedirectStandardOutput = true;
+        proceso.StartInfo.RedirectStandardError = true;
 
         proceso.Start();
+
+        string salida = proceso.StandardOutput.ReadToEnd();
+        string error = proceso.StandardError.ReadToEnd();
+
         proceso.WaitForExit();
+
+        if (proceso.ExitCode != 0 || !string.IsNullOrWhiteSpace(error))
+        {
+            throw new Exception(error + " " + salida);
+        }
     }
 }
