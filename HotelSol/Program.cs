@@ -1,8 +1,10 @@
 ﻿using System.Diagnostics;
+using System.Globalization;
 using HotelSol.Data;
 using HotelSol.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,11 +29,24 @@ builder.Services.AddDbContext<DbHotelContext>(options =>
 var app = builder.Build();
 
 
+// CULTURA DECIMALES
+var culture = new CultureInfo("en-US");
+
+var localizationOptions = new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture(culture),
+    SupportedCultures = new[] { culture },
+    SupportedUICultures = new[] { culture }
+};
+
+
 // Middleware
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseRequestLocalization(localizationOptions);
 
 app.UseSession();
 app.UseAuthentication();
@@ -59,6 +74,3 @@ Task.Run(() =>
 });
 
 app.Run(url);
-
-//app.Run();
-

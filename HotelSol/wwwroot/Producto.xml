@@ -113,10 +113,10 @@
     <Cantidad>10</Cantidad>
   </Producto>
   <Producto>
-    <Id>27</Id>
-    <Nombre>TESTPROD</Nombre>
-    <Detalle>TESTPROD</Detalle>
-    <Precio>19.00</Precio>
-    <Cantidad>33</Cantidad>
+    <Id>28</Id>
+    <Nombre>TESRPODUCTO1APPWEB</Nombre>
+    <Detalle>TESRPODUCTO1APPWEB</Detalle>
+    <Precio>12.00</Precio>
+    <Cantidad>13</Cantidad>
   </Producto>
 </Productos>

@@ -1,5 +1,3 @@
-wwwroot\Categoria.xml
-wwwroot\ClientesDesdeOdoo.xml
 wwwroot\css\sb-admin-2.css
 wwwroot\css\sb-admin-2.min.css
 wwwroot\css\site.css
@@ -77,9 +75,6 @@ wwwroot\lib\jquery\dist\jquery.slim.js
 wwwroot\lib\jquery\dist\jquery.slim.min.js
 wwwroot\lib\jquery\dist\jquery.slim.min.map
 wwwroot\lib\jquery\LICENSE.txt
-wwwroot\Persona.xml
-wwwroot\Producto.xml
-wwwroot\ProductosDesdeOdoo.xml
 wwwroot\vendor\bootstrap\js\bootstrap.bundle.js
 wwwroot\vendor\bootstrap\js\bootstrap.bundle.js.map
 wwwroot\vendor\bootstrap\js\bootstrap.bundle.min.js
@@ -1898,6 +1893,10 @@ wwwroot\vendor\jquery\jquery.min.map
 wwwroot\vendor\jquery\jquery.slim.js
 wwwroot\vendor\jquery\jquery.slim.min.js
 wwwroot\vendor\jquery\jquery.slim.min.map
+wwwroot\Persona.xml
+wwwroot\ClientesDesdeOdoo.xml
+wwwroot\Producto.xml
+wwwroot\ProductosDesdeOdoo.xml
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\wwwroot\lib\jquery\dist\jquery.js
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\wwwroot\lib\jquery-validation\LICENSE.md
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\wwwroot\lib\jquery-validation\dist\jquery.validate.min.js
@@ -1962,7 +1961,6 @@ C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\wwwroot\css\site.css
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\wwwroot\css\sb-admin-2.min.css
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\wwwroot\css\sb-admin-2.css
-C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\wwwroot\Categoria.xml
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\wwwroot\lib\jquery\dist\jquery.min.js
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\wwwroot\lib\jquery\dist\jquery.min.map
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\wwwroot\lib\jquery\dist\jquery.slim.js
@@ -3651,7 +3649,7 @@ C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\wwwroot\img\undraw_profile_2.svg
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\wwwroot\img\undraw_profile_3.svg
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\wwwroot\img\undraw_rocket.svg
-C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\wwwroot\ProductosDesdeOdoo.xml
+C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\wwwroot\Persona.xml
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\wwwroot\Producto.xml
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\wwwroot\ClientesDesdeOdoo.xml
-C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\wwwroot\Persona.xml
+C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\wwwroot\ProductosDesdeOdoo.xml

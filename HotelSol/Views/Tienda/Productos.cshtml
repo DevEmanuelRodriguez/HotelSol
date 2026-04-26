@@ -96,7 +96,7 @@
 
                 <div class="form-group">
                     <label>Precio</label>
-                    <input id="Precio" type="number" step="0.01" class="form-control" />
+                    <input id="Precio" type="text" class="form-control" />
                 </div>
 
                 <div class="form-group">
@@ -142,7 +142,7 @@
                 IdProducto: $("#IdProducto").val(),
                 Nombre: $("#Nombre").val(),
                 Detalle: $("#Detalle").val(),
-                Precio: $("#Precio").val(),
+                Precio: $("#Precio").val().replace(",", "."),
                 Cantidad: $("#Cantidad").val()
             };
 

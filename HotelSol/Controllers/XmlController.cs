@@ -23,17 +23,17 @@ public class XmlController : Controller
         _env = env;
     }
 
-    // -----------------------------
+    
     // VISTA EXPORTAR
-    // -----------------------------
+    
     public IActionResult Exportar()
     {
         return View();
     }
 
-    // -----------------------------
+   
     // EXPORTAR XML NORMAL
-    // -----------------------------
+    
     [HttpPost]
     public async Task<IActionResult> ExportarTabla(string tabla)
     {
@@ -51,9 +51,9 @@ public class XmlController : Controller
         return View("Exportar");
     }
 
-    // -----------------------------
+    
     // EXPORTAR A ODOO
-    // -----------------------------
+  
     [HttpPost]
     public async Task<IActionResult> ExportarOdoo(string tabla)
     {
@@ -82,17 +82,17 @@ public class XmlController : Controller
         return View("Exportar");
     }
 
-    // -----------------------------
+    
     // VISTA IMPORTAR
-    // -----------------------------
+    
     public IActionResult Importar()
     {
         return View();
     }
 
-    // -----------------------------
+    
     // IMPORTAR XML MANUAL
-    // -----------------------------
+   
     [HttpPost]
     public async Task<IActionResult> ImportarArchivo(IFormFile archivo)
     {
@@ -110,9 +110,9 @@ public class XmlController : Controller
         return View("Importar");
     }
 
-    // -----------------------------
+ 
     // IMPORTAR DESDE ODOO
-    // -----------------------------
+   
     [HttpPost]
     public async Task<IActionResult> ImportarOdoo(string tabla)
     {
@@ -151,12 +151,12 @@ public class XmlController : Controller
         return View("Importar");
     }
 
-    // -----------------------------
+   
     // EJECUTAR PYTHON
-    // -----------------------------
+   
     private void EjecutarPython(string archivoPy)
     {
-        var rutaScripts = @"C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\IntegracionPython";
+        var rutaScripts = Path.Combine(_env.ContentRootPath, "IntegracionPython");
 
         Process proceso = new Process();
 

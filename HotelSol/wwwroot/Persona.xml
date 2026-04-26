@@ -70,4 +70,11 @@
     <Documento>70707878</Documento>
     <Correo>Antunez@gmail.com</Correo>
   </Cliente>
+  <Cliente>
+    <Id>18</Id>
+    <Nombre>TESTCLIENTEAPPWEB</Nombre>
+    <Apellido>TESTCLIENTEAPPWEB</Apellido>
+    <Documento>12345678</Documento>
+    <Correo>TEST@gmail.COM</Correo>
+  </Cliente>
 </Clientes>

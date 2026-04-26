@@ -4671,7 +4671,6 @@ C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\obj\Debug\net9.0\scopedcss\Views\Shared\_Topbar.cshtml.rz.scp.css
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\obj\Debug\net9.0\scopedcss\bundle\HotelSol.styles.css
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\obj\Debug\net9.0\scopedcss\projectbundle\HotelSol.bundle.scp.css
-C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\obj\Debug\net9.0\compressed\7bbk4kg7pm-{0}-ndxjlluy7e-ndxjlluy7e.gz
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\obj\Debug\net9.0\compressed\3d5n4gx0vz-{0}-m2e4o71t8u-m2e4o71t8u.gz
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\obj\Debug\net9.0\compressed\bx6xoebazm-{0}-dyy4npzvmx-dyy4npzvmx.gz
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\obj\Debug\net9.0\compressed\90nrpfab66-{0}-b9sayid5wm-b9sayid5wm.gz
@@ -6438,7 +6437,7 @@ C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\obj\Debug\net9.0\HotelSol.pdb
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\obj\Debug\net9.0\HotelSol.genruntimeconfig.cache
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\obj\Debug\net9.0\ref\HotelSol.dll
-C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\obj\Debug\net9.0\compressed\ghnz7778jx-{0}-9qm1o2mqvq-9qm1o2mqvq.gz
-C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\obj\Debug\net9.0\compressed\ocjprmu7pb-{0}-gk0fgp6lfi-gk0fgp6lfi.gz
 C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\obj\Debug\net9.0\compressed\z4xhqjq8x2-{0}-sh0i0xjho3-sh0i0xjho3.gz
-C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\obj\Debug\net9.0\compressed\ozeqeu0b09-{0}-g2skgrjqob-g2skgrjqob.gz
+C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\obj\Debug\net9.0\compressed\ozeqeu0b09-{0}-vvpfx44ver-vvpfx44ver.gz
+C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\obj\Debug\net9.0\compressed\ghnz7778jx-{0}-ig2zmyvcku-ig2zmyvcku.gz
+C:\Users\Acer\Desktop\FP UOC\Semestre 1 2026\.NET\P4 punto NET\HotelSol\HotelSol\obj\Debug\net9.0\compressed\ocjprmu7pb-{0}-ul5qpszeg7-ul5qpszeg7.gz
