@@ -1,25 +1,70 @@
-﻿<h1>Exportar XML</h1>
+﻿<h2 class="mb-4">Exportar Datos</h2>
 
-<form asp-action="ExportarTabla" method="post">
-
-    <select name="tabla">
-        <option value="Categoria">Categoría</option>
-        <option value="Piso">Piso</option>
-        <option value="EstadoHabitacion">Estado Habitación</option>
-        <option value="TipoPersona">Tipo Persona</option>
-        <option value="Producto">Producto</option>
-        <option value="Persona">Persona</option>
-        <option value="Habitacion">Habitación</option>
-        <option value="Recepcion">Recepción</option>
-        <option value="Venta">Venta</option>
-        <option value="DetalleVenta">Detalle Venta</option>
-    </select>
-
-    <button type="submit">Exportar</button>
-
-</form>
-<!--Muestra el mensaje enviado desde el controller XmlController-->
 @if (ViewBag.Mensaje != null)
 {
-    <p>@ViewBag.Mensaje</p>
+    <div class="alert alert-success">
+        @ViewBag.Mensaje
+    </div>
 }
+
+<div class="card shadow mb-4 mx-auto" style="max-width:600px;">
+    <div class="card-body">
+
+        <!-- EXPORTAR XML LOCAL -->
+        <h5>Exportar XML Local</h5>
+
+        <form asp-action="ExportarTabla" method="post">
+
+            <div class="form-group mb-3">
+
+                <select name="tabla" class="form-control">
+
+                    <option value="Categoria">Categoría</option>
+                    <option value="Piso">Piso</option>
+                    <option value="EstadoHabitacion">Estado Habitación</option>
+                    <option value="TipoPersona">Tipo Persona</option>
+                    <option value="Producto">Producto</option>
+                    <option value="Persona">Persona</option>
+                    <option value="Habitacion">Habitación</option>
+                    <option value="Recepcion">Recepción</option>
+                    <option value="Venta">Venta</option>
+                    <option value="DetalleVenta">Detalle Venta</option>
+
+                </select>
+
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Exportar XML
+            </button>
+
+        </form>
+
+        <hr />
+
+        <!-- EXPORTAR A ODOO -->
+        <h5>Enviar a Odoo</h5>
+
+        <form asp-action="ExportarOdoo" method="post">
+
+            <div class="form-group mb-3">
+
+                <label>Seleccione tabla</label>
+
+                <select name="tabla" class="form-control">
+
+                    <option value="Producto">Producto</option>
+                    <option value="Cliente">Cliente</option>
+
+                </select>
+
+            </div>
+
+            <button type="submit" class="btn btn-success">
+                Exportar a Odoo
+            </button>
+
+        </form>
+
+    </div>
+</div>

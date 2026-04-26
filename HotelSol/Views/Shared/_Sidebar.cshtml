@@ -38,6 +38,7 @@
 
     <!-- GESTION (ADMIN + EMPLEADO) -->
 
+
     <li class="nav-item">
 
         <a class="nav-link collapsed"
@@ -45,7 +46,7 @@
            data-toggle="collapse"
            data-target="#collapseGestion">
 
-            <i class="fas fa-caret-up"></i>
+            <i class="fa-solid fa-bell-concierge"></i>
             <span>Gestión</span>
         </a>
 
@@ -177,13 +178,7 @@
                         Pisos
                     </a>
 
-                    <a class="collapse-item" href="#">
-                        XML Exportar
-                    </a>
-
-                    <a class="collapse-item" href="#">
-                        XML Importar
-                    </a>
+                    
 
                 </div>
             </div>
@@ -237,14 +232,36 @@
         </li>
 
         <!-- Odoo -->
-        <li class="nav-item">
-            <a class="nav-link"
-               asp-controller="Odoo"
-               asp-action="Index">
+        <li class="nav-item">            
+            <a class="nav-link collapsed"
+               href="#"
+               data-toggle="collapse"
+               data-target="#collapseOdoo">
 
-                <i class="fas fa-gem"></i>
+                <i class="fa-solid fa-up-down"></i>
                 <span>Odoo</span>
             </a>
+            <div id="collapseOdoo"
+                 class="collapse"
+                 data-parent="#accordionSidebar">
+
+                <div class="bg-white py-2 collapse-inner rounded">
+
+                    <a class="collapse-item"
+                       asp-controller="Xml"
+                       asp-action="Exportar">
+                        Exportar Odoo
+                    </a>
+
+                    <a class="collapse-item"
+                       asp-controller="Xml"
+                       asp-action="Importar">
+                        Importar Odoo
+                    </a>                                       
+
+                </div>
+            </div>
+
         </li>
     }
 

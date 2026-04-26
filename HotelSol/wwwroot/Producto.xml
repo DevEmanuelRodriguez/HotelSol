@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Productos>
+  <Producto>
+    <Id>1</Id>
+    <Nombre>GALLETAS DORAS</Nombre>
+    <Detalle>NINGUNA</Detalle>
+    <Precio>0.70</Precio>
+    <Cantidad>50</Cantidad>
+  </Producto>
+  <Producto>
+    <Id>2</Id>
+    <Nombre>REFRESCO POCMAS</Nombre>
+    <Detalle>350 ML</Detalle>
+    <Precio>1.50</Precio>
+    <Cantidad>80</Cantidad>
+  </Producto>
+  <Producto>
+    <Id>3</Id>
+    <Nombre>CHOCOLATE DMX</Nombre>
+    <Detalle>50 GRM</Detalle>
+    <Precio>0.80</Precio>
+    <Cantidad>60</Cantidad>
+  </Producto>
+  <Producto>
+    <Id>4</Id>
+    <Nombre>PAPAS DORADAS</Nombre>
+    <Detalle>150 GRM</Detalle>
+    <Precio>2.60</Precio>
+    <Cantidad>20</Cantidad>
+  </Producto>
+  <Producto>
+    <Id>5</Id>
+    <Nombre>REFRESCO OXA</Nombre>
+    <Detalle>300 ML</Detalle>
+    <Precio>2.00</Precio>
+    <Cantidad>30</Cantidad>
+  </Producto>
+  <Producto>
+    <Id>6</Id>
+    <Nombre>CIGARRILLOS DEM</Nombre>
+    <Detalle>10 UNID</Detalle>
+    <Precio>3.50</Precio>
+    <Cantidad>55</Cantidad>
+  </Producto>
+  <Producto>
+    <Id>7</Id>
+    <Nombre>AGUA LIFE</Nombre>
+    <Detalle>250 ML</Detalle>
+    <Precio>3.00</Precio>
+    <Cantidad>45</Cantidad>
+  </Producto>
+  <Producto>
+    <Id>8</Id>
+    <Nombre>GASEOSA ALMOADA</Nombre>
+    <Detalle>350 ML</Detalle>
+    <Precio>4.50</Precio>
+    <Cantidad>30</Cantidad>
+  </Producto>
+  <Producto>
+    <Id>9</Id>
+    <Nombre>CEREALES PANDA</Nombre>
+    <Detalle>NIN</Detalle>
+    <Precio>2.70</Precio>
+    <Cantidad>40</Cantidad>
+  </Producto>
+  <Producto>
+    <Id>10</Id>
+    <Nombre>SHAMPOO GH</Nombre>
+    <Detalle>200 ML</Detalle>
+    <Precio>2.50</Precio>
+    <Cantidad>20</Cantidad>
+  </Producto>
+  <Producto>
+    <Id>11</Id>
+    <Nombre>BATIDO FRESA</Nombre>
+    <Detalle>Botella 250ml</Detalle>
+    <Precio>5.50</Precio>
+    <Cantidad>35</Cantidad>
+  </Producto>
+  <Producto>
+    <Id>12</Id>
+    <Nombre>COCA COLINE</Nombre>
+    <Detalle>250 ML</Detalle>
+    <Precio>3.00</Precio>
+    <Cantidad>40</Cantidad>
+  </Producto>
+  <Producto>
+    <Id>13</Id>
+    <Nombre>PIZZA</Nombre>
+    <Detalle>Pizza familiar</Detalle>
+    <Precio>15.00</Precio>
+    <Cantidad>25</Cantidad>
+  </Producto>
+  <Producto>
+    <Id>14</Id>
+    <Nombre>CHIPS</Nombre>
+    <Detalle>Bolsa XXL</Detalle>
+    <Precio>2.00</Precio>
+    <Cantidad>95</Cantidad>
+  </Producto>
+  <Producto>
+    <Id>15</Id>
+    <Nombre>HELADO MILKY</Nombre>
+    <Detalle>Helado de 1kg</Detalle>
+    <Precio>4.50</Precio>
+    <Cantidad>15</Cantidad>
+  </Producto>
+  <Producto>
+    <Id>16</Id>
+    <Nombre>HAMBURGUESA</Nombre>
+    <Detalle>XXL</Detalle>
+    <Precio>14.00</Precio>
+    <Cantidad>10</Cantidad>
+  </Producto>
+  <Producto>
+    <Id>27</Id>
+    <Nombre>TESTPROD</Nombre>
+    <Detalle>TESTPROD</Detalle>
+    <Precio>19.00</Precio>
+    <Cantidad>33</Cantidad>
+  </Producto>
+</Productos>

@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Clientes>
+  <Cliente>
+    <Id>3</Id>
+    <Nombre>Bartolome</Nombre>
+    <Apellido>Abe</Apellido>
+    <Documento>34345656</Documento>
+    <Correo>Abe@gmail.com</Correo>
+  </Cliente>
+  <Cliente>
+    <Id>4</Id>
+    <Nombre>Hanan</Nombre>
+    <Apellido>Beppu</Apellido>
+    <Documento>56567878</Documento>
+    <Correo>Beppu@gmail.com</Correo>
+  </Cliente>
+  <Cliente>
+    <Id>5</Id>
+    <Nombre>Haru</Nombre>
+    <Apellido>Endo</Apellido>
+    <Documento>34237878</Documento>
+    <Correo>Endo@gmail.com</Correo>
+  </Cliente>
+  <Cliente>
+    <Id>6</Id>
+    <Nombre>Juan Luis</Nombre>
+    <Apellido>Vico</Apellido>
+    <Documento>78909078</Documento>
+    <Correo>Vico@gmail.com</Correo>
+  </Cliente>
+  <Cliente>
+    <Id>7</Id>
+    <Nombre>Victoriano</Nombre>
+    <Apellido>Araujo</Apellido>
+    <Documento>45456767</Documento>
+    <Correo>Araujo@gmail.com</Correo>
+  </Cliente>
+  <Cliente>
+    <Id>8</Id>
+    <Nombre>Kameyo</Nombre>
+    <Apellido>Hashimoto</Apellido>
+    <Documento>45343434</Documento>
+    <Correo>Hashimoto@gmail.com</Correo>
+  </Cliente>
+  <Cliente>
+    <Id>9</Id>
+    <Nombre>Nerea</Nombre>
+    <Apellido>Chavez</Apellido>
+    <Documento>34232334</Documento>
+    <Correo>Chavez@gmail.com</Correo>
+  </Cliente>
+  <Cliente>
+    <Id>10</Id>
+    <Nombre>Maria Sonia</Nombre>
+    <Apellido>Lillo</Apellido>
+    <Documento>78676756</Documento>
+    <Correo>Lillo@gmail.com</Correo>
+  </Cliente>
+  <Cliente>
+    <Id>11</Id>
+    <Nombre>Nagore</Nombre>
+    <Apellido>Quiros</Apellido>
+    <Documento>78787979</Documento>
+    <Correo>Quiros@gmail.com</Correo>
+  </Cliente>
+  <Cliente>
+    <Id>12</Id>
+    <Nombre>Maria Belen</Nombre>
+    <Apellido>Antunez</Apellido>
+    <Documento>70707878</Documento>
+    <Correo>Antunez@gmail.com</Correo>
+  </Cliente>
+</Clientes>

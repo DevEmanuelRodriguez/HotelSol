@@ -1,14 +1,55 @@
-﻿<h1>Importar XML</h1>
-
-<form asp-action="ImportarArchivo" method="post" enctype="multipart/form-data">
-
-    <input type="file" name="archivo" />
-
-    <button type="submit">Importar</button>
-
-</form>
+﻿<h2 class="mb-4">Importar Datos</h2>
 
 @if (ViewBag.Mensaje != null)
 {
-    <p>@ViewBag.Mensaje</p>
+    <div class="alert alert-success">
+        @ViewBag.Mensaje
+    </div>
 }
+
+<div class="card shadow mb-4 mx-auto" style="max-width:600px;">
+    <div class="card-body">
+
+        <!-- IMPORTAR XML MANUAL -->
+        <h5>Importar XML Manual</h5>
+
+        <form asp-action="ImportarArchivo" method="post" enctype="multipart/form-data">
+
+            <div class="form-group mb-3">
+                <input type="file" name="archivo" class="form-control" />
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Importar XML
+            </button>
+
+        </form>
+
+        <hr />
+
+        <!-- IMPORTAR DESDE ODOO -->
+        <h5>Importar desde Odoo</h5>
+
+        <form asp-action="ImportarOdoo" method="post">
+
+            <div class="form-group mb-3">
+
+                <label>Seleccione tabla</label>
+
+                <select name="tabla" class="form-control">
+
+                    <option value="Producto">Producto</option>
+                    <option value="Cliente">Cliente</option>
+
+                </select>
+
+            </div>
+
+            <button type="submit" class="btn btn-success">
+                Importar desde Odoo
+            </button>
+
+        </form>
+
+    </div>
+</div>

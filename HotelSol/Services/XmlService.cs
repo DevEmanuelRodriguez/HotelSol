@@ -19,27 +19,6 @@ public class XmlService
         _env = env;
     }
 
-    // Para realizar prueba unitaria
-    /*
-    public async Task ExportarAsync()
-    {
-        var habitaciones = await _context.Habitacions.ToListAsync();
-
-        var xml = new XDocument(
-            new XElement("Habitaciones",
-                habitaciones.Select(h =>
-                    new XElement("Habitacion",
-                        new XElement("Numero", h.Numero ?? ""),
-                        new XElement("Precio", h.Precio ?? 0)
-                    )
-                )
-            )
-        );
-
-        var ruta = Path.Combine(_env.WebRootPath, "habitaciones.xml");
-        xml.Save(ruta);
-    }*/
-
     // Para exportar cualquier tabla
     public async Task ExportarTabla(string tabla)
     {
@@ -118,7 +97,8 @@ public class XmlService
                                 new XElement("Id", p.IdProducto),
                                 new XElement("Nombre", p.Nombre ?? ""),
                                 new XElement("Detalle", p.Detalle ?? ""),
-                                new XElement("Precio", p.Precio ?? 0)
+                                new XElement("Precio", p.Precio ?? 0),
+                                new XElement("Cantidad", p.Cantidad ?? 0)
                             )
                         )
                     )
@@ -126,14 +106,19 @@ public class XmlService
                 break;
 
             case "Persona":
-                var personas = await _context.Personas.ToListAsync();
+                var personas = await _context.Personas
+                    .Where(p => p.IdTipoPersona == 3)
+                    .ToListAsync();
+
                 xml = new XDocument(
-                    new XElement("Personas",
+                    new XElement("Clientes",
                         personas.Select(p =>
-                            new XElement("Persona",
+                            new XElement("Cliente",
                                 new XElement("Id", p.IdPersona),
                                 new XElement("Nombre", p.Nombre ?? ""),
-                                new XElement("Documento", p.Documento ?? "")
+                                new XElement("Apellido", p.Apellido ?? ""),
+                                new XElement("Documento", p.Documento ?? ""),
+                                new XElement("Correo", p.Correo ?? "")
                             )
                         )
                     )
@@ -299,44 +284,70 @@ public class XmlService
                 break;
 
             case "Productos":
+
                 foreach (var nodo in xml.Descendants("Producto"))
                 {
-                    // leer datos del XML
                     var nombre = (string?)nodo.Element("Nombre") ?? "";
                     var detalle = (string?)nodo.Element("Detalle") ?? "";
                     var precio = (decimal?)nodo.Element("Precio") ?? 0;
+                    var cantidad = (int?)nodo.Element("Cantidad") ?? 0;
 
-                    // comprobar duplicado por combinación
-                    bool existe = await _context.Productos
-                        .AnyAsync(p => p.Nombre == nombre && p.Detalle == detalle);
+                    var producto = await _context.Productos
+                        .FirstOrDefaultAsync(p =>
+                            p.Nombre != null &&
+                            p.Nombre.Trim().ToUpper() == nombre.Trim().ToUpper());
 
-                    // insertar solo si no existe producto con nombre y detalle iguales
-                    if (!existe)
+                    if (producto == null)
                     {
                         _context.Productos.Add(new Models.Producto
                         {
                             Nombre = nombre,
                             Detalle = detalle,
-                            Precio = precio
+                            Precio = precio,
+                            Cantidad = cantidad,
+                            Estado = true,
+                            FechaCreacion = DateTime.Now
                         });
                     }
+                    else
+                    {
+                        producto.Detalle = detalle;
+                        producto.Precio = precio;
+
+                        // NO tocar cantidad
+                    }
                 }
+
                 break;
 
-            case "Personas":
-                foreach (var nodo in xml.Descendants("Persona"))
+            case "Clientes":
+                foreach (var nodo in xml.Descendants("Cliente"))
                 {
                     var documento = (string?)nodo.Element("Documento") ?? "";
+                    var correo = (string?)nodo.Element("Correo") ?? "";
+                    var nombre = (string?)nodo.Element("Nombre") ?? "";
+                    var apellido = (string?)nodo.Element("Apellido") ?? "";
 
-                    bool existe = await _context.Personas
-                        .AnyAsync(p => p.Documento == documento);
+                    // Bloquear admin por seguridad extra
+                    if ((nombre + " " + apellido).ToUpper().Contains("ADMIN"))
+                        continue;
+
+                    var existe = await _context.Personas.AnyAsync(p =>
+                        (p.Documento ?? "") == documento ||
+                        (correo != "" && (p.Correo ?? "") == correo));
 
                     if (!existe)
                     {
                         _context.Personas.Add(new Models.Persona
                         {
-                            Nombre = (string?)nodo.Element("Nombre") ?? "",
-                            Documento = documento
+                            TipoDocumento = "DNI",
+                            Nombre = nombre,
+                            Apellido = apellido,
+                            Documento = documento,
+                            Correo = correo,
+                            IdTipoPersona = 3,
+                            Estado = true,
+                            FechaCreacion = DateTime.Now
                         });
                     }
                 }
