@@ -59,7 +59,7 @@ for c in clientes:
 
 tree = ET.ElementTree(root)
 
-# FORMATO BONITO
+# FORMATO 
 ET.indent(tree, space="    ", level=0)
 
 tree.write(ruta_salida, encoding="utf-8", xml_declaration=True)

@@ -4,32 +4,32 @@ import os
 
 base = os.path.dirname(__file__)
 
-# -----------------------------
+
 # CONFIGURACION ODOO
-# -----------------------------
+
 url = "http://localhost:8069"
 db = "odoo18"
 username = "milenamartinez091993@gmail.com"
 password = "53efe908442501a9fc1b1ff4cbaa059c239a263d"
 
-# -----------------------------
+
 # RUTA XML
-# -----------------------------
+
 ruta_xml = os.path.abspath(
     os.path.join(base, "..", "wwwroot", "Persona.xml")
 )
 
-# -----------------------------
+
 # NORMALIZAR
-# -----------------------------
+
 def normalizar(texto):
     if texto is None or texto is False:
         return ""
     return str(texto).strip().upper()
 
-# -----------------------------
+
 # CONEXION
-# -----------------------------
+
 common = xmlrpc.client.ServerProxy(f"{url}/xmlrpc/2/common")
 uid = common.authenticate(db, username, password, {})
 
@@ -41,15 +41,15 @@ models = xmlrpc.client.ServerProxy(f"{url}/xmlrpc/2/object")
 
 print("Conectado a Odoo")
 
-# -----------------------------
+
 # LEER XML
-# -----------------------------
+
 tree = ET.parse(ruta_xml)
 root = tree.getroot()
 
-# -----------------------------
+
 # CLIENTES EXISTENTES
-# -----------------------------
+
 clientes = models.execute_kw(
     db, uid, password,
     'res.partner', 'search_read',
@@ -60,9 +60,9 @@ clientes = models.execute_kw(
     }
 )
 
-# -----------------------------
+
 # PROCESAR
-# -----------------------------
+
 for nodo in root.findall("Cliente"):
 
     nombre = nodo.findtext("Nombre", "").strip()
@@ -88,9 +88,9 @@ for nodo in root.findall("Cliente"):
                 partner_id = c["id"]
                 break
 
-    # -----------------------------
+    
     # CREAR
-    # -----------------------------
+    
     if not partner_id:
 
         models.execute_kw(
@@ -105,9 +105,9 @@ for nodo in root.findall("Cliente"):
 
         print("Creado:", nombre_completo)
 
-    # -----------------------------
+    
     # ACTUALIZAR
-    # -----------------------------
+    
     else:
 
         models.execute_kw(
