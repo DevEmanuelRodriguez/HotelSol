@@ -1,6 +1,8 @@
 # 🏨 Hotel SOL - Management System
+<img width="1262" height="516" alt="image" src="https://github.com/user-attachments/assets/bbcb69be-c683-4888-8e1e-d8ba29c781cb" />
 
-Backend-oriented hotel management application that handles reservations, customer data, room availability, and billing processes.
+
+Hotel management application that includes both frontend (desktop interface) and backend logic to handle reservations, customer data, room availability, and billing processes.
 
 The system supports role-based access (administrator and receptionist), seasonal pricing, and different accommodation plans (half board, full board, all-inclusive).
 
