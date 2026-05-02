@@ -1,10 +1,42 @@
-# README - Instalación rápida HotelSOL
+# 🏨 Hotel SOL - Management System
 
-## Pasos obligatorios para ejecutar correctamente
+Backend-oriented hotel management application that handles reservations, customer data, room availability, and billing processes.
 
-## 1. Instalar requisitos previos
+The system supports role-based access (administrator and receptionist), seasonal pricing, and different accommodation plans (half board, full board, all-inclusive).
 
-Debe estar instalado en el equipo:
+It also integrates with Odoo via Python scripts and API Key to synchronize business data between both platforms.
+
+---
+
+## ✨ Features
+
+* Customer management
+* Room types and availability tracking
+* Reservation system with date validation
+* Seasonal pricing (high, mid, low season)
+* Check-in / Check-out management
+* Incident handling (no-shows)
+* Billing system (including extra services)
+* Walk-in customers (no reservation)
+* Reservation modification and cancellation
+* ERP integration with Odoo
+
+---
+
+## 🧱 Tech Stack
+
+* SQL Server Express
+* Python (integration scripts)
+* Docker (Odoo deployment)
+* Desktop application (Windows)
+
+---
+
+## ⚙️ Installation Guide
+
+### 1. Prerequisites
+
+Make sure you have installed:
 
 * SQL Server Express
 * Docker Desktop
@@ -12,84 +44,83 @@ Debe estar instalado en el equipo:
 
 ---
 
-## 2. Restaurar base de datos
+### 2. Database Setup
 
-Abrir SQL Server Management Studio y restaurar:
+Restore the database using:
 
-HotelSOL.bak
+* `HotelSOL.bak`
+  or
+* `HotelSOL.sql`
 
-
-o ejecutar:
-
-
-HotelSOL.sql
-
+(using SQL Server Management Studio)
 
 ---
 
-## 3. Iniciar Odoo
+### 3. Start Odoo (ERP)
 
-Abrir Docker Desktop
+Navigate to the Docker folder and run:
 
-Entrar en carpeta Docker y ejecutar:
-
-
+```bash
 docker-compose up -d
+```
 
-Acceso:
+Access Odoo at:
 
 http://localhost:8069
 
-
 ---
 
-## 4. Instalar dependencias Python
+### 4. Install Python Dependencies
 
-Entrar en carpeta `IntegracionPython` y ejecutar (sirve para instalar automáticamente las librerías de Python que necesitan los scripts de integración con Odoo):
+Navigate to:
 
+```
+IntegracionPython/
+```
 
+Then run:
+
+```bash
 pip install -r requirements.txt
-
-
----
-
-## 5. Instalar HotelSOL
-
-Ejecutar:
-
-
-Setup.exe
-
-
-o abrir:
-
-HotelSol.exe
-
+```
 
 ---
 
-## 6. Iniciar aplicación
+### 5. Run the Application
 
-Abrir acceso directo de escritorio o ejecutar:
+Execute:
 
-
-HotelSOL
-
-
----
-
-## 7. Login inicial
-
-
-Usuario: 4545453
-Contraseña: 123
-
+* `Setup.exe`
+  or
+* `HotelSol.exe`
 
 ---
 
-## Si algo falla
+### 6. Login
 
-* Verificar SQL Server iniciado
-* Verificar Docker iniciado
-* Verificar Python instalado
-* Verificar Odoo activo en puerto 8069
+```
+User: 4545453
+Password: 123
+```
+
+---
+
+## 🔄 Odoo Integration
+
+The system integrates with Odoo using Python scripts and API Key authentication to synchronize hotel data with ERP processes.
+
+---
+
+## ⚠️ Troubleshooting
+
+* Ensure SQL Server is running
+* Ensure Docker is running
+* Ensure Python is installed
+* Ensure Odoo is accessible at port 8069
+
+---
+
+## 📌 Notes
+
+This project was designed using UML modeling and focuses on real-world business logic for hotel management systems.
+
