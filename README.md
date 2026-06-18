@@ -126,3 +126,40 @@ The system integrates with Odoo using Python scripts and API Key authentication 
 
 This project was designed using UML modeling and focuses on real-world business logic for hotel management systems.
 
+
+## Screenshots
+
+### Login
+
+![Login](docs/img/login-roles.PNG)
+
+---
+
+### Dashboard
+
+![Dashboard](docs/img/dashboard.PNG)
+
+---
+
+### Recepción
+
+![Recepción](docs/img/recepcion-disponibilidad.PNG)
+
+---
+
+### Crear Reserva
+
+![Crear Reserva](docs/img/crear-reserva.PNG)
+
+---
+
+### Productos
+
+![Productos](docs/img/productos-crud.PNG)
+
+---
+
+### Reportes
+
+![Reportes](docs/img/reportes-excel.PNG)
+
