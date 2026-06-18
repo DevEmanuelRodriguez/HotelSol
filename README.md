@@ -1,4 +1,4 @@
-# 🏨 Hotel SOL - Management System
+# Hotel SOL - Management System
 <img width="1262" height="516" alt="image" src="https://github.com/user-attachments/assets/bbcb69be-c683-4888-8e1e-d8ba29c781cb" />
 
 
@@ -10,7 +10,7 @@ It also integrates with Odoo via Python scripts and API Key to synchronize busin
 
 ---
 
-## ✨ Features
+## Features
 
 * Customer management
 * Room types and availability tracking
@@ -25,7 +25,7 @@ It also integrates with Odoo via Python scripts and API Key to synchronize busin
 
 ---
 
-## 🧱 Tech Stack
+## Tech Stack
 
 * SQL Server Express
 * Python (integration scripts)
@@ -34,7 +34,7 @@ It also integrates with Odoo via Python scripts and API Key to synchronize busin
 
 ---
 
-## ⚙️ Installation Guide
+## Installation Guide
 
 ### 1. Prerequisites
 
@@ -107,13 +107,13 @@ Password: 123
 
 ---
 
-## 🔄 Odoo Integration
+## Odoo Integration
 
 The system integrates with Odoo using Python scripts and API Key authentication to synchronize hotel data with ERP processes.
 
 ---
 
-## ⚠️ Troubleshooting
+## Troubleshooting
 
 * Ensure SQL Server is running
 * Ensure Docker is running
@@ -122,7 +122,7 @@ The system integrates with Odoo using Python scripts and API Key authentication 
 
 ---
 
-## 📌 Notes
+## Notes
 
 This project was designed using UML modeling and focuses on real-world business logic for hotel management systems.
 
